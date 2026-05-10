@@ -3,7 +3,6 @@
 ## 2026-05-10
 - Started the extensible battle foundation for the food-cleaner demo.
 - Planned structure: shared battle types, data resources, runtime state, rules executor, demo content factory, and a minimal battle scene.
-- Verification: Godot headless launch still pending; scene wiring was corrected after the first pass.
 - Updated the battle presentation to a time-axis layout with placeholder panels for player, enemy, purification task, deck/discard, hand, and timeline.
 - Removed a leftover turn-based controller call after the time-axis refactor so startup no longer references `BattleRules.end_player_turn()`.
 - Tightened the first 1280x720 battle layout pass and aligned UI script paths with the new panel-based scene hierarchy.
@@ -31,3 +30,13 @@
 - Added new UI nodes for the stomach row, defense label, stomach capacity label, enemy purification summary, and task list panel entries so the battle screen exposes the new runtime data instead of hiding it in logs.
 - Impacted files: `scenes/battle/battle_scene.tscn`, `scripts/ui/battle_scene.gd`.
 - Verification: not run in Godot from this environment; please open `res://scenes/battle/battle_scene.tscn`, confirm the new labels are visible, drag/play cards to ensure the stomach row and task list update, and click the deck preview button to confirm it prints the catalog contents.
+- Reworked the battle UI layout toward a more spacious composition: left-side player area, centered task/time-log block, right-side enemy placeholder, and bottom-corner draw/discard piles with the hand/timeline centered.
+- Fixed the top-left HP placeholder after `ProgressBar` rejected a `text` assignment by adding a separate overlay label in the same panel.
+- Impacted files: `scenes/battle/battle_scene.tscn`, `scripts/ui/battle_scene.gd`.
+- Verification: not run in Godot here; reopen the battle scene and confirm the HP bar shows text, the previous runtime error is gone, and the bottom/center panels still render in the new positions.
+- Tightened the battle HUD further by putting `战斗时间` and `时间：0t` on one line, wrapping the log in a scroll container, and shrinking the deck/discard placeholders into small lower-corner blocks.
+- Impacted files: `scenes/battle/battle_scene.tscn`, `scripts/ui/battle_scene.gd`.
+- Verification: not run in Godot here; reopen the battle scene, confirm the log panel scrolls, and check the deck/discard boxes now sit as compact corner widgets.
+- Updated the time row to a single-line label and reduced the deck/discard placeholders again so they read as tiny corner widgets rather than full cards.
+- Impacted files: `scenes/battle/battle_scene.tscn`.
+- Verification: not run in Godot here; reopen the battle scene and confirm the time row reads `战斗时间：0t` and the corner boxes stay compact.
