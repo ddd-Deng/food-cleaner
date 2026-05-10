@@ -1,0 +1,59 @@
+extends RefCounted
+class_name BattleTypes
+
+enum CardTarget {
+	NONE,
+	ENEMY,
+	ENEMY_FRONT_BLOCK,
+	STOMACH_FRONT_ITEM,
+	SELF,
+}
+
+enum CardType {
+	NONE,
+	EAT,
+	DIGEST,
+	PURIFY,
+	SUPPORT,
+}
+
+enum EffectKind {
+	NONE,
+	DRAW_CARDS,
+	GAIN_ENERGY,
+	EAT_ENEMY_BLOCK,
+	DIGEST_STOMACH_ITEM,
+	ADVANCE_PURIFICATION,
+	DEAL_PLAYER_DAMAGE,
+	DEAL_ENEMY_DAMAGE,
+	SUMMON_ENEMY_BLOCK,
+}
+
+enum PurificationActionType {
+	NONE,
+	CLEAN,
+	CUT,
+	BAKE,
+}
+
+enum EnemyActionType {
+	NONE,
+	ATTACK,
+	ADD_BLOCK,
+	CORRUPT_BLOCK,
+	CHARGE_ATTACK,
+}
+
+enum BattlePhase {
+	SETUP,
+	ACTIVE,
+	RESOLVING,
+	FINISHED,
+}
+
+enum BattleOutcome {
+	ONGOING,
+	VICTORY_CLEARED,
+	VICTORY_PURIFIED,
+	DEFEAT,
+}
