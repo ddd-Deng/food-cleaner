@@ -95,9 +95,17 @@ text = "玩家"
 layout_mode = 2
 text = "生命值：0 / 0"
 
+[node name="BlockValue" type="Label" parent="Root/Layout/ContentRow/LeftColumn/PlayerPanel/PlayerPanelInner" unique_id=1752010446]
+layout_mode = 2
+text = "防御：0"
+
 [node name="ItemRow" type="HBoxContainer" parent="Root/Layout/ContentRow/LeftColumn/PlayerPanel/PlayerPanelInner" unique_id=1578116612]
 layout_mode = 2
 theme_override_constants/separation = 8
+
+[node name="StomachRow" type="HBoxContainer" parent="Root/Layout/ContentRow/LeftColumn/PlayerPanel/PlayerPanelInner" unique_id=1867330055]
+layout_mode = 2
+theme_override_constants/separation = 6
 
 [node name="DeckPanel" type="PanelContainer" parent="Root/Layout/ContentRow/LeftColumn" unique_id=916778746]
 custom_minimum_size = Vector2(250, 96)
@@ -116,6 +124,10 @@ text = "抽牌堆：0"
 [node name="DiscardValue" type="Label" parent="Root/Layout/ContentRow/LeftColumn/DeckPanel/DeckPanelInner" unique_id=1452730338]
 layout_mode = 2
 text = "弃牌堆：0"
+
+[node name="CapacityValue" type="Label" parent="Root/Layout/ContentRow/LeftColumn/DeckPanel/DeckPanelInner" unique_id=1058410121]
+layout_mode = 2
+text = "胃容量：0 / 0"
 
 [node name="CentreColumn" type="VBoxContainer" parent="Root/Layout/ContentRow" unique_id=1871523795]
 custom_minimum_size = Vector2(0, 280)
@@ -146,6 +158,13 @@ text = "当前步骤：-"
 [node name="ProgressValue" type="Label" parent="Root/Layout/ContentRow/CentreColumn/TaskPanel/TaskPanelInner" unique_id=1193200125]
 layout_mode = 2
 text = "进度：0 / 0"
+
+[node name="TaskListValue" type="RichTextLabel" parent="Root/Layout/ContentRow/CentreColumn/TaskPanel/TaskPanelInner" unique_id=1818824534]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 80)
+fit_content = true
+bbcode_enabled = true
+text = "任务：-"
 
 [node name="IntentValue" type="Label" parent="Root/Layout/ContentRow/CentreColumn/TaskPanel/TaskPanelInner" unique_id=632727383]
 layout_mode = 2
@@ -192,10 +211,18 @@ text = "敌人"
 layout_mode = 2
 text = "敌人意图显示在中间区域"
 
+[node name="EnemyStatusValue" type="Label" parent="Root/Layout/ContentRow/RightColumn/EnemyPanel/EnemyPanelInner" unique_id=1199850277]
+layout_mode = 2
+text = "净化：0 / 0"
+
 [node name="BlockRow" type="VBoxContainer" parent="Root/Layout/ContentRow/RightColumn/EnemyPanel/EnemyPanelInner" unique_id=1469873478]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 6
+
+[node name="BlockTitle" type="Label" parent="Root/Layout/ContentRow/RightColumn/EnemyPanel/EnemyPanelInner/BlockRow" unique_id=2087630190]
+layout_mode = 2
+text = "食物块"
 
 [node name="BottomRow" type="HBoxContainer" parent="Root/Layout" unique_id=330427025]
 custom_minimum_size = Vector2(0, 268)

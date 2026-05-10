@@ -188,14 +188,12 @@ func _background_color_for_type() -> Color:
 	if card_instance == null:
 		return Color(0.37, 0.37, 0.37, 1.0)
 	match card_instance.get_card_type():
-		BattleTypes.CardType.EAT:
+		BattleTypes.CardType.ATTACK:
 			return Color(0.53, 0.35, 0.27, 1.0)
-		BattleTypes.CardType.DIGEST:
+		BattleTypes.CardType.SKILL:
 			return Color(0.34, 0.47, 0.31, 1.0)
 		BattleTypes.CardType.PURIFY:
 			return Color(0.30, 0.43, 0.58, 1.0)
-		BattleTypes.CardType.SUPPORT:
-			return Color(0.56, 0.48, 0.24, 1.0)
 		_:
 			return Color(0.37, 0.37, 0.37, 1.0)
 

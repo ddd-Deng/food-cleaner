@@ -7,9 +7,11 @@ var outcome: BattleTypes.BattleOutcome = BattleTypes.BattleOutcome.ONGOING
 var battle_time: int = 0
 var player_hp: int = 20
 var player_max_hp: int = 20
+var player_block: int = 0
 var player_max_hand_size: int = 5
 var player_starting_hand_size: int = 5
-var player_max_stomach_volume: int = 6
+var player_max_stomach_volume: int = 3
+var player_extra_stomach_capacity: int = 0
 var player_current_intent: String = "等待中"
 var player_items: Array[PlayerItemInstance] = []
 var draw_pile: Array[CardInstance] = []
@@ -36,7 +38,17 @@ func get_stomach_used() -> int:
 	return total
 
 func get_stomach_capacity_left() -> int:
-	return max(0, player_max_stomach_volume - get_stomach_used())
+	return max(0, player_max_stomach_volume + player_extra_stomach_capacity - get_stomach_used())
+
+func get_purification_total() -> int:
+	if enemy == null or enemy.definition == null:
+		return 0
+	return enemy.definition.purification_steps.size()
+
+func get_purification_completed() -> int:
+	if enemy == null:
+		return 0
+	return enemy.purification_index
 
 func add_log(message: String) -> void:
 	log_entries.append("[%dt] %s" % [battle_time, message])

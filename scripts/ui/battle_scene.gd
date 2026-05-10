@@ -5,14 +5,18 @@ const CARD_VIEW_SCENE: PackedScene = preload("res://scenes/ui/card_view.tscn")
 
 @onready var controller: BattleController = $BattleController
 @onready var player_hp_label: Label = $Root/Layout/ContentRow/LeftColumn/PlayerPanel/PlayerPanelInner/HPValue
+@onready var player_block_label: Label = $Root/Layout/ContentRow/LeftColumn/PlayerPanel/PlayerPanelInner/BlockValue
 @onready var player_item_row: HBoxContainer = $Root/Layout/ContentRow/LeftColumn/PlayerPanel/PlayerPanelInner/ItemRow
 @onready var draw_pile_label: Label = $Root/Layout/ContentRow/LeftColumn/DeckPanel/DeckPanelInner/DrawValue
 @onready var discard_pile_label: Label = $Root/Layout/ContentRow/LeftColumn/DeckPanel/DeckPanelInner/DiscardValue
+@onready var stomach_capacity_label: Label = $Root/Layout/ContentRow/LeftColumn/DeckPanel/DeckPanelInner/CapacityValue
 @onready var task_value_label: Label = $Root/Layout/ContentRow/CentreColumn/TaskPanel/TaskPanelInner/TaskValue
 @onready var progress_value_label: Label = $Root/Layout/ContentRow/CentreColumn/TaskPanel/TaskPanelInner/ProgressValue
+@onready var task_list_label: RichTextLabel = $Root/Layout/ContentRow/CentreColumn/TaskPanel/TaskPanelInner/TaskListValue
 @onready var intent_value_label: Label = $Root/Layout/ContentRow/CentreColumn/TaskPanel/TaskPanelInner/IntentValue
 @onready var timeline_value_label: Label = $Root/Layout/ContentRow/CentreColumn/TimelinePanel/TimelinePanelInner/TimelineValue
 @onready var enemy_name_label: Label = $Root/Layout/ContentRow/RightColumn/EnemyPanel/EnemyPanelInner/EnemyName
+@onready var enemy_status_label: Label = $Root/Layout/ContentRow/RightColumn/EnemyPanel/EnemyPanelInner/EnemyStatusValue
 @onready var enemy_block_row: VBoxContainer = $Root/Layout/ContentRow/RightColumn/EnemyPanel/EnemyPanelInner/BlockRow
 @onready var play_drop_zone: PlayDropZone = $Root/Layout/BottomRow/LeftBottom/PlayDropZone
 @onready var hand_row: HBoxContainer = $Root/Layout/BottomRow/LeftBottom/HandScroll/HandRow
@@ -41,15 +45,20 @@ func _ready() -> void:
 func _on_state_changed(state: BattleState) -> void:
 	_flash_state_changes(state)
 	player_hp_label.text = "%d / %d" % [state.player_hp, state.player_max_hp]
+	player_block_label.text = "防御：%d" % state.player_block
 	_refresh_player_items(state)
 	draw_pile_label.text = "抽牌堆：%d" % state.draw_pile.size()
 	discard_pile_label.text = "弃牌堆：%d" % state.discard_pile.size()
+	stomach_capacity_label.text = "胃容量：%d / %d" % [state.get_stomach_used(), state.player_max_stomach_volume + state.player_extra_stomach_capacity]
 	task_value_label.text = _task_text(state)
 	progress_value_label.text = _progress_text(state)
+	task_list_label.text = _task_list_text(state)
 	intent_value_label.text = "意图：%s" % state.player_current_intent
 	timeline_value_label.text = "时间：%dt" % state.battle_time
 	enemy_name_label.text = _enemy_name(state)
+	enemy_status_label.text = "净化：%d / %d" % [state.get_purification_completed(), state.get_purification_total()]
 	_rebuild_enemy_blocks(state)
+	_rebuild_stomach(state)
 	_rebuild_hand(state)
 	_rebuild_timeline(state)
 	_refresh_effect_banner(state)
@@ -67,7 +76,11 @@ func _on_settings_pressed() -> void:
 	log_text.append_text("\n设置界面占位。")
 
 func _on_deck_preview_pressed() -> void:
-	log_text.append_text("\n牌库预览占位。")
+	log_text.append_text("\n牌库预览：")
+	for card in CardCatalog.build_card_map().values():
+		if card is CardData:
+			var data: CardData = card
+			log_text.append_text("\n- %s | %dt | %s" % [data.display_name, data.time_cost, data.description])
 
 func _refresh_player_items(state: BattleState) -> void:
 	for child in player_item_row.get_children():
@@ -96,6 +109,21 @@ func _rebuild_enemy_blocks(state: BattleState) -> void:
 		var label: Label = Label.new()
 		label.text = "%d. %s" % [index + 1, block.get_display_name()]
 		enemy_block_row.add_child(label)
+
+func _rebuild_stomach(state: BattleState) -> void:
+	var stomach_row: HBoxContainer = $Root/Layout/ContentRow/LeftColumn/PlayerPanel/PlayerPanelInner/StomachRow
+	for child in stomach_row.get_children():
+		child.queue_free()
+	if state.stomach.is_empty():
+		var empty_label: Label = Label.new()
+		empty_label.text = "胃：空"
+		stomach_row.add_child(empty_label)
+		return
+	for index in range(state.stomach.size()):
+		var item: FoodBlockInstance = state.stomach[index]
+		var label: Label = Label.new()
+		label.text = "%d. %s(%d)" % [index + 1, item.get_display_name(), item.remaining_digest_time]
+		stomach_row.add_child(label)
 
 func _rebuild_hand(state: BattleState) -> void:
 	for child in hand_row.get_children():
@@ -156,6 +184,16 @@ func _task_text(state: BattleState) -> String:
 	if step == null:
 		return "当前步骤：已完成"
 	return "当前步骤：%s" % step.display_name
+
+func _task_list_text(state: BattleState) -> String:
+	if state.enemy == null or state.enemy.definition == null or state.enemy.definition.purification_steps.is_empty():
+		return "任务：-"
+	var lines: Array[String] = ["任务："]
+	for i in range(state.enemy.definition.purification_steps.size()):
+		var step: PurificationStepData = state.enemy.definition.purification_steps[i]
+		var done: bool = state.enemy.purification_completed[i]
+		lines.append("[%s] %s" % ["x" if done else " ", step.display_name])
+	return "\n".join(lines)
 
 func _progress_text(state: BattleState) -> String:
 	if state.enemy == null or state.enemy.definition == null:

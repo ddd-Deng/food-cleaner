@@ -3,6 +3,7 @@ class_name FoodBlockInstance
 
 var definition: FoodBlockData
 var volume: int = 1
+var remaining_digest_time: int = 1
 var tags: Array[StringName] = []
 
 static func from_definition(block_definition: FoodBlockData) -> FoodBlockInstance:
@@ -10,6 +11,7 @@ static func from_definition(block_definition: FoodBlockData) -> FoodBlockInstanc
 	instance.definition = block_definition
 	if block_definition != null:
 		instance.volume = block_definition.volume
+		instance.remaining_digest_time = max(1, block_definition.digest_time)
 		instance.tags = block_definition.tags.duplicate()
 	return instance
 
