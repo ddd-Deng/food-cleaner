@@ -4,21 +4,22 @@ class_name BattleScene
 const CARD_VIEW_SCENE: PackedScene = preload("res://scenes/ui/card_view.tscn")
 
 @onready var controller: BattleController = $BattleController
-@onready var player_hp_label: Label = $Root/Layout/ContentRow/LeftColumn/PlayerPanel/PlayerPanelInner/HPValue
-@onready var player_item_row: HBoxContainer = $Root/Layout/ContentRow/LeftColumn/PlayerPanel/PlayerPanelInner/ItemRow
-@onready var draw_pile_label: Label = $Root/Layout/ContentRow/LeftColumn/DeckPanel/DeckPanelInner/DrawValue
-@onready var discard_pile_label: Label = $Root/Layout/ContentRow/LeftColumn/DeckPanel/DeckPanelInner/DiscardValue
-@onready var task_value_label: Label = $Root/Layout/ContentRow/CentreColumn/TaskPanel/TaskPanelInner/TaskValue
-@onready var progress_value_label: Label = $Root/Layout/ContentRow/CentreColumn/TaskPanel/TaskPanelInner/ProgressValue
-@onready var intent_value_label: Label = $Root/Layout/ContentRow/CentreColumn/TaskPanel/TaskPanelInner/IntentValue
-@onready var timeline_value_label: Label = $Root/Layout/ContentRow/CentreColumn/TimelinePanel/TimelinePanelInner/TimelineValue
-@onready var enemy_name_label: Label = $Root/Layout/ContentRow/RightColumn/EnemyPanel/EnemyPanelInner/EnemyName
-@onready var enemy_block_row: VBoxContainer = $Root/Layout/ContentRow/RightColumn/EnemyPanel/EnemyPanelInner/BlockRow
-@onready var play_drop_zone: PlayDropZone = $Root/Layout/BottomRow/LeftBottom/PlayDropZone
-@onready var hand_row: HBoxContainer = $Root/Layout/BottomRow/LeftBottom/HandScroll/HandRow
-@onready var timeline_strip: HBoxContainer = $Root/Layout/BottomRow/LeftBottom/TimelineScroll/TimelineStrip
-@onready var effect_banner_label: Label = $Root/Layout/BottomRow/LogPanel/LogPanelInner/EffectBanner/EffectBannerInner/EffectBannerLabel
-@onready var log_text: RichTextLabel = $Root/Layout/BottomRow/LogPanel/LogPanelInner/LogText
+@onready var player_hp_bar: ProgressBar = $Root/Layout/HeaderRow/PlayerHpPanel/PlayerHpBar
+@onready var player_hp_overlay: Label = $Root/Layout/HeaderRow/PlayerHpPanel/PlayerHpLabel
+@onready var player_item_row: HBoxContainer = $Root/Layout/MainRow/LeftColumn/PlayerPanel/PlayerPanelInner/ItemRow
+@onready var draw_pile_label: Label = $Root/Layout/BottomRow/DeckColumn/DeckPanel/DeckPanelInner/DrawValue
+@onready var discard_pile_label: Label = $Root/Layout/BottomRow/DiscardColumn/DiscardPanel/DiscardPanelInner/DiscardValue
+@onready var task_value_label: Label = $Root/Layout/MainRow/CentreColumn/TaskPanel/TaskPanelInner/TaskValue
+@onready var progress_value_label: Label = $Root/Layout/MainRow/CentreColumn/TaskPanel/TaskPanelInner/ProgressValue
+@onready var intent_value_label: Label = $Root/Layout/MainRow/CentreColumn/TaskPanel/TaskPanelInner/IntentValue
+@onready var timeline_value_label: Label = $Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/TimelineValue
+@onready var enemy_name_label: Label = $Root/Layout/MainRow/RightColumn/EnemyPanel/EnemyPanelInner/EnemyName
+@onready var enemy_block_row: VBoxContainer = $Root/Layout/MainRow/RightColumn/EnemyPanel/EnemyPanelInner/BlockRow
+@onready var play_drop_zone: PlayDropZone = $Root/Layout/BottomRow/BottomCenter/PlayDropZone
+@onready var hand_row: HBoxContainer = $Root/Layout/BottomRow/BottomCenter/HandCenter/HandScroll/HandRow
+@onready var timeline_strip: HBoxContainer = $Root/Layout/BottomRow/BottomCenter/TimelineCenter/TimelineScroll/TimelineStrip
+@onready var effect_banner_label: Label = $Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/EffectBanner/EffectBannerInner/EffectBannerLabel
+@onready var log_text: RichTextLabel = $Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/LogScroll/LogText
 @onready var settings_button: Button = $Root/Layout/HeaderRow/RightButtons/SettingsButton
 @onready var deck_preview_button: Button = $Root/Layout/HeaderRow/RightButtons/DeckPreviewButton
 
@@ -40,14 +41,16 @@ func _ready() -> void:
 
 func _on_state_changed(state: BattleState) -> void:
 	_flash_state_changes(state)
-	player_hp_label.text = "%d / %d" % [state.player_hp, state.player_max_hp]
+	player_hp_bar.max_value = maxf(1.0, float(state.player_max_hp))
+	player_hp_bar.value = float(state.player_hp)
+	player_hp_overlay.text = "HP %d / %d" % [state.player_hp, state.player_max_hp]
 	_refresh_player_items(state)
 	draw_pile_label.text = "抽牌堆：%d" % state.draw_pile.size()
 	discard_pile_label.text = "弃牌堆：%d" % state.discard_pile.size()
 	task_value_label.text = _task_text(state)
 	progress_value_label.text = _progress_text(state)
 	intent_value_label.text = "意图：%s" % state.player_current_intent
-	timeline_value_label.text = "时间：%dt" % state.battle_time
+	timeline_value_label.text = "战斗时间：%dt" % state.battle_time
 	enemy_name_label.text = _enemy_name(state)
 	_rebuild_enemy_blocks(state)
 	_rebuild_hand(state)
@@ -59,6 +62,7 @@ func _on_log_added(message: String) -> void:
 	if not log_text.text.is_empty():
 		log_text.append_text("\n")
 	log_text.append_text(message)
+	log_text.scroll_to_line(log_text.get_line_count())
 
 func _on_battle_finished(outcome: BattleTypes.BattleOutcome) -> void:
 	log_text.append_text("\n战斗结束：%s" % _outcome_text(outcome))
@@ -183,7 +187,7 @@ func _refresh_effect_banner(state: BattleState) -> void:
 		return
 	_last_effect_sequence_seen = state.last_played_sequence
 	if state.last_played_sequence <= 0:
-		effect_banner_label.text = "拖拽手牌到出牌区后，这里会显示效果摘要。"
+		effect_banner_label.text = "战斗时间和日志都放在这里。"
 		return
 	effect_banner_label.text = "打出 %s | 消耗 %dt | %s" % [
 		state.last_played_card_name,
@@ -195,7 +199,7 @@ func _refresh_effect_banner(state: BattleState) -> void:
 func _flash_state_changes(state: BattleState) -> void:
 	if _last_player_hp_seen >= 0 and _last_player_hp_seen != state.player_hp:
 		var hp_color := Color(1.0, 0.68, 0.68, 1.0) if state.player_hp < _last_player_hp_seen else Color(0.72, 1.0, 0.72, 1.0)
-		_flash_control(player_hp_label, hp_color)
+		_flash_control(player_hp_bar, hp_color)
 	_last_player_hp_seen = state.player_hp
 
 	var enemy_block_count: int = state.enemy.blocks.size() if state.enemy != null else 0
