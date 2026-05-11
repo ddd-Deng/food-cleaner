@@ -1,0 +1,127 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/explore/explore_scene.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/explore/player_actor.gd" id="2"]
+
+[node name="ExploreScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Root" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="Layout" type="VBoxContainer" parent="Root"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="Root/Layout"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="RoomTitle" type="Label" parent="Root/Layout/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "房间"
+
+[node name="RoomType" type="Label" parent="Root/Layout/Header"]
+layout_mode = 2
+text = "类型"
+
+[node name="Stats" type="HBoxContainer" parent="Root/Layout/Header"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HpValue" type="Label" parent="Root/Layout/Header/Stats"]
+layout_mode = 2
+text = "HP 0 / 0"
+
+[node name="GoldValue" type="Label" parent="Root/Layout/Header/Stats"]
+layout_mode = 2
+text = "金币 0"
+
+[node name="RoomPanel" type="PanelContainer" parent="Root/Layout"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RoomCanvas" type="Control" parent="Root/Layout/RoomPanel"]
+layout_mode = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayerActor" type="Control" parent="Root/Layout/RoomPanel/RoomCanvas"]
+custom_minimum_size = Vector2(48, 48)
+offset_left = 460.0
+offset_top = 250.0
+offset_right = 508.0
+offset_bottom = 298.0
+script = ExtResource("2")
+
+[node name="OverlayPanel" type="PanelContainer" parent="Root/Layout/RoomPanel"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -80.0
+offset_right = 180.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OverlayInner" type="VBoxContainer" parent="Root/Layout/RoomPanel/OverlayPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="OverlayLabel" type="Label" parent="Root/Layout/RoomPanel/OverlayPanel/OverlayInner"]
+layout_mode = 2
+horizontal_alignment = 1
+text = "本局结束"
+autowrap_mode = 2
+
+[node name="RestartButton" type="Button" parent="Root/Layout/RoomPanel/OverlayPanel/OverlayInner"]
+layout_mode = 2
+text = "重新开始"
+
+[node name="Footer" type="PanelContainer" parent="Root/Layout"]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+
+[node name="FooterInner" type="VBoxContainer" parent="Root/Layout/Footer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PromptValue" type="Label" parent="Root/Layout/Footer/FooterInner"]
+layout_mode = 2
+text = "WASD 移动，E 交互。"
+
+[node name="StatusValue" type="RichTextLabel" parent="Root/Layout/Footer/FooterInner"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+bbcode_enabled = false
+fit_content = true
+scroll_active = false
+text = ""

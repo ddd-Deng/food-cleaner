@@ -4,8 +4,8 @@ class_name BattleRules
 static func create_state(definition: BattleDefinition) -> BattleState:
 	var state: BattleState = BattleState.new()
 	state.definition = definition
-	state.player_hp = definition.player_max_hp
 	state.player_max_hp = definition.player_max_hp
+	state.player_hp = clampi(definition.player_starting_hp, 0, definition.player_max_hp)
 	state.player_block = 0
 	state.player_max_hand_size = definition.player_max_hand_size
 	state.player_starting_hand_size = definition.player_starting_hand_size

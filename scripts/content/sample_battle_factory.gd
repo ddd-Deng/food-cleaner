@@ -6,6 +6,7 @@ static func create_demo_battle_definition() -> BattleDefinition:
 	battle.id = &"demo_food_cleaner_battle"
 	battle.display_name = "食物清道夫演示战斗"
 	battle.player_max_hp = 20
+	battle.player_starting_hp = 20
 	battle.player_max_hand_size = 8
 	battle.player_starting_hand_size = 4
 	battle.player_max_stomach_volume = 3

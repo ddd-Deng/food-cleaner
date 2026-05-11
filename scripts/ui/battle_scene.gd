@@ -1,6 +1,10 @@
 extends Control
 class_name BattleScene
 
+signal battle_resolved(result: Dictionary)
+
+@export var start_demo_on_ready: bool = true
+
 @onready var controller: BattleController = $BattleController
 @onready var player_hp_bar: ProgressBar = $Root/Layout/HeaderRow/PlayerHpPanel/PlayerHpBar
 @onready var player_hp_overlay: Label = $Root/Layout/HeaderRow/PlayerHpPanel/PlayerHpLabel
@@ -29,6 +33,8 @@ var _last_effect_sequence_seen: int = -1
 var _last_player_hp_seen: int = -1
 var _last_enemy_block_count_seen: int = -1
 var _last_purification_index_seen: int = -1
+var _pending_definition: BattleDefinition
+var _started_once: bool = false
 
 func _ready() -> void:
 	controller.state_changed.connect(_on_state_changed)
@@ -38,7 +44,15 @@ func _ready() -> void:
 	deck_preview_button.pressed.connect(_on_deck_preview_pressed)
 	hand_view.card_released_outside_hand.connect(_on_card_released_outside_hand)
 	hand_view.drag_cancelled.connect(_on_drag_cancelled)
-	controller.start_battle(SampleBattleFactory.create_demo_battle_definition())
+	if _pending_definition != null:
+		_start_controller_battle(_pending_definition)
+	elif start_demo_on_ready:
+		_start_controller_battle(SampleBattleFactory.create_demo_battle_definition())
+
+func start_battle(definition: BattleDefinition) -> void:
+	_pending_definition = definition
+	if is_node_ready():
+		_start_controller_battle(definition)
 
 func _input(event: InputEvent) -> void:
 	if event is not InputEventMouseButton:
@@ -80,6 +94,11 @@ func _on_log_added(message: String) -> void:
 func _on_battle_finished(outcome: BattleTypes.BattleOutcome) -> void:
 	log_text.append_text("\n战斗结束：%s" % _outcome_text(outcome))
 	log_text.scroll_to_line(log_text.get_line_count())
+	battle_resolved.emit({
+		"outcome": outcome,
+		"player_hp": controller.state.player_hp if controller.state != null else 0,
+		"player_max_hp": controller.state.player_max_hp if controller.state != null else 0,
+	})
 
 func _on_settings_pressed() -> void:
 	log_text.append_text("\n设置界面占位。")
@@ -238,3 +257,16 @@ func _flash_control(control: CanvasItem, flash_color: Color) -> void:
 	control.modulate = flash_color
 	var tween := create_tween()
 	tween.tween_property(control, "modulate", Color.WHITE, 0.24)
+
+func _start_controller_battle(definition: BattleDefinition) -> void:
+	if definition == null:
+		return
+	_pending_definition = definition
+	if _started_once:
+		log_text.clear()
+		_last_effect_sequence_seen = -1
+		_last_player_hp_seen = -1
+		_last_enemy_block_count_seen = -1
+		_last_purification_index_seen = -1
+	_started_once = true
+	controller.start_battle(definition)

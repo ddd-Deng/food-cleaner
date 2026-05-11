@@ -1,6 +1,12 @@
 # Devlog
 
 ## 2026-05-11
+- Added a first-pass exploration loop that now makes the project start in a room-based exploration scene instead of jumping straight into battle.
+- Introduced a minimal run/map architecture with persistent run state, generated demo rooms, room exits, chest rewards, boss completion, and a flow controller that swaps between exploration and battle scenes.
+- Updated battle startup so battles can be launched from external run flow with injected starting HP/deck/items and can return outcome plus remaining HP back to exploration on finish.
+- Added temporary WASD movement and `E` interaction input actions for the exploration prototype.
+- Impacted files: `project.godot`, `scenes/main/main.gd`, `scenes/explore/explore_scene.tscn`, `scripts/ui/battle_scene.gd`, `scripts/data/battle_definition.gd`, `scripts/runtime/battle_rules.gd`, `scripts/content/sample_battle_factory.gd`, `scripts/explore/explore_scene.gd`, `scripts/explore/player_actor.gd`, `scripts/explore/explore_interactable.gd`, `scripts/run/run_controller.gd`, `scripts/run/run_factory.gd`, `scripts/run/run_state.gd`, `scripts/run/battle_definition_builder.gd`, `scripts/map/map_generator.gd`, `scripts/map/map_types.gd`, `scripts/map/room_runtime_data.gd`.
+- Verification: Godot is not available in this environment. Please run the main scene, confirm the game now opens in exploration, move with `WASD`, interact with nearby objects using `E`, enter the monster room and finish a battle to verify HP and gold return to exploration, open the chest room to verify one-time gold reward, and confirm the boss room ends the run with the restart overlay after victory or defeat.
 - Renamed two `HandView` helper parameters to clear current Godot script warnings: one no longer shadows `Control.rotation_degrees`, and one explicitly marks the unused drag-end position parameter.
 - Impacted files: `scripts/ui/hand_view.gd`.
 - Verification: Godot is not available in this environment. Please reload scripts or reopen the project and confirm the `SHADOWED_VARIABLE_BASE_CLASS` warning at `hand_view.gd:184` and the `UNUSED_PARAMETER` warning at `hand_view.gd:211` no longer appear.
