@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bpol45bkl8i45" path="res://scripts/ui/battle_scene.gd" id="1"]
 [ext_resource type="Script" uid="uid://dpe8fkikxu52" path="res://scripts/runtime/battle_controller.gd" id="2"]
-[ext_resource type="Script" uid="uid://yg35igx2p2sn" path="res://scripts/ui/play_drop_zone.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/ui/hand_view.gd" id="4"]
 
 [node name="BattleScene" type="Control"]
 layout_mode = 3
@@ -251,7 +251,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="BottomRow" type="HBoxContainer" parent="Root/Layout"]
-custom_minimum_size = Vector2(0, 292)
+custom_minimum_size = Vector2(0, 260)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 16
@@ -287,39 +287,17 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 theme_override_constants/separation = 10
 
-[node name="PlayDropZone" type="PanelContainer" parent="Root/Layout/BottomRow/BottomCenter"]
-custom_minimum_size = Vector2(0, 46)
-layout_mode = 2
-size_flags_horizontal = 3
-script = ExtResource("3")
-
-[node name="PlayDropInner" type="MarginContainer" parent="Root/Layout/BottomRow/BottomCenter/PlayDropZone"]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 8
-
-[node name="PlayDropLabel" type="Label" parent="Root/Layout/BottomRow/BottomCenter/PlayDropZone/PlayDropInner"]
-layout_mode = 2
-text = "拖到这里打出"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="HandCenter" type="CenterContainer" parent="Root/Layout/BottomRow/BottomCenter"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HandScroll" type="ScrollContainer" parent="Root/Layout/BottomRow/BottomCenter/HandCenter"]
-custom_minimum_size = Vector2(920, 188)
+[node name="HandView" type="Control" parent="Root/Layout/BottomRow/BottomCenter/HandCenter"]
+custom_minimum_size = Vector2(920, 178)
 layout_mode = 2
-horizontal_scroll_mode = 2
-vertical_scroll_mode = 0
-
-[node name="HandRow" type="HBoxContainer" parent="Root/Layout/BottomRow/BottomCenter/HandCenter/HandScroll"]
-layout_mode = 2
-theme_override_constants/separation = 10
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("4")
 
 [node name="TimelineCenter" type="CenterContainer" parent="Root/Layout/BottomRow/BottomCenter"]
 layout_mode = 2

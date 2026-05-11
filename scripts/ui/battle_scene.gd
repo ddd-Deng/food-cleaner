@@ -1,8 +1,6 @@
 extends Control
 class_name BattleScene
 
-const CARD_VIEW_SCENE: PackedScene = preload("res://scenes/ui/card_view.tscn")
-
 @onready var controller: BattleController = $BattleController
 @onready var player_hp_bar: ProgressBar = $Root/Layout/HeaderRow/PlayerHpPanel/PlayerHpBar
 @onready var player_hp_overlay: Label = $Root/Layout/HeaderRow/PlayerHpPanel/PlayerHpLabel
@@ -20,8 +18,7 @@ const CARD_VIEW_SCENE: PackedScene = preload("res://scenes/ui/card_view.tscn")
 @onready var enemy_name_label: Label = $Root/Layout/MainRow/RightColumn/EnemyPanel/EnemyPanelInner/EnemyName
 @onready var enemy_status_label: Label = $Root/Layout/MainRow/RightColumn/EnemyPanel/EnemyPanelInner/EnemyStatusValue
 @onready var enemy_block_row: VBoxContainer = $Root/Layout/MainRow/RightColumn/EnemyPanel/EnemyPanelInner/BlockRow
-@onready var play_drop_zone: PlayDropZone = $Root/Layout/BottomRow/BottomCenter/PlayDropZone
-@onready var hand_row: HBoxContainer = $Root/Layout/BottomRow/BottomCenter/HandCenter/HandScroll/HandRow
+@onready var hand_view: HandView = $Root/Layout/BottomRow/BottomCenter/HandCenter/HandView
 @onready var timeline_strip: HBoxContainer = $Root/Layout/BottomRow/BottomCenter/TimelineCenter/TimelineScroll/TimelineStrip
 @onready var effect_banner_label: Label = $Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/EffectBanner/EffectBannerInner/EffectBannerLabel
 @onready var log_text: RichTextLabel = $Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/LogScroll/LogText
@@ -39,10 +36,18 @@ func _ready() -> void:
 	controller.battle_finished.connect(_on_battle_finished)
 	settings_button.pressed.connect(_on_settings_pressed)
 	deck_preview_button.pressed.connect(_on_deck_preview_pressed)
-	play_drop_zone.card_dropped.connect(_on_card_dropped)
-	play_drop_zone.drop_hover_changed.connect(_on_drop_hover_changed)
-	play_drop_zone.set_active(true)
+	hand_view.card_released_outside_hand.connect(_on_card_released_outside_hand)
+	hand_view.drag_cancelled.connect(_on_drag_cancelled)
 	controller.start_battle(SampleBattleFactory.create_demo_battle_definition())
+
+func _input(event: InputEvent) -> void:
+	if event is not InputEventMouseButton:
+		return
+	var mouse_event := event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_RIGHT or not mouse_event.pressed:
+		return
+	if hand_view.cancel_active_drag():
+		get_viewport().set_input_as_handled()
 
 func _on_state_changed(state: BattleState) -> void:
 	_flash_state_changes(state)
@@ -66,8 +71,6 @@ func _on_state_changed(state: BattleState) -> void:
 	_rebuild_hand(state)
 	_rebuild_timeline(state)
 	_refresh_effect_banner(state)
-	play_drop_zone.set_active(not state.is_finished())
-
 func _on_log_added(message: String) -> void:
 	if not log_text.text.is_empty():
 		log_text.append_text("\n")
@@ -138,16 +141,7 @@ func _rebuild_stomach(state: BattleState) -> void:
 		stomach_row.add_child(label)
 
 func _rebuild_hand(state: BattleState) -> void:
-	for child in hand_row.get_children():
-		child.queue_free()
-	for index in range(state.hand.size()):
-		var card: CardInstance = state.hand[index]
-		var card_view: CardView = CARD_VIEW_SCENE.instantiate()
-		hand_row.add_child(card_view)
-		card_view.setup(card, index)
-		card_view.set_interactable(not state.is_finished())
-		card_view.drag_started.connect(_on_card_drag_started)
-		card_view.drag_ended.connect(_on_card_drag_ended)
+	hand_view.rebuild_hand(state.hand, not state.is_finished())
 
 func _rebuild_timeline(state: BattleState) -> void:
 	for child in timeline_strip.get_children():
@@ -158,36 +152,17 @@ func _rebuild_timeline(state: BattleState) -> void:
 		label.custom_minimum_size = Vector2(48, 24)
 		timeline_strip.add_child(label)
 
-func _on_card_dropped(index: int) -> void:
+func _on_card_released_outside_hand(index: int) -> void:
+	_play_card_from_hand(index)
+
+func _on_drag_cancelled() -> void:
+	hand_view.set_drop_hover(false)
+
+func _play_card_from_hand(index: int) -> void:
 	if index < 0:
 		return
-	for child in hand_row.get_children():
-		if child is CardView:
-			var card_view := child as CardView
-			if card_view.hand_index == index:
-				card_view.mark_resolving()
-	controller.play_card(index)
-
-func _on_card_drag_started(active_card_view: CardView) -> void:
-	for child in hand_row.get_children():
-		if child == active_card_view:
-			continue
-		if child is CardView:
-			(child as CardView).set_interactable(false)
-
-func _on_card_drag_ended(_card_view: CardView, dropped_successfully: bool) -> void:
-	for child in hand_row.get_children():
-		if child is CardView:
-			(child as CardView).set_interactable(true)
-	if not dropped_successfully:
-		_on_drop_hover_changed(false)
-
-func _on_drop_hover_changed(is_hovering: bool) -> void:
-	for child in hand_row.get_children():
-		if child is CardView:
-			var card_view := child as CardView
-			if card_view.is_dragging:
-				card_view.set_drag_hover_enabled(is_hovering)
+	if not controller.play_card(index):
+		hand_view.rebuild_hand(controller.state.hand, not controller.state.is_finished())
 
 func _task_text(state: BattleState) -> String:
 	if state.enemy == null or state.enemy.definition == null:
@@ -233,7 +208,7 @@ func _refresh_effect_banner(state: BattleState) -> void:
 		return
 	_last_effect_sequence_seen = state.last_played_sequence
 	if state.last_played_sequence <= 0:
-		effect_banner_label.text = "拖拽手牌到出牌区后，这里会显示效果摘要。"
+		effect_banner_label.text = "拖出手牌区后松手即可打出，右键可立即取消。"
 		return
 	effect_banner_label.text = "打出 %s | 消耗 %dt | %s" % [
 		state.last_played_card_name,

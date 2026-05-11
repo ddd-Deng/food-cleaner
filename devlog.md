@@ -1,5 +1,75 @@
 # Devlog
 
+## 2026-05-11
+- Renamed two `HandView` helper parameters to clear current Godot script warnings: one no longer shadows `Control.rotation_degrees`, and one explicitly marks the unused drag-end position parameter.
+- Impacted files: `scripts/ui/hand_view.gd`.
+- Verification: Godot is not available in this environment. Please reload scripts or reopen the project and confirm the `SHADOWED_VARIABLE_BASE_CLASS` warning at `hand_view.gd:184` and the `UNUSED_PARAMETER` warning at `hand_view.gd:211` no longer appear.
+- Removed the card `TopSpacer` and moved the title label into the top row beside the time cost, so the artwork and description shift upward and use the card face more efficiently.
+- Impacted files: `scenes/ui/card_view.tscn`, `scripts/ui/card_view.gd`.
+- Verification: Godot is not available in this environment. Please open `res://scenes/battle/battle_scene.tscn`, confirm each card now shows cost on the left and name on the same top row, and verify the art plus description sit slightly higher without title overlap.
+- Raised the demo/default max hand size to 8 and added hand-count-based card shrinking, keeping 1-5 cards at full size and gradually reducing card layout scale down to 84% at 8 cards.
+- Updated the hand fan layout to calculate spacing, arc height, hover lift, and release-zone geometry from the scaled card size so 8-card hands keep the same curved-top principle without overcrowding.
+- Impacted files: `scripts/content/sample_battle_factory.gd`, `scripts/data/battle_definition.gd`, `scripts/runtime/battle_state.gd`, `scripts/ui/card_view.gd`, `scripts/ui/hand_view.gd`.
+- Verification: Godot is not available in this environment. Please use draw-heavy cards or temporarily start with 8 cards, then confirm the hand stays centered, cards shrink smoothly as count increases, and the side-card tops still sit lower than the center cards.
+- Adjusted the hand fan height curve to compensate for card rotation, so the middle card has the highest top edge and side cards visibly sit lower instead of all card tops appearing nearly flat.
+- Impacted files: `scripts/ui/hand_view.gd`.
+- Verification: Godot is not available in this environment. Please open the battle scene and confirm the hand forms a gentle arc with side-card top edges lower than the center card while dragging and playing still use the visible card order.
+- Stopped `CardView` from overriding child-node layout sizes in code and switched it to read the base card size from the scene, so `card_view.tscn` is now the primary source for divider, art, label, and description sizing.
+- Impacted files: `scripts/ui/card_view.gd`.
+- Verification: Godot is not available in this environment. Please adjust `Divider.custom_minimum_size.y` or other node sizes in `res://scenes/ui/card_view.tscn`, reopen `res://scenes/battle/battle_scene.tscn`, and confirm the runtime card reflects those scene edits directly instead of snapping back to script-defined values.
+- Fixed hand layout after playing cards by removing obsolete `CardView` nodes from `HandView` before the deferred layout pass, so queued-for-deletion cards no longer inflate the layout count and pull the surviving hand left.
+- Reverted the experimental separate visual slot order and now keeps `CardView` order plus `hand_index` aligned with the live `state.hand` order, preventing wrong-card plays or disappearing views after chained draw/discard effects.
+- Impacted files: `scripts/ui/hand_view.gd`.
+- Verification: Godot is not available in this environment. Please play the leftmost, middle, and rightmost cards in separate tries and confirm the remaining hand stays centered, no cards disappear, and newly drawn cards remain playable in the visible hand order.
+- Reduced the card art panel height and removed its vertical expand behavior so the divider sits higher, then increased the description area's minimum height and top alignment so card text can reliably show at least two wrapped lines.
+- Impacted files: `scripts/ui/card_view.gd`, `scenes/ui/card_view.tscn`.
+- Verification: Godot is not available in this environment. Please open `res://scenes/battle/battle_scene.tscn`, inspect a few cards with longer descriptions, and confirm the art panel is shorter, the divider is visibly higher, and the description area now fits two wrapped lines without being clipped.
+- Relaxed the raised hand-zone threshold by lowering the extra top grace distance from 44 to 24 pixels, so releasing after a moderate upward drag is more likely to count as leaving the hand zone.
+- Impacted files: `scripts/ui/hand_view.gd`.
+- Verification: Godot is not available in this environment. Please drag a card upward to about the height that previously felt borderline and confirm it now plays a bit earlier, while very small lifts still cancel back to hand.
+- Softened hover arbitration by giving real card-body hits priority over the sticky owner hold area, and added a hand-level per-frame body-hit scan so moving from one card face into another switches smoothly while ambiguous lower gaps remain stable.
+- Impacted files: `scripts/ui/card_view.gd`, `scripts/ui/hand_view.gd`.
+- Verification: Godot is not available in this environment. Please slide the mouse from card A into card B and confirm B highlights without needing to leave the hand area, then rest in the lower gap between them and confirm the highlight no longer chatters.
+- Changed hand release resolution to use a dedicated hand-zone boundary instead of simple pointer-outside-hand detection. A card now only plays if more than half of its body crosses above the raised hand-zone top edge; otherwise release cancels back to hand like right-click.
+- Impacted files: `scripts/ui/hand_view.gd`.
+- Verification: Godot is not available in this environment. Please drag a card slightly upward but keep most of it near the hand and confirm release returns it, then drag the same card clearly higher so most of the card body is above the hand zone and confirm release plays it.
+- Changed hover ownership from last-enter-wins to sticky owner arbitration: a neighboring card cannot steal hover while the current hovered card still contains the mouse in its hold area, preventing rapid highlight toggling in overlapping gaps.
+- Impacted files: `scripts/ui/card_view.gd`, `scripts/ui/hand_view.gd`.
+- Verification: Godot is not available in this environment. Please rest the mouse in the lower gap between two fanned cards and confirm highlight does not rapidly switch between them; moving clearly into the next card after leaving the current hold area should still switch hover.
+- Replaced the Godot built-in drag preview flow for hand cards with direct card-body dragging, so the selected card itself follows the pointer, no ghost preview appears, sibling cards stay in place, and right-click cancel still returns the dragged card cleanly.
+- Impacted files: `scripts/ui/card_view.gd`, `scripts/ui/hand_view.gd`, `scripts/ui/battle_scene.gd`.
+- Verification: Godot is not available in this environment. Please drag a blue card upward/outward and confirm the card under the pointer stays blue and is the original card body, the hand no longer shows a returned card plus separate ghost, the other cards do not shift while dragging, releasing outside the hand plays it, and right-click during drag returns it to the hand.
+- Added hand-level hover ownership so when one card enters hover, sibling cards are forced back to normal, preventing two overlapping cards from staying highlighted and lifted at the same time.
+- Impacted files: `scripts/ui/card_view.gd`, `scripts/ui/hand_view.gd`.
+- Verification: Godot is not available in this environment. Please move the mouse slowly through the gap between two fanned cards and confirm only the latest card under the pointer remains highlighted/lifted.
+- Added sticky hover handling for hand cards so a lifted card stays hovered while the mouse is in the combined base/lifted card area, preventing border flicker and up/down jitter near the lower edge.
+- Impacted files: `scripts/ui/card_view.gd`.
+- Verification: Godot is not available in this environment. Please hover a hand card, slowly move the mouse downward through the gap created by the lift, and confirm the card remains highlighted until the pointer actually leaves the held hover area.
+- Locked `CardView` to a single shorter runtime size for both in-hand cards and drag previews, preventing non-hovered cards from keeping the old tall frame.
+- Raised the hand fan again and reduced the bottom hand container height so cards sit farther above the timeline.
+- Rebalanced the card face toward a wider, lower profile with a larger art panel, thinner divider, and very short description strip.
+- Impacted files: `scripts/ui/card_view.gd`, `scripts/ui/hand_view.gd`, `scenes/ui/card_view.tscn`, `scenes/battle/battle_scene.tscn`.
+- Verification: Godot is not available in this environment. Please open `res://scenes/battle/battle_scene.tscn`, confirm every card uses the same short silhouette before hover, drag a card to confirm the preview is also short, and check that the hand no longer covers the timeline while the art area takes most of the card face.
+- Cleaned up three Godot editor warnings by removing an unused `CardView` signal declaration and renaming two `HandView` identifiers that shadowed `Control` base-class properties.
+- Impacted files: `scripts/ui/card_view.gd`, `scripts/ui/hand_view.gd`.
+- Verification: Godot is not available in this environment. Please reload the project scripts or reopen the battle scene and confirm the previous `UNUSED_SIGNAL` warning in `card_view.gd` plus the two `SHADOWED_VARIABLE_BASE_CLASS` warnings in `hand_view.gd` no longer appear.
+- Removed the dedicated play release hint panel from the battle scene once releasing outside the hand became the default interaction, keeping the bottom-center area focused on the hand and timeline only.
+- Impacted files: `scripts/ui/battle_scene.gd`, `scenes/battle/battle_scene.tscn`.
+- Verification: Godot is not available in this environment. Please open `res://scenes/battle/battle_scene.tscn`, confirm the old release hint strip is gone, and verify dragging a card outside the hand area still plays it while right-click still cancels the drag.
+- Changed hand release so cards play when released outside the hand area, cancel when released inside the hand area, and immediately return on right-click cancel during drag.
+- Kept the existing play-drop zone visual as auxiliary feedback, but no longer require players to hit the narrow strip to resolve a card.
+- Impacted files: `scripts/ui/card_view.gd`, `scripts/ui/hand_view.gd`, `scripts/ui/battle_scene.gd`, `scenes/battle/battle_scene.tscn`.
+- Verification: Godot is not available in this environment. Please open `res://scenes/battle/battle_scene.tscn`, drag a card and release inside the hand area to confirm it cancels, drag the same card outside the hand area and release to confirm it plays even away from the strip, then start another drag and right-click to confirm the card immediately returns to hand.
+- Replaced the old scrollable hand row with a dedicated `HandView` that manually fans cards across the bottom center area.
+- Updated `CardView` so its in-hand pose comes from layout data, while hover/drag/resolving states apply additive lift, scale, rotation reset, and higher draw order for overlapping cards.
+- Kept the existing drag-to-play flow and battle rules intact while routing hand rebuilding and resolving highlights through the new hand container.
+- Rebalanced the card frame toward a wider, shorter silhouette and tightened the internal label/art spacing to better match a horizontal hand presentation.
+- Changed hand rebuilding to preserve surviving cards in their previous visual slots, so after playing a middle card the replacement draw refills that gap instead of shifting the whole fan.
+- Forced drag preview sizing to match the shortened card frame and raised the hand baseline so the fan sits higher above the timeline strip.
+- Shifted more vertical space into the art panel and reduced description height again so the divider sits closer to the middle of the card, matching a short-text card layout.
+- Impacted files: `scripts/ui/hand_view.gd`, `scripts/ui/card_view.gd`, `scripts/ui/battle_scene.gd`, `scenes/battle/battle_scene.tscn`.
+- Verification: Godot is not available in this environment. Please open `res://scenes/battle/battle_scene.tscn`, confirm the hand now sits above the timeline without overlapping it, verify the drag preview uses the same short card silhouette as the in-hand card, drag a middle card onto the play zone to confirm the newly drawn card refills that slot while the other cards stay put, then drag a card away from the zone to confirm it returns to the hand cleanly.
+
 ## 2026-05-10
 - Started the extensible battle foundation for the food-cleaner demo.
 - Planned structure: shared battle types, data resources, runtime state, rules executor, demo content factory, and a minimal battle scene.
