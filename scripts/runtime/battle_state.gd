@@ -8,6 +8,7 @@ var battle_time: int = 0
 var player_hp: int = 20
 var player_max_hp: int = 20
 var player_block: int = 0
+var player_gold: int = 0
 var player_max_hand_size: int = 8
 var player_starting_hand_size: int = 4
 var player_max_stomach_volume: int = 3

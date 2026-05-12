@@ -2,9 +2,59 @@
 
 [ext_resource type="Script" uid="uid://bpol45bkl8i45" path="res://scripts/ui/battle_scene.gd" id="1"]
 [ext_resource type="Script" uid="uid://dpe8fkikxu52" path="res://scripts/runtime/battle_controller.gd" id="2"]
-[ext_resource type="Script" path="res://scripts/ui/hand_view.gd" id="4"]
+[ext_resource type="Script" uid="uid://da2tkcwkvllr4" path="res://scripts/ui/battle_actor_view.gd" id="3"]
+[ext_resource type="Script" uid="uid://dnsl22ty8ukef" path="res://scripts/ui/hand_view.gd" id="4"]
+[ext_resource type="Texture2D" uid="uid://dm2gw7nh04wlh" path="res://sprites/按钮/设置.png" id="5_settings"]
+[ext_resource type="Texture2D" uid="uid://cdsisuov65cmv" path="res://sprites/按钮/查看卡组.png" id="6_deck"]
+[ext_resource type="Texture2D" uid="uid://dqdo54c7fucoy" path="res://sprites/抽牌堆.png" id="7_draw_pile"]
+[ext_resource type="Texture2D" uid="uid://ba6pv7odgd4ns" path="res://sprites/弃牌堆.png" id="8_discard_pile"]
+[ext_resource type="Texture2D" uid="uid://b8owdlteijxx0" path="res://sprites/血条/血条底槽.png" id="9_hp_under"]
+[ext_resource type="Texture2D" uid="uid://dxm45oefx124a" path="res://sprites/血条/血条.png" id="10_hp_fill"]
+[ext_resource type="Texture2D" uid="uid://by4od1rh3nyh7" path="res://sprites/头像框.png" id="11_avatar_frame"]
+[ext_resource type="Texture2D" uid="uid://bl854ixwku8p" path="res://sprites/金币槽.png" id="12_gold_slot"]
+[ext_resource type="Texture2D" uid="uid://c6i5jfak7uake" path="res://sprites/净化进度、.png" id="13_purification_progress"]
 
-[node name="BattleScene" type="Control"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_avatar_frame"]
+atlas = ExtResource("11_avatar_frame")
+region = Rect2(11, 9, 92, 89)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hp_under"]
+atlas = ExtResource("9_hp_under")
+region = Rect2(117, 27, 308, 33)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hp_fill"]
+atlas = ExtResource("10_hp_fill")
+region = Rect2(116, 28, 200, 31)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gold_slot"]
+atlas = ExtResource("12_gold_slot")
+region = Rect2(110, 63, 170, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_settings_button"]
+atlas = ExtResource("5_settings")
+region = Rect2(1195, 15, 61, 65)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_deck_button"]
+atlas = ExtResource("6_deck")
+region = Rect2(1120, 16, 63, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_purification_empty"]
+atlas = ExtResource("13_purification_progress")
+region = Rect2(779, 19, 49, 57)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_purification_done"]
+atlas = ExtResource("13_purification_progress")
+region = Rect2(970, 19, 59, 57)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_draw_pile_button"]
+atlas = ExtResource("7_draw_pile")
+region = Rect2(36, 570, 118, 106)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_discard_pile_button"]
+atlas = ExtResource("8_discard_pile")
+region = Rect2(1134, 568, 109, 115)
+
+[node name="BattleScene" type="Control" unique_id=2060161710]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,322 +63,404 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
 
-[node name="BattleController" type="Node" parent="."]
+[node name="BattleController" type="Node" parent="." unique_id=460990232]
 script = ExtResource("2")
 
-[node name="Root" type="MarginContainer" parent="."]
+[node name="Root" type="MarginContainer" parent="." unique_id=750512397]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Layout" type="VBoxContainer" parent="Root" unique_id=168758545]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HeaderRow" type="HBoxContainer" parent="Root/Layout" unique_id=125358410]
+custom_minimum_size = Vector2(0, 94)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="PlayerHud" type="Control" parent="Root/Layout/HeaderRow" unique_id=1953765263]
+custom_minimum_size = Vector2(438, 94)
+layout_mode = 2
+
+[node name="AvatarFrame" type="TextureRect" parent="Root/Layout/HeaderRow/PlayerHud" unique_id=1661953001]
+layout_mode = 1
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 96.0
+offset_bottom = 91.0
+texture = SubResource("AtlasTexture_avatar_frame")
+stretch_mode = 5
+
+[node name="StatusColumn" type="Control" parent="Root/Layout/HeaderRow/PlayerHud" unique_id=667301915]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 98.0
+offset_top = 2.0
+offset_right = 438.0
+offset_bottom = 94.0
+
+[node name="PlayerHpPanel" type="Control" parent="Root/Layout/HeaderRow/PlayerHud/StatusColumn" unique_id=531489594]
+custom_minimum_size = Vector2(320, 40)
+layout_mode = 1
+anchors_preset = 0
+offset_top = 2.0
+offset_right = 320.0
+offset_bottom = 42.0
+
+[node name="PlayerHpUnder" type="NinePatchRect" parent="Root/Layout/HeaderRow/PlayerHud/StatusColumn/PlayerHpPanel" unique_id=1399240081]
+layout_mode = 1
+offset_left = 6.0
+offset_top = 3.5
+offset_right = 314.0
+offset_bottom = 36.5
+texture = SubResource("AtlasTexture_hp_under")
+
+[node name="PlayerHpBar" type="Control" parent="Root/Layout/HeaderRow/PlayerHud/StatusColumn/PlayerHpPanel" unique_id=1382936982]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 0
+offset_left = 6.0
+offset_top = 4.5
+offset_right = 314.0
+offset_bottom = 35.5
+
+[node name="PlayerHpFill" type="NinePatchRect" parent="Root/Layout/HeaderRow/PlayerHud/StatusColumn/PlayerHpPanel/PlayerHpBar" unique_id=1811504332]
+layout_mode = 1
+offset_right = 308.0
+offset_bottom = 31.0
+texture = SubResource("AtlasTexture_hp_fill")
+
+[node name="PlayerHpLabel" type="Label" parent="Root/Layout/HeaderRow/PlayerHud/StatusColumn/PlayerHpPanel" unique_id=1717803940]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 14
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 14
-
-[node name="Layout" type="VBoxContainer" parent="Root"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/separation = 12
-
-[node name="HeaderRow" type="HBoxContainer" parent="Root/Layout"]
-custom_minimum_size = Vector2(0, 42)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 12
-
-[node name="PlayerHpPanel" type="PanelContainer" parent="Root/Layout/HeaderRow"]
-custom_minimum_size = Vector2(240, 38)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PlayerHpBar" type="ProgressBar" parent="Root/Layout/HeaderRow/PlayerHpPanel"]
-custom_minimum_size = Vector2(220, 24)
-layout_mode = 2
-show_percentage = false
-
-[node name="PlayerHpLabel" type="Label" parent="Root/Layout/HeaderRow/PlayerHpPanel"]
-layout_mode = 2
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+text = "HP 0 / 0"
 horizontal_alignment = 1
 vertical_alignment = 1
-text = "HP 0 / 0"
 
-[node name="HeaderSpacer" type="Control" parent="Root/Layout/HeaderRow"]
+[node name="GoldPanel" type="Control" parent="Root/Layout/HeaderRow/PlayerHud/StatusColumn" unique_id=210133633]
+custom_minimum_size = Vector2(188, 54)
+layout_mode = 1
+anchors_preset = 0
+offset_top = 40.0
+offset_right = 188.0
+offset_bottom = 94.0
+
+[node name="GoldSlot" type="TextureRect" parent="Root/Layout/HeaderRow/PlayerHud/StatusColumn/GoldPanel" unique_id=1715525509]
+layout_mode = 1
+offset_right = 170.0
+offset_bottom = 54.0
+texture = SubResource("AtlasTexture_gold_slot")
+stretch_mode = 5
+
+[node name="GoldValue" type="Label" parent="Root/Layout/HeaderRow/PlayerHud/StatusColumn/GoldPanel" unique_id=2065763788]
+layout_mode = 1
+offset_left = 58.0
+offset_top = 6.0
+offset_right = 160.0
+offset_bottom = 48.0
+theme_override_colors/font_color = Color(0.32, 0.2, 0.09, 1)
+theme_override_font_sizes/font_size = 20
+text = "0"
+vertical_alignment = 1
+
+[node name="HeaderSpacer" type="Control" parent="Root/Layout/HeaderRow" unique_id=1311506952]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="RightButtons" type="HBoxContainer" parent="Root/Layout/HeaderRow"]
+[node name="TaskStripPanel" type="MarginContainer" parent="Root/Layout/HeaderRow" unique_id=176934834]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
 
-[node name="SettingsButton" type="Button" parent="Root/Layout/HeaderRow/RightButtons"]
-custom_minimum_size = Vector2(92, 34)
+[node name="PurificationTaskRow" type="HBoxContainer" parent="Root/Layout/HeaderRow/TaskStripPanel" unique_id=1954513484]
 layout_mode = 2
-text = "设置"
-
-[node name="DeckPreviewButton" type="Button" parent="Root/Layout/HeaderRow/RightButtons"]
-custom_minimum_size = Vector2(92, 34)
-layout_mode = 2
-text = "牌库"
-
-[node name="MainRow" type="HBoxContainer" parent="Root/Layout"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 theme_override_constants/separation = 18
 
-[node name="LeftColumn" type="VBoxContainer" parent="Root/Layout/MainRow"]
-custom_minimum_size = Vector2(240, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/separation = 12
-
-[node name="PlayerPanel" type="PanelContainer" parent="Root/Layout/MainRow/LeftColumn"]
-custom_minimum_size = Vector2(240, 160)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PlayerPanelInner" type="VBoxContainer" parent="Root/Layout/MainRow/LeftColumn/PlayerPanel"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="PlayerTitle" type="Label" parent="Root/Layout/MainRow/LeftColumn/PlayerPanel/PlayerPanelInner"]
-layout_mode = 2
-text = "玩家"
-
-[node name="BlockValue" type="Label" parent="Root/Layout/MainRow/LeftColumn/PlayerPanel/PlayerPanelInner"]
-layout_mode = 2
-text = "防御：0"
-
-[node name="ItemRow" type="HBoxContainer" parent="Root/Layout/MainRow/LeftColumn/PlayerPanel/PlayerPanelInner"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="StomachRow" type="HBoxContainer" parent="Root/Layout/MainRow/LeftColumn/PlayerPanel/PlayerPanelInner"]
+[node name="PreviewTaskWash" type="HBoxContainer" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow" unique_id=1988270094]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="LeftSpacer" type="Control" parent="Root/Layout/MainRow/LeftColumn"]
+[node name="Name" type="Label" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskWash" unique_id=1390223300]
 layout_mode = 2
-size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.42, 0.27, 0.14, 1)
+theme_override_font_sizes/font_size = 18
+text = "脏污"
+vertical_alignment = 1
 
-[node name="CentreColumn" type="VBoxContainer" parent="Root/Layout/MainRow"]
+[node name="Icon" type="TextureRect" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskWash" unique_id=1090028734]
+custom_minimum_size = Vector2(30, 34)
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-size_flags_stretch_ratio = 2.2
-theme_override_constants/separation = 12
+texture = SubResource("AtlasTexture_purification_empty")
+stretch_mode = 5
 
-[node name="TaskPanel" type="PanelContainer" parent="Root/Layout/MainRow/CentreColumn"]
-custom_minimum_size = Vector2(0, 144)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="TaskPanelInner" type="VBoxContainer" parent="Root/Layout/MainRow/CentreColumn/TaskPanel"]
+[node name="PreviewTaskTrim" type="HBoxContainer" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow" unique_id=981264343]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="TaskTitle" type="Label" parent="Root/Layout/MainRow/CentreColumn/TaskPanel/TaskPanelInner"]
+[node name="Name" type="Label" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskTrim" unique_id=104135796]
 layout_mode = 2
-text = "净化任务"
+theme_override_colors/font_color = Color(0.42, 0.27, 0.14, 1)
+theme_override_font_sizes/font_size = 18
+text = "腐败"
+vertical_alignment = 1
 
-[node name="TaskValue" type="Label" parent="Root/Layout/MainRow/CentreColumn/TaskPanel/TaskPanelInner"]
+[node name="Icon" type="TextureRect" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskTrim" unique_id=1574046331]
+custom_minimum_size = Vector2(30, 34)
 layout_mode = 2
-text = "当前步骤：-"
+texture = SubResource("AtlasTexture_purification_empty")
+stretch_mode = 5
 
-[node name="ProgressValue" type="Label" parent="Root/Layout/MainRow/CentreColumn/TaskPanel/TaskPanelInner"]
+[node name="PreviewTaskPurge" type="HBoxContainer" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow" unique_id=308136475]
 layout_mode = 2
-text = "进度：0 / 0"
+theme_override_constants/separation = 6
 
-[node name="TaskListValue" type="RichTextLabel" parent="Root/Layout/MainRow/CentreColumn/TaskPanel/TaskPanelInner"]
-custom_minimum_size = Vector2(0, 80)
+[node name="Name" type="Label" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskPurge" unique_id=975008771]
 layout_mode = 2
-fit_content = true
-bbcode_enabled = true
-text = "任务：-"
+theme_override_colors/font_color = Color(0.29, 0.2, 0.11, 1)
+theme_override_font_sizes/font_size = 18
+text = "污秽"
+vertical_alignment = 1
 
-[node name="IntentValue" type="Label" parent="Root/Layout/MainRow/CentreColumn/TaskPanel/TaskPanelInner"]
+[node name="Icon" type="TextureRect" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskPurge" unique_id=809159193]
+custom_minimum_size = Vector2(30, 34)
 layout_mode = 2
-text = "意图：-"
+texture = SubResource("AtlasTexture_purification_done")
+stretch_mode = 5
 
-[node name="TimeLogPanel" type="PanelContainer" parent="Root/Layout/MainRow/CentreColumn"]
+[node name="RightButtons" type="HBoxContainer" parent="Root/Layout/HeaderRow" unique_id=626151618]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="DeckPreviewButton" type="TextureButton" parent="Root/Layout/HeaderRow/RightButtons" unique_id=1129262132]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+tooltip_text = "牌库"
+texture_normal = SubResource("AtlasTexture_deck_button")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="SettingsButton" type="TextureButton" parent="Root/Layout/HeaderRow/RightButtons" unique_id=966229500]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+tooltip_text = "设置"
+texture_normal = SubResource("AtlasTexture_settings_button")
+ignore_texture_size = true
+stretch_mode = 5
+
+
+[node name="MainRow" type="HBoxContainer" parent="Root/Layout" unique_id=974220798]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 28
+
+[node name="LeftColumn" type="VBoxContainer" parent="Root/Layout/MainRow" unique_id=245272272]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="PlayerStatus" type="Label" parent="Root/Layout/MainRow/LeftColumn" unique_id=848161232]
+custom_minimum_size = Vector2(0, 122)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "玩家
+护盾 0
+胃 0/0"
+autowrap_mode = 2
+
+[node name="LeftSpacer" type="Control" parent="Root/Layout/MainRow/LeftColumn" unique_id=759846578]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CentreColumn" type="VBoxContainer" parent="Root/Layout/MainRow" unique_id=1969880177]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.6
+theme_override_constants/separation = 8
+
+[node name="TimeLogPanel" type="PanelContainer" parent="Root/Layout/MainRow/CentreColumn" unique_id=70771226]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TimeLogInner" type="VBoxContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel"]
+[node name="TimeLogInner" type="VBoxContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel" unique_id=180011127]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="TimelineValue" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner"]
+[node name="TimelineValue" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner" unique_id=769047376]
 layout_mode = 2
 text = "战斗时间：0t"
 
-[node name="EffectBanner" type="PanelContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner"]
-custom_minimum_size = Vector2(0, 52)
+[node name="EffectBanner" type="PanelContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner" unique_id=1188837986]
+custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 
-[node name="EffectBannerInner" type="MarginContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/EffectBanner"]
+[node name="EffectBannerInner" type="MarginContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/EffectBanner" unique_id=1555356340]
 layout_mode = 2
 theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 10
+theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_bottom = 8
 
-[node name="EffectBannerLabel" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/EffectBanner/EffectBannerInner"]
+[node name="EffectBannerLabel" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/EffectBanner/EffectBannerInner" unique_id=1938284100]
 layout_mode = 2
 text = "拖拽手牌到出牌区后，这里会显示效果摘要。"
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="LogTitle" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner"]
+[node name="LogTitle" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner" unique_id=751006090]
 layout_mode = 2
 text = "日志"
 
-[node name="LogScroll" type="ScrollContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner"]
+[node name="LogScroll" type="ScrollContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner" unique_id=602774726]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="LogText" type="RichTextLabel" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/LogScroll"]
+[node name="LogText" type="RichTextLabel" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/LogScroll" unique_id=1473608164]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 autowrap_mode = 2
 
-[node name="CentreSpacer" type="Control" parent="Root/Layout/MainRow/CentreColumn"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="RightColumn" type="VBoxContainer" parent="Root/Layout/MainRow"]
-custom_minimum_size = Vector2(240, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/separation = 12
-
-[node name="EnemyPanel" type="PanelContainer" parent="Root/Layout/MainRow/RightColumn"]
-custom_minimum_size = Vector2(240, 170)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="EnemyPanelInner" type="VBoxContainer" parent="Root/Layout/MainRow/RightColumn/EnemyPanel"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="EnemyName" type="Label" parent="Root/Layout/MainRow/RightColumn/EnemyPanel/EnemyPanelInner"]
-layout_mode = 2
-text = "敌人"
-
-[node name="EnemyIntentPlaceholder" type="Label" parent="Root/Layout/MainRow/RightColumn/EnemyPanel/EnemyPanelInner"]
-layout_mode = 2
-text = "敌人图案/意图预留区"
-
-[node name="EnemyStatusValue" type="Label" parent="Root/Layout/MainRow/RightColumn/EnemyPanel/EnemyPanelInner"]
-layout_mode = 2
-text = "净化：0 / 0"
-
-[node name="BlockRow" type="VBoxContainer" parent="Root/Layout/MainRow/RightColumn/EnemyPanel/EnemyPanelInner"]
+[node name="RightColumn" type="VBoxContainer" parent="Root/Layout/MainRow" unique_id=47337126]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 6
 
-[node name="BlockTitle" type="Label" parent="Root/Layout/MainRow/RightColumn/EnemyPanel/EnemyPanelInner/BlockRow"]
-layout_mode = 2
-text = "食物块"
-
-[node name="RightSpacer" type="Control" parent="Root/Layout/MainRow/RightColumn"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="BottomRow" type="HBoxContainer" parent="Root/Layout"]
-custom_minimum_size = Vector2(0, 260)
+[node name="EnemyStatus" type="Label" parent="Root/Layout/MainRow/RightColumn" unique_id=920689639]
+custom_minimum_size = Vector2(0, 122)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 16
+size_flags_vertical = 1
+text = "敌人
+净化 0/0
+待机"
+horizontal_alignment = 2
+autowrap_mode = 2
 
-[node name="DeckColumn" type="VBoxContainer" parent="Root/Layout/BottomRow"]
+[node name="RightSpacer" type="Control" parent="Root/Layout/MainRow/RightColumn" unique_id=1500564966]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="DeckSpacer" type="Control" parent="Root/Layout/BottomRow/DeckColumn"]
+[node name="BottomRow" type="HBoxContainer" parent="Root/Layout" unique_id=2026744775]
+custom_minimum_size = Vector2(0, 260)
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="DeckColumn" type="VBoxContainer" parent="Root/Layout/BottomRow" unique_id=1499812669]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 6
 
-[node name="DeckPanel" type="PanelContainer" parent="Root/Layout/BottomRow/DeckColumn"]
-custom_minimum_size = Vector2(120, 56)
+[node name="ActorAnchor" type="CenterContainer" parent="Root/Layout/BottomRow/DeckColumn" unique_id=2101478670]
+custom_minimum_size = Vector2(0, 190)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="DeckPanelInner" type="VBoxContainer" parent="Root/Layout/BottomRow/DeckColumn/DeckPanel"]
+[node name="PlayerActorView" type="Control" parent="Root/Layout/BottomRow/DeckColumn/ActorAnchor" unique_id=1838247660]
+custom_minimum_size = Vector2(148, 180)
 layout_mode = 2
-theme_override_constants/separation = 0
+script = ExtResource("3")
 
-[node name="DrawValue" type="Label" parent="Root/Layout/BottomRow/DeckColumn/DeckPanel/DeckPanelInner"]
+[node name="DeckPanel" type="TextureButton" parent="Root/Layout/BottomRow/DeckColumn" unique_id=451597229]
+custom_minimum_size = Vector2(96, 92)
 layout_mode = 2
+size_flags_horizontal = 4
+tooltip_text = "抽牌堆"
+texture_normal = SubResource("AtlasTexture_draw_pile_button")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="DeckPanelInner" type="CenterContainer" parent="Root/Layout/BottomRow/DeckColumn/DeckPanel" unique_id=671984361]
+layout_mode = 0
+
+[node name="DrawValue" type="Label" parent="Root/Layout/BottomRow/DeckColumn/DeckPanel/DeckPanelInner" unique_id=695905672]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.14, 0.08, 1)
+theme_override_font_sizes/font_size = 12
 text = "抽牌堆：0"
+horizontal_alignment = 1
 
-[node name="CapacityValue" type="Label" parent="Root/Layout/BottomRow/DeckColumn/DeckPanel/DeckPanelInner"]
-layout_mode = 2
-text = "胃容量：0 / 0"
-
-[node name="BottomCenter" type="VBoxContainer" parent="Root/Layout/BottomRow"]
+[node name="BottomCenter" type="VBoxContainer" parent="Root/Layout/BottomRow" unique_id=1365750957]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 3.0
 theme_override_constants/separation = 10
 
-[node name="HandCenter" type="CenterContainer" parent="Root/Layout/BottomRow/BottomCenter"]
+[node name="HandCenter" type="CenterContainer" parent="Root/Layout/BottomRow/BottomCenter" unique_id=1642441041]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HandView" type="Control" parent="Root/Layout/BottomRow/BottomCenter/HandCenter"]
+[node name="HandView" type="Control" parent="Root/Layout/BottomRow/BottomCenter/HandCenter" unique_id=1613551167]
 custom_minimum_size = Vector2(920, 178)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("4")
 
-[node name="TimelineCenter" type="CenterContainer" parent="Root/Layout/BottomRow/BottomCenter"]
+[node name="TimelineCenter" type="CenterContainer" parent="Root/Layout/BottomRow/BottomCenter" unique_id=850662080]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TimelineScroll" type="ScrollContainer" parent="Root/Layout/BottomRow/BottomCenter/TimelineCenter"]
-custom_minimum_size = Vector2(920, 40)
+[node name="TimelineScroll" type="ScrollContainer" parent="Root/Layout/BottomRow/BottomCenter/TimelineCenter" unique_id=802588537]
+custom_minimum_size = Vector2(920, 82)
 layout_mode = 2
 horizontal_scroll_mode = 2
 vertical_scroll_mode = 0
 
-[node name="TimelineStrip" type="HBoxContainer" parent="Root/Layout/BottomRow/BottomCenter/TimelineCenter/TimelineScroll"]
+[node name="TimelineStrip" type="Control" parent="Root/Layout/BottomRow/BottomCenter/TimelineCenter/TimelineScroll" unique_id=1963287131]
+custom_minimum_size = Vector2(920, 82)
 layout_mode = 2
-theme_override_constants/separation = 8
+mouse_filter = 2
 
-[node name="DiscardColumn" type="VBoxContainer" parent="Root/Layout/BottomRow"]
+[node name="DiscardColumn" type="VBoxContainer" parent="Root/Layout/BottomRow" unique_id=965850952]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 6
 
-[node name="DiscardSpacer" type="Control" parent="Root/Layout/BottomRow/DiscardColumn"]
+[node name="ActorAnchor" type="CenterContainer" parent="Root/Layout/BottomRow/DiscardColumn" unique_id=1658956106]
+custom_minimum_size = Vector2(0, 190)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="DiscardPanel" type="PanelContainer" parent="Root/Layout/BottomRow/DiscardColumn"]
-custom_minimum_size = Vector2(96, 36)
+[node name="EnemyActorView" type="Control" parent="Root/Layout/BottomRow/DiscardColumn/ActorAnchor" unique_id=1979800179]
+custom_minimum_size = Vector2(148, 180)
 layout_mode = 2
+script = ExtResource("3")
 
-[node name="DiscardPanelInner" type="VBoxContainer" parent="Root/Layout/BottomRow/DiscardColumn/DiscardPanel"]
+[node name="DiscardPanel" type="TextureButton" parent="Root/Layout/BottomRow/DiscardColumn" unique_id=2117097553]
+custom_minimum_size = Vector2(96, 92)
 layout_mode = 2
-theme_override_constants/separation = 0
+size_flags_horizontal = 4
+tooltip_text = "弃牌堆"
+texture_normal = SubResource("AtlasTexture_discard_pile_button")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="DiscardValue" type="Label" parent="Root/Layout/BottomRow/DiscardColumn/DiscardPanel/DiscardPanelInner"]
+[node name="DiscardPanelInner" type="CenterContainer" parent="Root/Layout/BottomRow/DiscardColumn/DiscardPanel" unique_id=1343079743]
+layout_mode = 0
+
+[node name="DiscardValue" type="Label" parent="Root/Layout/BottomRow/DiscardColumn/DiscardPanel/DiscardPanelInner" unique_id=1055437035]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.14, 0.08, 1)
+theme_override_font_sizes/font_size = 12
 text = "弃牌堆：0"
+horizontal_alignment = 1

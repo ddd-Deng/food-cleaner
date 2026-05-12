@@ -55,6 +55,19 @@ func get_current_intent_label() -> String:
 		return "待机"
 	return action.display_name if not action.display_name.is_empty() else "意图"
 
+func get_action_labels_at_time(time_point: int) -> Array[String]:
+	var labels: Array[String] = []
+	if definition == null or definition.actions.is_empty():
+		return labels
+	for i in range(action_schedule.size()):
+		if action_schedule[i] != time_point:
+			continue
+		var action: EnemyActionData = definition.actions[i % definition.actions.size()]
+		if action == null:
+			continue
+		labels.append(action.display_name if not action.display_name.is_empty() else "Intent")
+	return labels
+
 func advance_action() -> void:
 	action_index += 1
 	if action_index >= action_schedule.size():

@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dxxan5ioec6b7"
+
+[deps]
+
+files=["res://data/items.名称.translation", "res://data/items.效果.translation"]
+
+source_file="res://data/items.csv"
+dest_files=["res://data/items.名称.translation", "res://data/items.效果.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

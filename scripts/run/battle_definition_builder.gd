@@ -10,6 +10,7 @@ static func build_for_room(run_state: RunState, room: RoomRuntimeData) -> Battle
 	battle.player_max_hand_size = run_state.player_max_hand_size
 	battle.player_starting_hand_size = run_state.player_starting_hand_size
 	battle.player_max_stomach_volume = run_state.player_max_stomach_volume
+	battle.player_starting_gold = run_state.gold
 	battle.starting_deck = run_state.deck_entries.duplicate()
 	for item in run_state.player_items:
 		if item != null and item.definition != null:

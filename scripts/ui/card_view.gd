@@ -1,10 +1,15 @@
-extends PanelContainer
+extends Control
 class_name CardView
 
 const HOVER_SCALE: float = 1.08
 const HOVER_LIFT: float = 34.0
 const HOVER_HOLD_PADDING: float = 14.0
 const DRAG_START_DISTANCE: float = 8.0
+
+# The original art sheets are 1024x750; these files are cropped to the card body at 336x448.
+const ATTACK_CARD_TEXTURE: Texture2D = preload("res://sprites/card_backgrounds/attack_card.png")
+const SKILL_CARD_TEXTURE: Texture2D = preload("res://sprites/card_backgrounds/skill_card.png")
+const PURIFY_CARD_TEXTURE: Texture2D = preload("res://sprites/card_backgrounds/purify_card.png")
 
 signal drag_started(card_view: CardView)
 signal drag_ended(card_view: CardView, dropped_successfully: bool, release_global_position: Vector2, cancelled_by_user: bool)
@@ -20,12 +25,12 @@ enum VisualState {
 	DISABLED,
 }
 
+@onready var background: TextureRect = $Background
+@onready var state_outline: Panel = $StateOutline
 @onready var cost_label: Label = $Margin/Content/TopRow/CostLabel
 @onready var name_label: Label = $Margin/Content/TopRow/NameLabel
-@onready var art_panel: PanelContainer = $Margin/Content/ArtPanel
-@onready var art_label: Label = $Margin/Content/ArtPanel/ArtLabel
-@onready var divider: ColorRect = $Margin/Content/Divider
-@onready var description_label: Label = $Margin/Content/DescriptionLabel
+@onready var art_label: Label = $Margin/Content/ArtSpacer/ArtLabel
+@onready var description_label: Label = $Margin/Content/DescriptionSpacer/DescriptionLabel
 
 var card_instance: CardInstance
 var hand_index: int = -1
@@ -50,9 +55,7 @@ func _ready() -> void:
 	set_process(false)
 	set_process_input(false)
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	clip_contents = true
 	_capture_base_layout()
-	divider.color = Color(0.08, 0.08, 0.08, 1.0)
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	_configure_mouse_filters(self)
@@ -136,7 +139,7 @@ func _refresh_content() -> void:
 	name_label.text = card_instance.get_display_name()
 	art_label.text = card_instance.get_art_label()
 	description_label.text = card_instance.definition.description if card_instance.definition != null else ""
-	_update_art_style()
+	_refresh_background_texture()
 
 func _capture_base_layout() -> void:
 	_base_size = custom_minimum_size
@@ -274,22 +277,7 @@ func _mouse_position_in_parent() -> Vector2:
 	return parent_control.get_global_transform().affine_inverse() * get_global_mouse_position()
 
 func _apply_visual_state() -> void:
-	var style := StyleBoxFlat.new()
-	style.bg_color = _background_color_for_type()
-	style.border_width_left = 3
-	style.border_width_top = 3
-	style.border_width_right = 3
-	style.border_width_bottom = 3
-	style.border_color = _border_color_for_state()
-	style.corner_radius_top_left = 6
-	style.corner_radius_top_right = 6
-	style.corner_radius_bottom_left = 6
-	style.corner_radius_bottom_right = 6
-	style.content_margin_left = 0
-	style.content_margin_top = 0
-	style.content_margin_right = 0
-	style.content_margin_bottom = 0
-	add_theme_stylebox_override("panel", style)
+	_apply_outline_style()
 
 	modulate = Color(1, 1, 1, 0.55) if visual_state == VisualState.DISABLED else Color.WHITE
 	custom_minimum_size = _get_card_size()
@@ -327,9 +315,6 @@ func _apply_visual_state() -> void:
 		_:
 			pass
 
-	if _is_ui_ready and art_panel != null:
-		art_panel.queue_redraw()
-
 func _configure_mouse_filters(root: Node) -> void:
 	for child in root.get_children():
 		if child is Control:
@@ -337,18 +322,23 @@ func _configure_mouse_filters(root: Node) -> void:
 			control.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			_configure_mouse_filters(control)
 
-func _background_color_for_type() -> Color:
+func _refresh_background_texture() -> void:
+	if not _is_ui_ready or background == null:
+		return
+	background.texture = _card_texture_for_type()
+
+func _card_texture_for_type() -> Texture2D:
 	if card_instance == null:
-		return Color(0.37, 0.37, 0.37, 1.0)
+		return ATTACK_CARD_TEXTURE
 	match card_instance.get_card_type():
 		BattleTypes.CardType.ATTACK:
-			return Color(0.53, 0.35, 0.27, 1.0)
+			return ATTACK_CARD_TEXTURE
 		BattleTypes.CardType.SKILL:
-			return Color(0.34, 0.47, 0.31, 1.0)
+			return SKILL_CARD_TEXTURE
 		BattleTypes.CardType.PURIFY:
-			return Color(0.30, 0.43, 0.58, 1.0)
+			return PURIFY_CARD_TEXTURE
 		_:
-			return Color(0.37, 0.37, 0.37, 1.0)
+			return ATTACK_CARD_TEXTURE
 
 func _border_color_for_state() -> Color:
 	match visual_state:
@@ -365,18 +355,20 @@ func _border_color_for_state() -> Color:
 		_:
 			return Color(0.10, 0.10, 0.10, 1.0)
 
-func _update_art_style() -> void:
-	if not _is_ui_ready or art_panel == null:
+func _apply_outline_style() -> void:
+	if not _is_ui_ready or state_outline == null:
 		return
-	var art_style := StyleBoxFlat.new()
-	art_style.bg_color = Color(1, 1, 1, 0.14)
-	art_style.border_width_left = 2
-	art_style.border_width_top = 2
-	art_style.border_width_right = 2
-	art_style.border_width_bottom = 2
-	art_style.border_color = Color(0.08, 0.08, 0.08, 0.85)
-	art_style.corner_radius_top_left = 4
-	art_style.corner_radius_top_right = 4
-	art_style.corner_radius_bottom_left = 4
-	art_style.corner_radius_bottom_right = 4
-	art_panel.add_theme_stylebox_override("panel", art_style)
+	var outline_style := StyleBoxFlat.new()
+	outline_style.bg_color = Color(0, 0, 0, 0)
+	outline_style.border_width_left = 3
+	outline_style.border_width_top = 3
+	outline_style.border_width_right = 3
+	outline_style.border_width_bottom = 3
+	outline_style.border_color = _border_color_for_state()
+	outline_style.corner_radius_top_left = 8
+	outline_style.corner_radius_top_right = 8
+	outline_style.corner_radius_bottom_left = 8
+	outline_style.corner_radius_bottom_right = 8
+	outline_style.draw_center = false
+	state_outline.visible = visual_state != VisualState.IN_HAND
+	state_outline.add_theme_stylebox_override("panel", outline_style)

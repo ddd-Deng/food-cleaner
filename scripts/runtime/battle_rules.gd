@@ -1,12 +1,16 @@
 extends RefCounted
 class_name BattleRules
 
+const TIMELINE_HISTORY_START_TIME := 0
+const TIMELINE_FUTURE_PREVIEW_SLOTS := 7
+
 static func create_state(definition: BattleDefinition) -> BattleState:
 	var state: BattleState = BattleState.new()
 	state.definition = definition
 	state.player_max_hp = definition.player_max_hp
 	state.player_hp = clampi(definition.player_starting_hp, 0, definition.player_max_hp)
 	state.player_block = 0
+	state.player_gold = max(0, definition.player_starting_gold)
 	state.player_max_hand_size = definition.player_max_hand_size
 	state.player_starting_hand_size = definition.player_starting_hand_size
 	state.player_max_stomach_volume = definition.player_max_stomach_volume
@@ -320,14 +324,14 @@ static func _refresh_battle_readouts(state: BattleState) -> void:
 
 static func _build_timeline_preview(state: BattleState) -> Array[String]:
 	var entries: Array[String] = []
-	var start_time: int = state.battle_time
-	var end_time: int = start_time + 9
+	var start_time: int = TIMELINE_HISTORY_START_TIME
+	var end_time: int = max(start_time, state.battle_time + TIMELINE_FUTURE_PREVIEW_SLOTS)
 	for time_point in range(start_time, end_time + 1):
 		var marker: String = "%dt" % time_point
-		if state.enemy != null and state.enemy.get_current_action_time() == time_point:
-			var action: EnemyActionData = state.enemy.current_action()
-			if action != null:
-				marker = "%dt %s" % [time_point, action.display_name]
+		if state.enemy != null:
+			var action_labels: Array[String] = state.enemy.get_action_labels_at_time(time_point)
+			if not action_labels.is_empty():
+				marker = "%dt %s" % [time_point, "/".join(action_labels)]
 		entries.append(marker)
 	return entries
 

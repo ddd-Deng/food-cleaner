@@ -19,7 +19,7 @@ static func build_card_map() -> Dictionary:
 static func get_card_definition(card_id: StringName) -> CardData:
 	return build_card_map().get(card_id, null)
 
-static func _load_cards_from_csv(csv_path: String = "res://cards.csv") -> Array[CardData]:
+static func _load_cards_from_csv(csv_path: String = "res://data/cards.csv") -> Array[CardData]:
 	var cards: Array[CardData] = []
 	var csv_text: String = FileAccess.get_file_as_string(csv_path)
 	if csv_text.is_empty():
