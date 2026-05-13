@@ -5,6 +5,14 @@ signal battle_requested(room_id: StringName)
 signal restart_requested
 
 const INTERACTABLE_SCENE := preload("res://scripts/explore/explore_interactable.gd")
+const DEFAULT_EXIT_POSITIONS := [
+	Vector2(70, 230),
+	Vector2(822, 230),
+	Vector2(446, 56),
+	Vector2(446, 404),
+]
+const DEFAULT_FEATURE_POSITION := Vector2(430, 170)
+const DEFAULT_PLAYER_SPAWN_POSITION := Vector2(456, 246)
 
 @onready var room_title_label: Label = $Root/Layout/Header/RoomTitle
 @onready var room_type_label: Label = $Root/Layout/Header/RoomType
@@ -21,9 +29,13 @@ const INTERACTABLE_SCENE := preload("res://scripts/explore/explore_interactable.
 var run_state: RunState
 var _spawned_interactables: Array[ExploreInteractable] = []
 var _nearest_interactable: ExploreInteractable
+var _active_room_scene: ExploreRoomScene
+var _pending_room_layout_sync: bool = false
+var _room_layout_sync_version: int = 0
 
 func _ready() -> void:
 	restart_button.pressed.connect(func() -> void: restart_requested.emit())
+	room_canvas.resized.connect(_on_room_canvas_resized)
 	if run_state != null:
 		_refresh_view()
 
@@ -63,7 +75,7 @@ func _refresh_view() -> void:
 	else:
 		restart_button.visible = false
 	_rebuild_room(room)
-	call_deferred("_reset_player_position")
+	_request_room_layout_sync()
 
 func _reset_player_position() -> void:
 	var inner_margin := Vector2(8, 8)
@@ -72,48 +84,47 @@ func _reset_player_position() -> void:
 		room_canvas.size - inner_margin * 2.0
 	)
 	player_actor.set_active(not run_state.is_run_over)
-	player_actor.center_in_room(bounds)
+	var spawn_center := _get_room_player_spawn_position()
+	var spawn_top_left := spawn_center - player_actor.size * 0.5
+	player_actor.position = spawn_top_left
 	player_actor.set_room_bounds(bounds)
 	_update_nearest_interactable()
 
 func _rebuild_room(room: RoomRuntimeData) -> void:
+	_clear_room_scene()
 	for interactable in _spawned_interactables:
 		interactable.queue_free()
 	_spawned_interactables.clear()
 
-	room_canvas.self_modulate = _room_color(room.room_type)
+	_load_room_scene(room)
 	_spawn_room_feature(room)
 	_spawn_room_exits(room)
 
 func _spawn_room_feature(room: RoomRuntimeData) -> void:
+	var feature_position := _get_room_feature_position()
 	match room.room_type:
 		MapTypes.RoomType.START:
 			_add_interactable(&"guide", "清扫路线图", "查看提示", &"message", {
 				"message": "前往怪物房清理污染，再尝试进入 Boss 房。宝箱房当前提供基础金币奖励。",
-			}, Vector2(440, 150))
+			}, feature_position)
 		MapTypes.RoomType.MONSTER, MapTypes.RoomType.BOSS:
 			var cleared_name := "已净化房间" if room.cleared else "污染怪物"
 			var prompt := "查看房间状态" if room.cleared else "发起战斗"
 			_add_interactable(&"enemy", cleared_name, prompt, &"encounter", {
 				"room_id": room.id,
-			}, Vector2(430, 170))
+			}, feature_position)
 		MapTypes.RoomType.CHEST:
 			var opened: bool = room.payload.get("opened", false)
 			_add_interactable(&"chest", "已开宝箱" if opened else "补给宝箱", "开启宝箱", &"chest", {
 				"room_id": room.id,
-			}, Vector2(430, 170))
+			}, feature_position)
 		MapTypes.RoomType.SHOP:
 			_add_interactable(&"merchant", "流动商人", "打开商店", &"shop", {
 				"room_id": room.id,
-			}, Vector2(430, 170))
+			}, feature_position)
 
 func _spawn_room_exits(room: RoomRuntimeData) -> void:
-	var positions := [
-		Vector2(70, 230),
-		Vector2(822, 230),
-		Vector2(446, 56),
-		Vector2(446, 404),
-	]
+	var positions := _get_room_exit_positions()
 	for index in range(room.linked_room_ids.size()):
 		var target_room_id: StringName = room.linked_room_ids[index]
 		var target_room: RoomRuntimeData = run_state.get_room(target_room_id)
@@ -126,7 +137,7 @@ func _spawn_room_exits(room: RoomRuntimeData) -> void:
 			"前往 %s" % target_room.display_name,
 			&"exit",
 			{"target_room_id": target_room_id},
-			positions[index % positions.size()]
+			positions[index % max(1, positions.size())]
 		)
 
 func _add_interactable(id: StringName, display_name: String, prompt: String, kind: StringName, payload: Dictionary, position_value: Vector2) -> void:
@@ -220,3 +231,67 @@ func _room_color(room_type: MapTypes.RoomType) -> Color:
 			return Color(0.93, 0.82, 0.82, 1.0)
 		_:
 			return Color(0.9, 0.9, 0.9, 1.0)
+
+func _load_room_scene(room: RoomRuntimeData) -> void:
+	_active_room_scene = null
+	if room == null or room.scene_path.is_empty():
+		room_canvas.self_modulate = _room_color(room.room_type)
+		return
+	var scene_resource := load(room.scene_path)
+	if scene_resource is not PackedScene:
+		room_canvas.self_modulate = _room_color(room.room_type)
+		return
+	var room_scene := (scene_resource as PackedScene).instantiate()
+	if room_scene is not ExploreRoomScene:
+		room_scene.queue_free()
+		room_canvas.self_modulate = _room_color(room.room_type)
+		return
+	_active_room_scene = room_scene as ExploreRoomScene
+	room_canvas.self_modulate = Color.WHITE
+	room_canvas.add_child(_active_room_scene)
+	room_canvas.move_child(_active_room_scene, 0)
+	_active_room_scene.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_active_room_scene.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+func _clear_room_scene() -> void:
+	if _active_room_scene != null:
+		_active_room_scene.queue_free()
+		_active_room_scene = null
+
+func _get_room_feature_position() -> Vector2:
+	if _active_room_scene == null:
+		return DEFAULT_FEATURE_POSITION
+	return _active_room_scene.get_feature_anchor_position(DEFAULT_FEATURE_POSITION)
+
+func _get_room_exit_positions() -> Array[Vector2]:
+	if _active_room_scene == null:
+		return DEFAULT_EXIT_POSITIONS.duplicate()
+	var positions := _active_room_scene.get_exit_anchor_positions(DEFAULT_EXIT_POSITIONS)
+	return DEFAULT_EXIT_POSITIONS.duplicate() if positions.is_empty() else positions
+
+func _get_room_player_spawn_position() -> Vector2:
+	if _active_room_scene == null:
+		return DEFAULT_PLAYER_SPAWN_POSITION
+	return _active_room_scene.get_player_spawn_position(DEFAULT_PLAYER_SPAWN_POSITION)
+
+func _request_room_layout_sync() -> void:
+	_pending_room_layout_sync = true
+	_schedule_room_layout_sync()
+
+func _on_room_canvas_resized() -> void:
+	if not _pending_room_layout_sync:
+		return
+	_schedule_room_layout_sync()
+
+func _schedule_room_layout_sync() -> void:
+	_room_layout_sync_version += 1
+	call_deferred("_run_room_layout_sync", _room_layout_sync_version)
+
+func _run_room_layout_sync(sync_version: int) -> void:
+	await get_tree().process_frame
+	if sync_version != _room_layout_sync_version:
+		return
+	if not _pending_room_layout_sync:
+		return
+	_pending_room_layout_sync = false
+	_reset_player_position()

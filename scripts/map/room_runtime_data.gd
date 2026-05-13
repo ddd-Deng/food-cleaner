@@ -4,6 +4,7 @@ class_name RoomRuntimeData
 var id: StringName = &""
 var display_name: String = ""
 var room_type: MapTypes.RoomType = MapTypes.RoomType.EVENT
+var scene_path: String = ""
 var linked_room_ids: Array[StringName] = []
 var visited: bool = false
 var cleared: bool = false

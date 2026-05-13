@@ -8,6 +8,7 @@ static func build_demo_rooms() -> Dictionary:
 	start_room.id = &"start"
 	start_room.display_name = "入口前厅"
 	start_room.room_type = MapTypes.RoomType.START
+	start_room.scene_path = "res://scenes/rooms/start_room.tscn"
 	start_room.linked_room_ids = [&"monster_room", &"chest_room"]
 	rooms[start_room.id] = start_room
 
@@ -15,6 +16,7 @@ static func build_demo_rooms() -> Dictionary:
 	monster_room.id = &"monster_room"
 	monster_room.display_name = "脏污餐台"
 	monster_room.room_type = MapTypes.RoomType.MONSTER
+	monster_room.scene_path = "res://scenes/rooms/monster_room.tscn"
 	monster_room.linked_room_ids = [&"start", &"boss_room"]
 	monster_room.payload = {
 		"enemy_definition": _build_enemy_variant("变质便当", 0),
@@ -27,6 +29,7 @@ static func build_demo_rooms() -> Dictionary:
 	chest_room.id = &"chest_room"
 	chest_room.display_name = "补给角落"
 	chest_room.room_type = MapTypes.RoomType.CHEST
+	chest_room.scene_path = "res://scenes/rooms/chest_room.tscn"
 	chest_room.linked_room_ids = [&"start"]
 	chest_room.payload = {
 		"opened": false,
@@ -38,6 +41,7 @@ static func build_demo_rooms() -> Dictionary:
 	boss_room.id = &"boss_room"
 	boss_room.display_name = "深处后厨"
 	boss_room.room_type = MapTypes.RoomType.BOSS
+	boss_room.scene_path = "res://scenes/rooms/boss_room.tscn"
 	boss_room.linked_room_ids = [&"monster_room"]
 	boss_room.payload = {
 		"enemy_definition": _build_enemy_variant("污秽盛宴", 1),

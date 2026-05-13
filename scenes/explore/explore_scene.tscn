@@ -62,6 +62,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="RoomCanvas" type="Control" parent="Root/Layout/RoomPanel"]
+clip_contents = true
 layout_mode = 2
 anchors_preset = 15
 anchor_right = 1.0

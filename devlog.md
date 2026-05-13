@@ -1,5 +1,27 @@
 # 开发日志
 
+## 2026-05-13
+
+### 修正首次进入探索时房间边界过早计算
+- 做了什么：调整 `ExploreScene` 在房间刷新后的玩家定位时机。此前首次进入探索时，`_refresh_view()` 只在房间重建后 `call_deferred()` 一次 `_reset_player_position()`；如果这时 `RoomCanvas` 仍在容器布局过程中，玩家可移动边界就会按一个尚未稳定的尺寸计算，表现为入口前厅下半部分像有空气墙，但切换一次房间后又恢复正常。现在改为在房间刷新后标记待同步，并监听 `RoomCanvas.resized`，总是等到最新一次布局后的下一帧再应用出生点和移动边界。
+- 影响文件：`scripts/explore/explore_scene.gd`、`devlog.md`
+- 如何验证：重新启动项目后直接进入入口前厅，确认首次进入时也能走到房间下半区域；再切换到其他房间并返回，入口前厅的可行走范围应保持一致，不再只有首次进入时异常。
+
+### 修正探索房间可见区域与可行走区域错位
+- 做了什么：为 `explore_scene.tscn` 的 `RoomCanvas` 开启 `clip_contents`。此前 room scene 模板会按完整场景尺寸绘制内容，但 `PlayerActor` 的可活动范围实际只按 `RoomCanvas` 尺寸夹取；在未裁剪内容时，房间下半部可能仍然可见，导致看起来像“下面还有地图，但角色被空气墙挡住”。开启裁剪后，可见区域会和实际移动边界保持一致。
+- 影响文件：`scenes/explore/explore_scene.tscn`、`devlog.md`
+- 如何验证：重新进入探索场景，确认入口前厅中不再出现“下半部分地图可见但角色无法走过去”的错觉；角色可见范围应与实际可行走区域一致，移动到房间下边缘时会明确停在可见房间底边附近。
+
+### 修复 room scene 出口锚点参数类型错误
+- 做了什么：修正 `ExploreRoomScene.get_exit_anchor_positions()` 的参数类型定义。此前它要求调用方传入 `Array[Vector2]`，但 `ExploreScene` 传入的默认出口常量在运行时会被视为普通 `Array`，导致 Godot 在进入探索场景时直接报 typed array 参数不匹配。现在改为接受普通 `Array`，并在函数内部筛出 `Vector2` 转成返回用的 `Array[Vector2]`。
+- 影响文件：`scripts/explore/room_scene.gd`、`devlog.md`
+- 如何验证：重新启动项目并进入探索，确认不再出现 `The array of argument 1 (Array) does not have the same element type as the expected typed array argument`；各房间出口仍按 room scene 中的 `exit` 锚点位置生成。
+
+### 探索房间改为独立 room scene 模板
+- 做了什么：将探索层原本由 `ExploreScene` 直接按房间类型生成背景色和固定坐标交互物的做法，改为“运行时房间数据 + 独立房间 `.tscn` 模板”结构；为 `RoomRuntimeData` 增加 `scene_path`，新增 `ExploreRoomScene` 与 `RoomAnchor` 脚本，用于在房间模板里可视化标记功能物、出口和玩家出生点；把当前已有的 `start`、`monster_room`、`chest_room`、`boss_room` 四个房间分别拆到 `scenes/rooms/` 下独立场景中，并让 `ExploreScene` 运行时按模板加载房间，再根据模板锚点放置交互物和出口。
+- 影响文件：`scripts/map/room_runtime_data.gd`、`scripts/map/map_generator.gd`、`scripts/explore/explore_scene.gd`、`scripts/explore/room_scene.gd`、`scripts/explore/room_anchor.gd`、`scenes/rooms/start_room.tscn`、`scenes/rooms/monster_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/boss_room.tscn`、`devlog.md`
+- 如何验证：当前环境未安装 Godot，无法执行 headless 场景加载。请在编辑器中分别打开 `res://scenes/rooms/start_room.tscn`、`monster_room.tscn`、`chest_room.tscn`、`boss_room.tscn`，确认能直接可视化编辑房间内容，并能看到 `feature/exit/player_spawn` 锚点；再运行项目，确认进入不同房间时会加载对应模板，玩家出生点、房间中央功能物和出口位置以各房间 scene 中的锚点为准，怪物房/Boss 房仍会阻止未清理前离开，宝箱房仍能正常给金币并返回探索。
+
 ## 2026-05-12
 
 ### 调整 CardView 卡面文字锚定布局
