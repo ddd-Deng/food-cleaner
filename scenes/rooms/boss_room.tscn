@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/explore/room_anchor.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 
 [node name="BossRoom" type="Control"]
 custom_minimum_size = Vector2(960, 540)
@@ -41,15 +42,6 @@ theme_override_font_sizes/font_size = 26
 text = "深处后厨"
 horizontal_alignment = 1
 
-[node name="FeatureAnchor" type="ColorRect" parent="."]
-custom_minimum_size = Vector2(220, 64)
-offset_left = 370.0
-offset_top = 164.0
-offset_right = 590.0
-offset_bottom = 228.0
-script = ExtResource("2")
-anchor_kind = &"feature"
-
 [node name="PlayerSpawn" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(48, 48)
 offset_left = 456.0
@@ -59,12 +51,22 @@ offset_bottom = 388.0
 script = ExtResource("2")
 anchor_kind = &"player_spawn"
 
-[node name="ExitLeft" type="ColorRect" parent="."]
-custom_minimum_size = Vector2(220, 64)
-offset_left = 58.0
-offset_top = 228.0
-offset_right = 278.0
-offset_bottom = 292.0
-script = ExtResource("2")
-anchor_kind = &"exit"
-anchor_order = 0
+[node name="BossInteractable" parent="." instance=ExtResource("3")]
+position = Vector2(480, 196)
+interactable_id = &"enemy"
+display_name = "污染怪物"
+prompt_text = "发起战斗"
+interactable_kind = &"encounter"
+payload = {
+"room_id": &"boss_room"
+}
+
+[node name="ExitToMonster" parent="." instance=ExtResource("3")]
+position = Vector2(168, 260)
+interactable_id = &"exit_monster_room"
+display_name = "出口 -> 怪物房"
+prompt_text = "前往 脏污餐台"
+interactable_kind = &"exit"
+payload = {
+"target_room_id": &"monster_room"
+}

@@ -14,6 +14,7 @@ enum FacingMode {
 
 @export var move_speed: float = 260.0
 @export var animation_fps: float = 12.0
+@export var interaction_radius: float = 90.0
 
 var room_bounds: Rect2 = Rect2(0, 0, 960, 540)
 var is_active: bool = true
@@ -23,9 +24,12 @@ var _facing_mode: FacingMode = FacingMode.FRONT
 var _is_facing_left: bool = false
 
 @onready var _animated_sprite: AnimatedSprite2D = AnimatedSprite2D.new()
+@onready var interaction_area: Area2D = Area2D.new()
+@onready var interaction_shape: CollisionShape2D = CollisionShape2D.new()
 
 func _ready() -> void:
 	_configure_animated_sprite()
+	_configure_interaction_area()
 	_load_animation_sets()
 	_apply_default_size()
 	_update_animation_state(false)
@@ -60,9 +64,21 @@ func get_center_point() -> Vector2:
 func get_collision_size() -> Vector2:
 	return collision_size
 
+func get_interaction_area() -> Area2D:
+	return interaction_area
+
 func _configure_animated_sprite() -> void:
 	_animated_sprite.centered = true
 	add_child(_animated_sprite)
+
+func _configure_interaction_area() -> void:
+	add_child(interaction_area)
+	interaction_area.monitoring = true
+	interaction_area.monitorable = false
+	interaction_area.add_child(interaction_shape)
+	var circle := CircleShape2D.new()
+	circle.radius = interaction_radius
+	interaction_shape.shape = circle
 
 func _load_animation_sets() -> void:
 	var sprite_frames := SpriteFrames.new()

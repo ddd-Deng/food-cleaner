@@ -2,6 +2,21 @@
 
 ## 2026-05-13
 
+### 探索交互切换为真正的 Area2D 检测
+- 做了什么：在 `PlayerActor` 上新增交互检测 `Area2D`，并将 `ExploreScene` 的交互判定从“遍历所有交互点做距离扫描”改为“监听玩家交互范围内的 `Area2D` 进入/离开事件”。现在只有进入玩家交互圆形范围的 `ExploreInteractable` 才会进入可交互列表，按 `E` 时再从当前重叠列表中选最近目标；因此交互现在已经是真正基于 `Area2D` 的检测，而不再只是把 `Area2D` 节点当占位。
+- 影响文件：`scripts/explore/player_actor.gd`、`scripts/explore/explore_scene.gd`、`devlog.md`
+- 如何验证：进入探索后，只有角色走进出口/怪物/宝箱的碰撞范围时，对应交互点才会高亮并显示 `E ...` 提示；走出范围后提示消失；拖动房间 scene 中交互点的位置或调整其 `area_size` 后，交互触发范围会随之变化。
+
+### 修复宝箱状态同步的类型推断报错
+- 做了什么：修正 `ExploreScene` 在同步宝箱交互点显示状态时的局部变量声明。此前使用 `var opened := room != null and room.payload.get("opened", false)`，由于 `payload.get()` 返回 `Variant`，GDScript 无法可靠推断 `opened` 的静态类型，导致解析时报错。现改为显式 `bool` 转换。
+- 影响文件：`scripts/explore/explore_scene.gd`、`devlog.md`
+- 如何验证：重新加载项目，确认不再出现 `Cannot infer the type of "opened" variable because the value doesn't have a set type.`；进入宝箱房后，宝箱未开时显示“补给宝箱”，打开后切换为“已开宝箱”。
+
+### 探索交互物重构为 Node2D + Area2D 并下沉到房间 scene
+- 做了什么：将探索中的出口、怪物、宝箱、提示牌从 `Control` UI 占位重构为真正的 `Node2D + Area2D` 交互点，并新增 `scenes/explore/explore_interactable.tscn` 作为可复用场景；四个现有房间模板现在直接实例化自己的交互点，位置、碰撞范围、文案和目标房间都在房间 `.tscn` 里可视化维护，不再由 `ExploreScene` 运行时按锚点动态生成。`ExploreScene` 切换为在加载房间 scene 后收集其中的 `ExploreInteractable` 节点，并根据运行时状态同步怪物房/宝箱房显示文案。
+- 影响文件：`scripts/explore/explore_interactable.gd`、`scenes/explore/explore_interactable.tscn`、`scripts/explore/explore_scene.gd`、`scripts/explore/room_scene.gd`、`scenes/rooms/start_room.tscn`、`scenes/rooms/monster_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/boss_room.tscn`、`devlog.md`
+- 如何验证：在编辑器中打开四个房间 scene，确认出口/怪物/宝箱/提示牌已经是独立节点而不是 `feature/exit` 锚点；运行项目，确认靠近这些交互点后仍会高亮并响应 `E`，怪物房/Boss 房在清理前仍锁门，宝箱打开后文案会变成“已开宝箱”。
+
 ### 探索主角重构为 Node2D + AnimatedSprite2D
 - 做了什么：将探索主角从 `Control + TextureRect` 的 UI 节点实现重构为 `Node2D + AnimatedSprite2D`。角色动画现在由 Godot 自带的 `AnimatedSprite2D` 和 `SpriteFrames` 驱动，不再手写帧计时与 UI 贴图切换；仍保留现有“四组目录按文件名排序加载帧图、横向主导用右向动画并在向左时翻转、纵向主导用前向动画、初始待机前”的方向规则。同时调整 `ExploreScene` 的出生点应用逻辑，使其直接把房间锚点中心作为 `Node2D.position`，不再依赖旧 `Control.size` 计算左上角。
 - 影响文件：`scripts/explore/player_actor.gd`、`scripts/explore/explore_scene.gd`、`scenes/explore/explore_scene.tscn`、`devlog.md`
