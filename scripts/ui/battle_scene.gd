@@ -6,6 +6,7 @@ signal battle_resolved(result: Dictionary)
 @export var start_demo_on_ready: bool = true
 
 @onready var controller: BattleController = $BattleController
+@onready var battle_player_sprite: BattlePlayerSprite = $BattlePlayerSprite
 @onready var player_hp_bar: Control = $Root/Layout/HeaderRow/PlayerHud/StatusColumn/PlayerHpPanel/PlayerHpBar
 @onready var player_hp_fill: NinePatchRect = $Root/Layout/HeaderRow/PlayerHud/StatusColumn/PlayerHpPanel/PlayerHpBar/PlayerHpFill
 @onready var player_hp_overlay: Label = $Root/Layout/HeaderRow/PlayerHud/StatusColumn/PlayerHpPanel/PlayerHpLabel
@@ -281,8 +282,15 @@ func _on_drag_cancelled() -> void:
 func _play_card_from_hand(index: int) -> void:
 	if index < 0:
 		return
+	var played_card: CardInstance = null
+	if controller.state != null and index < controller.state.hand.size():
+		played_card = controller.state.hand[index]
+	var played_card_type: BattleTypes.CardType = played_card.get_card_type() if played_card != null else BattleTypes.CardType.NONE
 	if not controller.play_card(index):
 		hand_view.rebuild_hand(controller.state.hand, not controller.state.is_finished())
+		return
+	if played_card_type == BattleTypes.CardType.ATTACK and battle_player_sprite != null:
+		battle_player_sprite.play_attack_animation()
 
 func _refresh_purification_task_row(state: BattleState) -> void:
 	for child in purification_task_row.get_children():

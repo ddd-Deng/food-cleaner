@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/explore/room_anchor.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
+[ext_resource type="Texture2D" path="res://sprites/map/森林地图/背景.png" id="4"]
 
 [node name="BossRoom" type="Control"]
 custom_minimum_size = Vector2(960, 540)
@@ -14,14 +16,16 @@ grow_vertical = 2
 script = ExtResource("1")
 fallback_room_tint = Color(0.93, 0.82, 0.82, 1)
 
-[node name="Backdrop" type="Panel" parent="."]
+[node name="Backdrop" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-self_modulate = Color(0.93, 0.82, 0.82, 1)
+texture = ExtResource("4")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="KitchenCore" type="Panel" parent="."]
 layout_mode = 1
@@ -41,15 +45,6 @@ theme_override_font_sizes/font_size = 26
 text = "深处后厨"
 horizontal_alignment = 1
 
-[node name="FeatureAnchor" type="ColorRect" parent="."]
-custom_minimum_size = Vector2(220, 64)
-offset_left = 370.0
-offset_top = 164.0
-offset_right = 590.0
-offset_bottom = 228.0
-script = ExtResource("2")
-anchor_kind = &"feature"
-
 [node name="PlayerSpawn" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(48, 48)
 offset_left = 456.0
@@ -59,12 +54,22 @@ offset_bottom = 388.0
 script = ExtResource("2")
 anchor_kind = &"player_spawn"
 
-[node name="ExitLeft" type="ColorRect" parent="."]
-custom_minimum_size = Vector2(220, 64)
-offset_left = 58.0
-offset_top = 228.0
-offset_right = 278.0
-offset_bottom = 292.0
-script = ExtResource("2")
-anchor_kind = &"exit"
-anchor_order = 0
+[node name="BossInteractable" parent="." instance=ExtResource("3")]
+position = Vector2(480, 196)
+interactable_id = &"enemy"
+display_name = "污染怪物"
+prompt_text = "发起战斗"
+interactable_kind = &"encounter"
+payload = {
+"room_id": &"boss_room"
+}
+
+[node name="ExitToMonster" parent="." instance=ExtResource("3")]
+position = Vector2(168, 260)
+interactable_id = &"exit_monster_room"
+display_name = "出口 -> 怪物房"
+prompt_text = "前往 脏污餐台"
+interactable_kind = &"exit"
+payload = {
+"target_room_id": &"monster_room"
+}
