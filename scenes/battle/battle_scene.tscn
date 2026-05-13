@@ -3,7 +3,8 @@
 [ext_resource type="Script" uid="uid://bpol45bkl8i45" path="res://scripts/ui/battle_scene.gd" id="1"]
 [ext_resource type="Script" uid="uid://dpe8fkikxu52" path="res://scripts/runtime/battle_controller.gd" id="2"]
 [ext_resource type="Script" uid="uid://da2tkcwkvllr4" path="res://scripts/ui/battle_actor_view.gd" id="3"]
-[ext_resource type="Script" uid="uid://dnsl22ty8ukef" path="res://scripts/ui/hand_view.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/ui/hand_view.gd" id="4"]
+[ext_resource type="Script" uid="uid://dywudx16a8swr" path="res://scripts/ui/battle_player_sprite.gd" id="4_player_sprite"]
 [ext_resource type="Texture2D" uid="uid://dm2gw7nh04wlh" path="res://sprites/按钮/设置.png" id="5_settings"]
 [ext_resource type="Texture2D" uid="uid://cdsisuov65cmv" path="res://sprites/按钮/查看卡组.png" id="6_deck"]
 [ext_resource type="Texture2D" uid="uid://dqdo54c7fucoy" path="res://sprites/抽牌堆.png" id="7_draw_pile"]
@@ -13,8 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://by4od1rh3nyh7" path="res://sprites/头像框.png" id="11_avatar_frame"]
 [ext_resource type="Texture2D" uid="uid://bl854ixwku8p" path="res://sprites/金币槽.png" id="12_gold_slot"]
 [ext_resource type="Texture2D" uid="uid://c6i5jfak7uake" path="res://sprites/净化进度、.png" id="13_purification_progress"]
-[ext_resource type="Texture2D" path="res://sprites/map/战斗场景/背景.png" id="14_battle_background"]
-[ext_resource type="Texture2D" path="res://sprites/map/战斗场景/光.png" id="15_battle_foreground"]
+[ext_resource type="Texture2D" uid="uid://5yvutjetcuo3" path="res://sprites/map/战斗场景/背景.png" id="14_battle_background"]
+[ext_resource type="Texture2D" uid="uid://056l2vj5of4v" path="res://sprites/map/战斗场景/光.png" id="15_battle_foreground"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_avatar_frame"]
 atlas = ExtResource("11_avatar_frame")
@@ -32,14 +33,6 @@ region = Rect2(116, 28, 200, 31)
 atlas = ExtResource("12_gold_slot")
 region = Rect2(110, 63, 170, 54)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_settings_button"]
-atlas = ExtResource("5_settings")
-region = Rect2(1195, 15, 61, 65)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_deck_button"]
-atlas = ExtResource("6_deck")
-region = Rect2(1120, 16, 63, 62)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_purification_empty"]
 atlas = ExtResource("13_purification_progress")
 region = Rect2(779, 19, 49, 57)
@@ -47,6 +40,14 @@ region = Rect2(779, 19, 49, 57)
 [sub_resource type="AtlasTexture" id="AtlasTexture_purification_done"]
 atlas = ExtResource("13_purification_progress")
 region = Rect2(970, 19, 59, 57)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_deck_button"]
+atlas = ExtResource("6_deck")
+region = Rect2(1120, 16, 63, 62)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_settings_button"]
+atlas = ExtResource("5_settings")
+region = Rect2(1195, 15, 61, 65)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_draw_pile_button"]
 atlas = ExtResource("7_draw_pile")
@@ -79,6 +80,10 @@ mouse_filter = 2
 texture = ExtResource("14_battle_background")
 expand_mode = 1
 stretch_mode = 6
+
+[node name="BattlePlayerSprite" type="AnimatedSprite2D" parent="." unique_id=1087421911]
+position = Vector2(472, 314)
+script = ExtResource("4_player_sprite")
 
 [node name="Foreground" type="TextureRect" parent="." unique_id=1547819240]
 layout_mode = 1
@@ -283,7 +288,6 @@ tooltip_text = "设置"
 texture_normal = SubResource("AtlasTexture_settings_button")
 ignore_texture_size = true
 stretch_mode = 5
-
 
 [node name="MainRow" type="HBoxContainer" parent="Root/Layout" unique_id=974220798]
 layout_mode = 2

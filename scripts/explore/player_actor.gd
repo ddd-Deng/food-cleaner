@@ -3,13 +3,16 @@ class_name PlayerActor
 
 const ANIMATION_ROOT := "res://sprites/主角动画_256x144"
 const IDLE_FRONT_DIR := ANIMATION_ROOT + "/主角待机动画前"
+const IDLE_BACK_DIR := ANIMATION_ROOT + "/主角待机动画后"
 const IDLE_SIDE_DIR := ANIMATION_ROOT + "/主角待机动画右"
 const WALK_FRONT_DIR := ANIMATION_ROOT + "/走路动画前"
+const WALK_BACK_DIR := ANIMATION_ROOT + "/走路动画后"
 const WALK_SIDE_DIR := ANIMATION_ROOT + "/走路动画右"
 const OUTLINE_SHADER := preload("res://shaders/player_outline.gdshader")
 
 enum FacingMode {
 	FRONT,
+	BACK,
 	SIDE,
 }
 
@@ -101,8 +104,10 @@ func _load_animation_sets() -> void:
 	var sprite_frames := SpriteFrames.new()
 	_animation_sets = {
 		&"idle_front": _load_frames_from_directory(IDLE_FRONT_DIR),
+		&"idle_back": _load_frames_from_directory(IDLE_BACK_DIR),
 		&"idle_side": _load_frames_from_directory(IDLE_SIDE_DIR),
 		&"walk_front": _load_frames_from_directory(WALK_FRONT_DIR),
+		&"walk_back": _load_frames_from_directory(WALK_BACK_DIR),
 		&"walk_side": _load_frames_from_directory(WALK_SIDE_DIR),
 	}
 	for animation_name in _animation_sets.keys():
@@ -162,7 +167,7 @@ func _update_facing_from_direction(direction: Vector2) -> void:
 		_facing_mode = FacingMode.SIDE
 		_is_facing_left = direction.x < 0.0
 	else:
-		_facing_mode = FacingMode.FRONT
+		_facing_mode = FacingMode.BACK if direction.y < 0.0 else FacingMode.FRONT
 
 func _update_animation_state(is_moving: bool) -> void:
 	var animation_name := _animation_name_for_state(is_moving)
@@ -177,8 +182,20 @@ func _update_animation_state(is_moving: bool) -> void:
 
 func _animation_name_for_state(is_moving: bool) -> StringName:
 	if is_moving:
-		return &"walk_side" if _facing_mode == FacingMode.SIDE else &"walk_front"
-	return &"idle_side" if _facing_mode == FacingMode.SIDE else &"idle_front"
+		match _facing_mode:
+			FacingMode.SIDE:
+				return &"walk_side"
+			FacingMode.BACK:
+				return &"walk_back"
+			_:
+				return &"walk_front"
+	match _facing_mode:
+		FacingMode.SIDE:
+			return &"idle_side"
+		FacingMode.BACK:
+			return &"idle_back"
+		_:
+			return &"idle_front"
 
 func _update_outline_material() -> void:
 	if _outline_material == null:

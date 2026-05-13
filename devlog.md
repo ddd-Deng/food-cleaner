@@ -2,6 +2,21 @@
 
 ## 2026-05-13
 
+### 探索主角接入背面待机与走路动画
+- 做了什么：重新运行 `tools/resize_player_sprites.py --clean`，将新加入的 `sprites/主角动画/主角待机动画后` 与 `sprites/主角动画/走路动画后` 一并按最近邻采样生成到 `sprites/主角动画_256x144/` 下；同时扩展 `PlayerActor` 的探索朝向逻辑，从原本的“前/侧”改为“前/后/侧”。现在角色在探索地图中向上移动时会播放背面走路动画，松开后如果最后朝向为上，则会停在背面待机动画；左右移动仍沿用右侧动画和左翻转。
+- 影响文件：`scripts/explore/player_actor.gd`、`sprites/主角动画_256x144/主角待机动画后/`、`sprites/主角动画_256x144/走路动画后/`、`devlog.md`
+- 如何验证：进入探索场景，按住向上移动时确认主角显示背面走路动画，松开后保持背面待机；向下移动和左右移动时，仍分别显示正面/侧面动画；抽查 `sprites/主角动画_256x144/主角待机动画后/` 与 `sprites/主角动画_256x144/走路动画后/` 已生成对应缩小帧图。
+
+### 战斗攻击牌会触发主角攻击动画
+- 做了什么：扩展了战斗场景中的 `BattlePlayerSprite`。现在它会在运行时同时加载待机右、`攻击_前`、`攻击_后` 三组动画；当玩家成功打出攻击牌时，会先播放一次 `攻击_前`，再无缝播放一次 `攻击_后`，最后自动回到待机右循环。若玩家连续快速打出攻击牌，新的攻击请求会立刻从 `攻击_前` 重新开始并覆盖当前正在播放的攻击动画。
+- 影响文件：`scripts/ui/battle_player_sprite.gd`、`scripts/ui/battle_scene.gd`、`devlog.md`
+- 如何验证：进入一场战斗，打出一张攻击牌后确认战斗场景里的主角会连续播放两段攻击动画并回到待机右；连续快速打出多张攻击牌时，确认新的攻击动画会打断前一个并立即重播前半段，而不是排队等待。
+
+### 战斗场景加入可编辑的主角 AnimatedSprite2D 形象
+- 做了什么：在 `battle_scene.tscn` 中新增 `BattlePlayerSprite` 节点，作为纯展示用的主角形象，当前默认放在战斗场景中间位置。该节点使用 `AnimatedSprite2D`，并通过 `scripts/ui/battle_player_sprite.gd` 在运行时从 `res://sprites/主角动画_256x144/主角待机动画右` 目录加载待机右动画帧并循环播放；层级放在背景之上、战斗前景光效之下，方便后续直接在场景中拖拽位置和查看动画。
+- 影响文件：`scripts/ui/battle_player_sprite.gd`、`scenes/battle/battle_scene.tscn`、`devlog.md`
+- 如何验证：打开战斗场景或进入一场战斗，确认场景中央会出现一个持续播放待机右动画的 `AnimatedSprite2D` 主角形象；在编辑器中选中 `BattlePlayerSprite` 后，应能直接拖动位置或调整节点参数。
+
 ### 主角描边 shader 中将所有非零 alpha 视为实心像素
 - 做了什么：调整 `player_outline.gdshader` 的 alpha 处理方式。现在主角原图中只要 `a > 0` 的像素，都会在 shader 中被当作 `alpha = 1` 的实心像素；描边采样时也同样按“非零 alpha 即实心”处理，不再保留原图边缘自带的半透明过渡。这样可以直接从 shader 层面消掉原始帧图边缘的半透明像素对主角本体和描边质量的影响。
 - 影响文件：`shaders/player_outline.gdshader`、`devlog.md`
