@@ -6,6 +6,7 @@ const IDLE_FRONT_DIR := ANIMATION_ROOT + "/主角待机动画前"
 const IDLE_SIDE_DIR := ANIMATION_ROOT + "/主角待机动画右"
 const WALK_FRONT_DIR := ANIMATION_ROOT + "/走路动画前"
 const WALK_SIDE_DIR := ANIMATION_ROOT + "/走路动画右"
+const OUTLINE_SHADER := preload("res://shaders/player_outline.gdshader")
 
 enum FacingMode {
 	FRONT,
@@ -15,6 +16,14 @@ enum FacingMode {
 @export var move_speed: float = 260.0
 @export var animation_fps: float = 12.0
 @export var interaction_radius: float = 90.0
+@export var outline_color: Color = Color(1.0, 1.0, 1.0, 1.0):
+	set(value):
+		outline_color = value
+		_update_outline_material()
+@export_range(0.0, 12.0, 0.1) var outline_thickness: float = 2.0:
+	set(value):
+		outline_thickness = value
+		_update_outline_material()
 
 var room_bounds: Rect2 = Rect2(0, 0, 960, 540)
 var is_active: bool = true
@@ -22,6 +31,7 @@ var collision_size: Vector2 = Vector2(48, 48)
 var _animation_sets: Dictionary = {}
 var _facing_mode: FacingMode = FacingMode.FRONT
 var _is_facing_left: bool = false
+var _outline_material: ShaderMaterial
 
 @onready var _animated_sprite: AnimatedSprite2D = AnimatedSprite2D.new()
 @onready var interaction_area: Area2D = Area2D.new()
@@ -32,6 +42,7 @@ func _ready() -> void:
 	_configure_interaction_area()
 	_load_animation_sets()
 	_apply_default_size()
+	_configure_outline_material()
 	_update_animation_state(false)
 
 func _process(delta: float) -> void:
@@ -70,6 +81,12 @@ func get_interaction_area() -> Area2D:
 func _configure_animated_sprite() -> void:
 	_animated_sprite.centered = true
 	add_child(_animated_sprite)
+
+func _configure_outline_material() -> void:
+	_outline_material = ShaderMaterial.new()
+	_outline_material.shader = OUTLINE_SHADER
+	_animated_sprite.material = _outline_material
+	_update_outline_material()
 
 func _configure_interaction_area() -> void:
 	add_child(interaction_area)
@@ -162,6 +179,12 @@ func _animation_name_for_state(is_moving: bool) -> StringName:
 	if is_moving:
 		return &"walk_side" if _facing_mode == FacingMode.SIDE else &"walk_front"
 	return &"idle_side" if _facing_mode == FacingMode.SIDE else &"idle_front"
+
+func _update_outline_material() -> void:
+	if _outline_material == null:
+		return
+	_outline_material.set_shader_parameter("outline_color", outline_color)
+	_outline_material.set_shader_parameter("outline_thickness", outline_thickness)
 
 func _clamp_to_room() -> void:
 	var half_size := collision_size * 0.5

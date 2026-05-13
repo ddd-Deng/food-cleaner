@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
+[ext_resource type="Texture2D" path="res://sprites/map/森林地图/背景.png" id="4"]
 
 [node name="ChestRoom" type="Control"]
 custom_minimum_size = Vector2(960, 540)
@@ -15,14 +16,16 @@ grow_vertical = 2
 script = ExtResource("1")
 fallback_room_tint = Color(0.95, 0.92, 0.78, 1)
 
-[node name="Backdrop" type="Panel" parent="."]
+[node name="Backdrop" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-self_modulate = Color(0.95, 0.92, 0.78, 1)
+texture = ExtResource("4")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="Storage" type="Panel" parent="."]
 layout_mode = 1

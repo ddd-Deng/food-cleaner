@@ -2,6 +2,36 @@
 
 ## 2026-05-13
 
+### 主角描边 shader 中将所有非零 alpha 视为实心像素
+- 做了什么：调整 `player_outline.gdshader` 的 alpha 处理方式。现在主角原图中只要 `a > 0` 的像素，都会在 shader 中被当作 `alpha = 1` 的实心像素；描边采样时也同样按“非零 alpha 即实心”处理，不再保留原图边缘自带的半透明过渡。这样可以直接从 shader 层面消掉原始帧图边缘的半透明像素对主角本体和描边质量的影响。
+- 影响文件：`shaders/player_outline.gdshader`、`devlog.md`
+- 如何验证：进入探索后观察主角边缘，确认原本因为源图半透明边缘带来的虚边/脏边会明显减少；同时主角本体所有非透明像素区域都会以完全不透明方式显示。
+
+### 重新以最近邻硬边方式生成主角缩小帧图
+- 做了什么：重写 `tools/resize_player_sprites.py`，不再调用系统缩放工具，而是使用纯 Python 的 PNG 解码/编码流程对主角动画原图执行最近邻缩放，重新生成 `sprites/主角动画_256x144/` 下的所有缩小帧图。这样缩小时不会再引入平滑插值，边缘会保持更硬的像素风格，更适合后续描边 shader。
+- 影响文件：`tools/resize_player_sprites.py`、`sprites/主角动画_256x144/`、`devlog.md`
+- 如何验证：重新运行 `python3 tools/resize_player_sprites.py --clean` 后进入探索，对比主角边缘应比上一版更硬朗、不再被缩放平滑；抽查 `sprites/主角动画_256x144/主角待机动画前/Scene1_000.png` 等输出图尺寸仍为 `256x144`。
+
+### 修复主角描边 shader 的 fragment return 报错
+- 做了什么：调整 `player_outline.gdshader` 的 `fragment()` 写法。此前在 `canvas_item` shader 的 `fragment` 处理函数里直接使用了 `return` 提前退出，Godot 会报 `Using 'return' in the 'fragment' processor function is incorrect.`；现改为标准的 `if / else` 赋值结构。
+- 影响文件：`shaders/player_outline.gdshader`、`devlog.md`
+- 如何验证：重新进入探索场景，确认不再出现 `Using 'return' in the 'fragment' processor function is incorrect.`；主角描边仍能正常显示。
+
+### 为探索主角增加可调白色描边 shader
+- 做了什么：为探索主角新增 `canvas_item` 描边 shader，并挂到 `PlayerActor` 内部的 `AnimatedSprite2D` 上。当前使用 8 个方向采样来生成外轮廓，默认是白边；同时将描边颜色和描边厚度做成 `PlayerActor` 的导出属性，方便在编辑器中直接调整，而不需要改 shader 文件。
+- 影响文件：`shaders/player_outline.gdshader`、`scripts/explore/player_actor.gd`、`devlog.md`
+- 如何验证：打开探索场景并选中 `PlayerActor`，调整 `outline_color` 与 `outline_thickness` 后运行项目，确认主角外围会出现一圈描边；把厚度改大后描边会更宽，把颜色改成非白色后描边颜色会同步变化。
+
+### 战斗场景替换背景并增加前景光效层
+- 做了什么：为 `battle_scene.tscn` 新增全屏背景与前景贴图层。`res://sprites/map/战斗场景/背景.png` 作为战斗场景最底层背景，`res://sprites/map/战斗场景/光.png` 作为覆盖在战斗场景上的全屏前景层；两张图都按全屏铺满显示。当前前景层放在 `Root` UI 容器之下，因此不会遮挡现有按钮、手牌、日志和 HUD。
+- 影响文件：`scenes/battle/battle_scene.tscn`、`devlog.md`
+- 如何验证：打开战斗场景或进入一场战斗，确认背景已替换为 `sprites/map/战斗场景/背景.png`，并且 `光.png` 会作为一层整体覆盖显示；确认现有战斗 UI、卡牌、时间轴、按钮和数值文本仍然显示在这两层之上。
+
+### 探索房间背景统一替换为森林地图底图
+- 做了什么：将四个探索房间 scene 的背景节点从纯色 `Panel` 统一替换为直接铺满显示 `res://sprites/map/森林地图/背景.png` 的 `TextureRect`。这张背景图本身是 `1280x720`，与当前项目默认窗口尺寸一致，因此当前直接作为房间背景图使用，不额外做裁切拼接逻辑。
+- 影响文件：`scenes/rooms/start_room.tscn`、`scenes/rooms/monster_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/boss_room.tscn`、`devlog.md`
+- 如何验证：打开四个房间 scene 或进入探索，确认各房间底图都不再是纯色背景，而是统一显示 `sprites/map/森林地图/背景.png`；交互点、主角和房间标题仍显示在背景上方。
+
 ### 净化牌在无对应任务时也允许打出
 - 做了什么：调整战斗出牌校验逻辑。此前净化牌在出牌前会先检查当前敌人是否存在对应的净化任务，不匹配时直接禁止打出；现在移除了这条前置拦截，因此净化牌即使没有对应任务也可以正常打出、推进时间并进入弃牌堆，只是在效果结算阶段会落到“当前没有匹配的净化任务”，不会产生净化收益。
 - 影响文件：`scripts/runtime/battle_rules.gd`、`devlog.md`
