@@ -2,6 +2,21 @@
 
 ## 2026-05-13
 
+### 探索主角重构为 Node2D + AnimatedSprite2D
+- 做了什么：将探索主角从 `Control + TextureRect` 的 UI 节点实现重构为 `Node2D + AnimatedSprite2D`。角色动画现在由 Godot 自带的 `AnimatedSprite2D` 和 `SpriteFrames` 驱动，不再手写帧计时与 UI 贴图切换；仍保留现有“四组目录按文件名排序加载帧图、横向主导用右向动画并在向左时翻转、纵向主导用前向动画、初始待机前”的方向规则。同时调整 `ExploreScene` 的出生点应用逻辑，使其直接把房间锚点中心作为 `Node2D.position`，不再依赖旧 `Control.size` 计算左上角。
+- 影响文件：`scripts/explore/player_actor.gd`、`scripts/explore/explore_scene.gd`、`scenes/explore/explore_scene.tscn`、`devlog.md`
+- 如何验证：进入探索，确认 `PlayerActor` 节点已改为 `Node2D` 且能正常显示动画；游戏开始时显示待机前，左右移动时播放右向动画并在向左时翻转，上下移动时播放前向动画；主角中心点仍与房间出生锚点对齐，移动边界和交互判定不因节点类型切换而失效。
+
+### 主角动画改为整帧播放并补充批量缩放脚本
+- 做了什么：按当前资源组织调整探索主角动画方案，不再对主角动画做透明区域裁切，而是直接把整张帧图作为 sprite 按文件顺序循环播放；同时新增 `tools/resize_player_sprites.py`，用于把 `sprites/主角动画/` 下四组原始 `1280x720` PNG 批量缩放到新的 `sprites/主角动画_256x144/` 目录，当前 `PlayerActor` 默认从这个缩小后的目录读取动画帧。由于这些新生成的 PNG 在首次运行时不一定已经有 Godot 的导入产物，`PlayerActor` 读取帧图时改为直接从源 PNG 文件构建运行时 `ImageTexture`，避免出现 `load(res://...)` 拿不到可显示纹理、导致主角完全不可见的问题。
+- 影响文件：`scripts/explore/player_actor.gd`、`tools/resize_player_sprites.py`、`devlog.md`
+- 如何验证：先运行 `python3 tools/resize_player_sprites.py --clean` 生成缩小后的动画资源；然后进入探索，确认主角初始显示待机前动画，左右移动时播放右向整帧动画并在向左时翻转，上下移动时播放前向整帧动画，且不再出现因为裁切导致的透明主角。
+
+### 探索主角替换为四向规则动画显示
+- 做了什么：将探索中的 `PlayerActor` 从简单自绘方块改为基于 `sprites/主角动画/` 下四组 PNG 序列的贴图动画播放。现在会读取“主角待机动画前 / 主角待机动画右 / 走路动画前 / 走路动画右”四个目录：当横向分量大于纵向分量时使用右向动画，向左移动时对右向动画做水平翻转；当更偏上下移动时使用前向动画且不翻转；停下后沿用最后一次移动得到的朝向状态，初始状态是待机前动画。由于这些源帧本身是 1280x720 的大画布，运行时不会直接拿导入纹理裁切，而是直接读取原始 PNG，先扫描全部动画的非透明区域生成统一裁切框，再把每一帧裁成小图并按固定缩放显示，避免出现整张大画布或裁到透明区导致主角不可见的问题。若资源加载失败，仍回退到原来的方块占位，避免探索直接不可见。
+- 影响文件：`scripts/explore/player_actor.gd`、`devlog.md`
+- 如何验证：运行项目进入探索，确认游戏开始时主角显示为待机前动画；按 `A/D` 横向移动时播放右行走动画，并在向左时左右翻转；按 `W/S` 或纵向分量更大时播放前行走动画；松开按键后切回与最后朝向一致的待机动画。
+
 ### 修正首次进入探索时房间边界过早计算
 - 做了什么：调整 `ExploreScene` 在房间刷新后的玩家定位时机。此前首次进入探索时，`_refresh_view()` 只在房间重建后 `call_deferred()` 一次 `_reset_player_position()`；如果这时 `RoomCanvas` 仍在容器布局过程中，玩家可移动边界就会按一个尚未稳定的尺寸计算，表现为入口前厅下半部分像有空气墙，但切换一次房间后又恢复正常。现在改为在房间刷新后标记待同步，并监听 `RoomCanvas.resized`，总是等到最新一次布局后的下一帧再应用出生点和移动边界。
 - 影响文件：`scripts/explore/explore_scene.gd`、`devlog.md`

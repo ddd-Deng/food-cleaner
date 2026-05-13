@@ -70,12 +70,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PlayerActor" type="Control" parent="Root/Layout/RoomPanel/RoomCanvas"]
-custom_minimum_size = Vector2(48, 48)
-offset_left = 460.0
-offset_top = 250.0
-offset_right = 508.0
-offset_bottom = 298.0
+[node name="PlayerActor" type="Node2D" parent="Root/Layout/RoomPanel/RoomCanvas"]
+position = Vector2(484, 274)
 script = ExtResource("2")
 
 [node name="OverlayPanel" type="PanelContainer" parent="Root/Layout/RoomPanel"]

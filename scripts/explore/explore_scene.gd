@@ -85,8 +85,7 @@ func _reset_player_position() -> void:
 	)
 	player_actor.set_active(not run_state.is_run_over)
 	var spawn_center := _get_room_player_spawn_position()
-	var spawn_top_left := spawn_center - player_actor.size * 0.5
-	player_actor.position = spawn_top_left
+	player_actor.position = spawn_center
 	player_actor.set_room_bounds(bounds)
 	_update_nearest_interactable()
 
