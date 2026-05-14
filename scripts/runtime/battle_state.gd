@@ -22,6 +22,7 @@ var exhaust_pile: Array[CardInstance] = []
 var stomach: Array[FoodBlockInstance] = []
 var enemy: EnemyRuntime
 var timeline_entries: Array[String] = []
+var card_effect_records: Array[CardEffectRecord] = []
 var last_played_card_name: String = ""
 var last_played_card_time_cost: int = 0
 var last_played_effect_summary: String = ""
@@ -56,3 +57,15 @@ func add_log(message: String) -> void:
 
 func set_timeline(entries: Array[String]) -> void:
 	timeline_entries = entries.duplicate()
+
+func add_card_effect_record(record: CardEffectRecord) -> void:
+	if record == null:
+		return
+	card_effect_records.append(record)
+
+func get_card_effect_records_at_time(time_point: int) -> Array[CardEffectRecord]:
+	var records: Array[CardEffectRecord] = []
+	for record in card_effect_records:
+		if record != null and record.time_point == time_point:
+			records.append(record)
+	return records

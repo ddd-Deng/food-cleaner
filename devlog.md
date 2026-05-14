@@ -1,5 +1,37 @@
 # 开发日志
 
+## 2026-05-14
+
+### 手牌区上移与日志区压缩
+- 做了什么：为 `HandView` 增加 `HAND_VERTICAL_OFFSET` 手动纵向偏移参数并默认设为 `-22.0`，让手牌整体向上移动，同时同步调整出牌释放判定边界；将战斗底部区域 `BottomRow` 高度从 260 增加到 286，使上方日志区自然缩短，给手牌与时间轴更多空间。
+- 影响文件：`scripts/ui/hand_view.gd`、`scenes/battle/battle_scene.tscn`、`devlog.md`
+- 如何验证：进入战斗后确认手牌整体比之前更靠上，拖拽出牌判定仍以手牌区上方为准；确认日志区高度略短但仍可滚动，底部手牌与时间轴显示正常。
+
+### 卡牌轮廓高亮颜色与时钟边缘优化
+- 做了什么：将卡牌状态高亮主色从白色改为金黄色；为轮廓贴图额外保留 8px 透明采样边界并关闭 `CardView` 裁剪，避免左上角时钟高亮被控件边缘截断；同时把轮廓 shader 改为 16 方向采样并使用平滑 alpha 过渡，减少圆形时钟描边的多边形感。
+- 影响文件：`scripts/ui/card_view.gd`、`scenes/ui/card_view.tscn`、`devlog.md`
+- 如何验证：进入战斗悬停或拖拽卡牌，确认高亮为黄色系，左上角时钟外圈不再明显被切掉，时钟描边比之前更圆滑；确认拖拽、可出牌和不可用状态仍保持不同颜色反馈。
+
+### 卡牌状态高亮改为贴图轮廓描边
+- 做了什么：将 `CardView` 的状态高亮从旧的矩形 `Panel` 边框改为 `TextureRect + canvas_item shader`，根据当前卡牌透明素材的 alpha 边缘绘制轮廓，避免高亮框住透明背景区域；攻击/技能/净化三类卡会复用各自当前背景贴图生成对应轮廓。
+- 影响文件：`scripts/ui/card_view.gd`、`scenes/ui/card_view.tscn`、`devlog.md`
+- 如何验证：进入战斗并悬停、拖拽或移动到可出牌区域，确认高亮沿卡牌本体和左上角时间 UI 的素材边缘显示，不再出现旧版完整矩形白框；确认不可用、拖拽、可出牌状态仍有不同颜色反馈。
+
+### 卡牌 UI 背景改用透明原始素材
+- 做了什么：将 `CardView` 的攻击/技能/净化卡背景从 `sprites/card_backgrounds/*.png` 改为直接读取 `sprites/攻击卡.png`、`sprites/技能卡.png`、`sprites/净化卡.png`，并继续用 `AtlasTexture` 裁出 336x448 的有效卡面区域，避免整张 1024x750 透明画布把卡面缩小。
+- 影响文件：`scripts/ui/card_view.gd`、`scenes/ui/card_view.tscn`、`devlog.md`
+- 如何验证：打开 `res://scenes/ui/card_view.tscn` 或进入战斗，确认三类手牌显示为透明背景版本的卡牌素材，不再使用 `sprites/card_backgrounds` 中的旧裁切图；确认费用、名称、图案占位、描述以及拖拽/悬停状态反馈仍正常显示。
+
+### 战斗时间轴卡牌生效标记与悬停预览
+- 做了什么：新增 `CardEffectRecord` 记录每张成功生效卡牌的时间点、牌名、耗时和效果摘要；卡牌完成耗时推进且未被战斗结束打断后写入历史记录；时间轴在对应时间点绘制 `sprites/时间轴/卡牌生效标记.jpg` 裁切出的标记，鼠标悬停时由独立 `CardEffectTimelineMarker` 发出预览请求，并由 `CardEffectPreviewPopup` 显示该时间点生效过的卡牌。
+- 影响文件：`scripts/runtime/card_effect_record.gd`、`scripts/runtime/battle_state.gd`、`scripts/runtime/battle_rules.gd`、`scripts/ui/card_effect_timeline_marker.gd`、`scripts/ui/card_effect_preview_popup.gd`、`scripts/ui/battle_scene.gd`、`devlog.md`
+- 如何验证：进入战斗后打出带耗时或 `0t` 的卡牌，确认时间轴对应时间点出现卡牌生效标记；拖动时间轴回看历史时标记仍保留；鼠标悬停标记会显示牌名、耗时和效果摘要，移开后隐藏；同一时间点有敌人行动时敌人行动标记和卡牌标记都应可见。
+
+### 时间轴卡牌生效标记透明化与缩小
+- 做了什么：从 `sprites/时间轴/卡牌生效标记.jpg` 派生只包含卡牌本体的透明 PNG `sprites/时间轴/卡牌生效卡牌标记.png`，移除原素材中的白底和下方三角回合标记；时间轴改用新小图，并把显示尺寸缩小、略微右移，减少与当前回合标记重合。
+- 影响文件：`sprites/时间轴/卡牌生效卡牌标记.png`、`scripts/ui/battle_scene.gd`、`devlog.md`
+- 如何验证：进入战斗后打出卡牌，确认时间轴卡牌生效标记不再有白底，也不再包含三角回合标记；当前时间点附近的卡牌标记不会直接压在当前回合标记中心。
+
 ## 2026-05-12
 
 ### 调整 CardView 卡面文字锚定布局
@@ -200,3 +232,7 @@
 - 做了什么：移除 `scenes/battle/battle_scene.tscn` 文件开头的 UTF-8 BOM；Godot 文本场景解析器会把 BOM 当作第 1 行第 1 个字符，导致即使文本显示为 `[gd_scene ...]`，仍报 `Expected '['`。
 - 影响文件：`scenes/battle/battle_scene.tscn`、`devlog.md`
 - 如何验证：检查文件开头字节应直接从 `5B`（`[`）开始；再用 Godot 命令行加载 `res://scenes/battle/battle_scene.tscn`，确认不再出现 `Parse Error: Expected '['`。
+### 修复 `EffectBannerLabel` 自动换行告警
+- 做了什么：给战斗场景时间日志区的 `EffectBannerLabel` 补了 `custom_minimum_size = Vector2(0, 24)`，让容器里的自动换行 `Label` 有明确最小高度，消除 Godot 的黄色布局警告。
+- 影响文件：`scenes/battle/battle_scene.tscn`、`devlog.md`
+- 如何验证：已完成场景文本静态检查；Godot headless 解析验证被当前运行环境的审批拦截，未实际启动。

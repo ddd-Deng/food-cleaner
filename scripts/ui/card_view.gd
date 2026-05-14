@@ -6,10 +6,57 @@ const HOVER_LIFT: float = 34.0
 const HOVER_HOLD_PADDING: float = 14.0
 const DRAG_START_DISTANCE: float = 8.0
 
-# The original art sheets are 1024x750; these files are cropped to the card body at 336x448.
-const ATTACK_CARD_TEXTURE: Texture2D = preload("res://sprites/card_backgrounds/attack_card.png")
-const SKILL_CARD_TEXTURE: Texture2D = preload("res://sprites/card_backgrounds/skill_card.png")
-const PURIFY_CARD_TEXTURE: Texture2D = preload("res://sprites/card_backgrounds/purify_card.png")
+# The original transparent art sheets are 1024x750; the card body sits in this 336x448 region.
+const CARD_BODY_REGION: Rect2 = Rect2(332, 191, 336, 448)
+const CARD_OUTLINE_SOURCE_PADDING: float = 8.0
+const ATTACK_CARD_TEXTURE: Texture2D = preload("res://sprites/攻击卡.png")
+const SKILL_CARD_TEXTURE: Texture2D = preload("res://sprites/技能卡.png")
+const PURIFY_CARD_TEXTURE: Texture2D = preload("res://sprites/净化卡.png")
+const OUTLINE_SHADER_CODE: String = """
+shader_type canvas_item;
+
+uniform vec4 outline_color : source_color = vec4(1.0, 0.82, 0.22, 1.0);
+uniform float outline_width = 3.0;
+uniform float alpha_threshold = 0.08;
+
+void fragment() {
+	float center_alpha = texture(TEXTURE, UV).a;
+	float neighbor_min = center_alpha;
+	float neighbor_max = center_alpha;
+	vec2 step_uv = TEXTURE_PIXEL_SIZE * outline_width;
+	vec2 half_step_uv = step_uv * 0.5;
+	vec2 directions[16] = vec2[](
+		vec2(1.0, 0.0),
+		vec2(0.9239, 0.3827),
+		vec2(0.7071, 0.7071),
+		vec2(0.3827, 0.9239),
+		vec2(0.0, 1.0),
+		vec2(-0.3827, 0.9239),
+		vec2(-0.7071, 0.7071),
+		vec2(-0.9239, 0.3827),
+		vec2(-1.0, 0.0),
+		vec2(-0.9239, -0.3827),
+		vec2(-0.7071, -0.7071),
+		vec2(-0.3827, -0.9239),
+		vec2(0.0, -1.0),
+		vec2(0.3827, -0.9239),
+		vec2(0.7071, -0.7071),
+		vec2(0.9239, -0.3827)
+	);
+
+	for (int index = 0; index < 16; index++) {
+		vec2 direction = directions[index];
+		float near_alpha = texture(TEXTURE, UV + direction * half_step_uv).a;
+		float far_alpha = texture(TEXTURE, UV + direction * step_uv).a;
+		neighbor_min = min(neighbor_min, min(near_alpha, far_alpha));
+		neighbor_max = max(neighbor_max, max(near_alpha, far_alpha));
+	}
+
+	float edge_strength = smoothstep(alpha_threshold, alpha_threshold + 0.12, neighbor_max)
+		* (1.0 - smoothstep(alpha_threshold, alpha_threshold + 0.12, neighbor_min));
+	COLOR = vec4(outline_color.rgb, outline_color.a * edge_strength);
+}
+"""
 
 signal drag_started(card_view: CardView)
 signal drag_ended(card_view: CardView, dropped_successfully: bool, release_global_position: Vector2, cancelled_by_user: bool)
@@ -26,7 +73,7 @@ enum VisualState {
 }
 
 @onready var background: TextureRect = $Background
-@onready var state_outline: Panel = $StateOutline
+@onready var state_outline: TextureRect = $StateOutline
 @onready var cost_label: Label = $Margin/Content/TopRow/CostLabel
 @onready var name_label: Label = $Margin/Content/TopRow/NameLabel
 @onready var art_label: Label = $Margin/Content/ArtSpacer/ArtLabel
@@ -49,6 +96,7 @@ var _hand_z_index: int = 0
 var _drag_pointer_offset: Vector2 = Vector2.ZERO
 var _drag_position: Vector2 = Vector2.ZERO
 var _press_global_position: Vector2 = Vector2.ZERO
+var _outline_material: ShaderMaterial
 
 func _ready() -> void:
 	_is_ui_ready = true
@@ -59,6 +107,7 @@ func _ready() -> void:
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	_configure_mouse_filters(self)
+	_configure_outline_material()
 	_refresh_content()
 	_apply_visual_state()
 
@@ -282,6 +331,7 @@ func _apply_visual_state() -> void:
 	modulate = Color(1, 1, 1, 0.55) if visual_state == VisualState.DISABLED else Color.WHITE
 	custom_minimum_size = _get_card_size()
 	size = _get_card_size()
+	_apply_outline_bounds()
 	pivot_offset = _get_card_size() * 0.5
 	position = _drag_position if is_dragging else _hand_position
 	rotation_degrees = _hand_rotation_degrees
@@ -325,7 +375,10 @@ func _configure_mouse_filters(root: Node) -> void:
 func _refresh_background_texture() -> void:
 	if not _is_ui_ready or background == null:
 		return
-	background.texture = _card_texture_for_type()
+	var card_atlas := _card_atlas_for_type()
+	background.texture = card_atlas
+	if state_outline != null:
+		state_outline.texture = _card_outline_atlas_for_type()
 
 func _card_texture_for_type() -> Texture2D:
 	if card_instance == null:
@@ -340,16 +393,49 @@ func _card_texture_for_type() -> Texture2D:
 		_:
 			return ATTACK_CARD_TEXTURE
 
+func _card_atlas_for_type() -> AtlasTexture:
+	var card_atlas := AtlasTexture.new()
+	card_atlas.atlas = _card_texture_for_type()
+	card_atlas.region = CARD_BODY_REGION
+	return card_atlas
+
+func _card_outline_atlas_for_type() -> AtlasTexture:
+	var card_atlas := AtlasTexture.new()
+	card_atlas.atlas = _card_texture_for_type()
+	card_atlas.region = CARD_BODY_REGION.grow(CARD_OUTLINE_SOURCE_PADDING)
+	return card_atlas
+
+func _apply_outline_bounds() -> void:
+	if state_outline == null:
+		return
+	var card_size := _get_card_size()
+	var horizontal_padding := CARD_OUTLINE_SOURCE_PADDING * card_size.x / CARD_BODY_REGION.size.x
+	var vertical_padding := CARD_OUTLINE_SOURCE_PADDING * card_size.y / CARD_BODY_REGION.size.y
+	state_outline.offset_left = -horizontal_padding
+	state_outline.offset_top = -vertical_padding
+	state_outline.offset_right = horizontal_padding
+	state_outline.offset_bottom = vertical_padding
+
+func _configure_outline_material() -> void:
+	if state_outline == null:
+		return
+	var outline_shader := Shader.new()
+	outline_shader.code = OUTLINE_SHADER_CODE
+	_outline_material = ShaderMaterial.new()
+	_outline_material.shader = outline_shader
+	_outline_material.set_shader_parameter("outline_width", 2.0)
+	state_outline.material = _outline_material
+
 func _border_color_for_state() -> Color:
 	match visual_state:
 		VisualState.HOVERED:
-			return Color(0.95, 0.95, 0.90, 1.0)
+			return Color(1.0, 0.82, 0.22, 1.0)
 		VisualState.DRAGGING:
-			return Color(0.93, 0.83, 0.35, 1.0)
+			return Color(1.0, 0.68, 0.16, 1.0)
 		VisualState.PLAYABLE_OVER_DROP_ZONE:
-			return Color(0.64, 0.93, 0.52, 1.0)
+			return Color(0.86, 0.95, 0.32, 1.0)
 		VisualState.RESOLVING:
-			return Color(0.70, 0.70, 0.70, 1.0)
+			return Color(0.95, 0.78, 0.36, 1.0)
 		VisualState.DISABLED:
 			return Color(0.20, 0.20, 0.20, 1.0)
 		_:
@@ -358,17 +444,6 @@ func _border_color_for_state() -> Color:
 func _apply_outline_style() -> void:
 	if not _is_ui_ready or state_outline == null:
 		return
-	var outline_style := StyleBoxFlat.new()
-	outline_style.bg_color = Color(0, 0, 0, 0)
-	outline_style.border_width_left = 3
-	outline_style.border_width_top = 3
-	outline_style.border_width_right = 3
-	outline_style.border_width_bottom = 3
-	outline_style.border_color = _border_color_for_state()
-	outline_style.corner_radius_top_left = 8
-	outline_style.corner_radius_top_right = 8
-	outline_style.corner_radius_bottom_left = 8
-	outline_style.corner_radius_bottom_right = 8
-	outline_style.draw_center = false
 	state_outline.visible = visual_state != VisualState.IN_HAND
-	state_outline.add_theme_stylebox_override("panel", outline_style)
+	if _outline_material != null:
+		_outline_material.set_shader_parameter("outline_color", _border_color_for_state())

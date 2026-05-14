@@ -1,23 +1,13 @@
 [gd_scene format=3 uid="uid://3v0jxbbisn7d"]
 
 [ext_resource type="Script" uid="uid://c7rc1metto70u" path="res://scripts/ui/card_view.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://btqywj3se3f1j" path="res://sprites/card_backgrounds/attack_card.png" id="2_attack"]
+[ext_resource type="Texture2D" uid="uid://yutrrgd3ri71" path="res://sprites/攻击卡.png" id="2_attack"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover_outline"]
-bg_color = Color(0, 0, 0, 0)
-draw_center = false
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.95, 0.95, 0.9, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+[sub_resource type="AtlasTexture" id="AtlasTexture_attack_card"]
+atlas = ExtResource("2_attack")
+region = Rect2(332, 191, 336, 448)
 
 [node name="CardView" type="Control" unique_id=121550463]
-clip_contents = true
 custom_minimum_size = Vector2(144, 192)
 layout_mode = 3
 anchors_preset = 0
@@ -31,11 +21,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_attack")
+texture = SubResource("AtlasTexture_attack_card")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="StateOutline" type="Panel" parent="." unique_id=882219644]
+[node name="StateOutline" type="TextureRect" parent="." unique_id=882219644]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -44,7 +34,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_hover_outline")
+texture = SubResource("AtlasTexture_attack_card")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="Margin" type="MarginContainer" parent="." unique_id=2130627266]
 layout_mode = 1

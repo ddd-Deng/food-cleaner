@@ -56,6 +56,7 @@ static func play_card(state: BattleState, hand_index: int) -> bool:
 		_refresh_battle_readouts(state)
 		return true
 
+	_record_card_effect(state, card)
 	if card.definition != null:
 		for effect in card.definition.effects:
 			_apply_effect(state, effect)
@@ -321,6 +322,14 @@ static func _draw_one_card(state: BattleState) -> void:
 static func _refresh_battle_readouts(state: BattleState) -> void:
 	state.set_timeline(_build_timeline_preview(state))
 	_update_enemy_intent(state)
+
+static func _record_card_effect(state: BattleState, card: CardInstance) -> void:
+	state.add_card_effect_record(CardEffectRecord.from_card(
+		card,
+		state.battle_time,
+		state.last_played_effect_summary,
+		state.last_played_sequence
+	))
 
 static func _build_timeline_preview(state: BattleState) -> Array[String]:
 	var entries: Array[String] = []

@@ -12,6 +12,7 @@ const FULL_SIZE_HAND_COUNT: int = 5
 const MAX_HAND_COUNT: int = 8
 const MIN_CARD_SCALE: float = 0.84
 const HAND_BOTTOM_PADDING: float = 104.0
+const HAND_VERTICAL_OFFSET: float = -22.0
 const HAND_RELEASE_GRACE_HEIGHT: float = 24.0
 
 signal card_released_outside_hand(hand_index: int)
@@ -138,7 +139,7 @@ func _find_topmost_card_body_under_mouse() -> CardView:
 func _hand_zone_top_global_y() -> float:
 	var layout_card_size: Vector2 = _card_size * _layout_card_scale
 	var base_y: float = maxf(0.0, size.y - layout_card_size.y - HAND_BOTTOM_PADDING)
-	var lifted_top_local_y: float = base_y - CARD_CENTER_LIFT * _layout_card_scale
+	var lifted_top_local_y: float = base_y + HAND_VERTICAL_OFFSET - CARD_CENTER_LIFT * _layout_card_scale
 	return global_position.y + lifted_top_local_y - HAND_RELEASE_GRACE_HEIGHT
 
 func _layout_cards() -> void:
@@ -169,7 +170,7 @@ func _layout_cards() -> void:
 			normalized_offset = (float(index) - midpoint) / midpoint
 		var x: float = start_x + spacing * float(index)
 		var fan_rotation_degrees: float = FAN_MAX_ANGLE_DEGREES * normalized_offset
-		var desired_top_y: float = base_y - CARD_CENTER_LIFT * _layout_card_scale + CARD_EDGE_TOP_DROP * _layout_card_scale * pow(absf(normalized_offset), FAN_TOP_CURVE_POWER)
+		var desired_top_y: float = base_y + HAND_VERTICAL_OFFSET - CARD_CENTER_LIFT * _layout_card_scale + CARD_EDGE_TOP_DROP * _layout_card_scale * pow(absf(normalized_offset), FAN_TOP_CURVE_POWER)
 		var rotated_top_extent: float = _rotated_card_top_extent(layout_card_size, fan_rotation_degrees)
 		var y: float = desired_top_y - layout_card_size.y * 0.5 + rotated_top_extent
 		card_view.set_hand_layout_scale(_layout_card_scale)

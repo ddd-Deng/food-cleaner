@@ -33,6 +33,7 @@ signal battle_resolved(result: Dictionary)
 const TIMELINE_BASE_TEXTURE: Texture2D = preload("res://sprites/时间轴/时间轴.png")
 const TIMELINE_MARKER_TEXTURE: Texture2D = preload("res://sprites/时间轴/时间轴上的标记点.png")
 const TIMELINE_CURRENT_TEXTURE: Texture2D = preload("res://sprites/时间轴/当前回合标记.png")
+const TIMELINE_CARD_EFFECT_TEXTURE: Texture2D = preload("res://sprites/时间轴/卡牌生效卡牌标记.png")
 const PURIFICATION_PROGRESS_TEXTURE: Texture2D = preload("res://sprites/净化进度、.png")
 
 const TIMELINE_BASE_REGION := Rect2(252, 666, 839, 52)
@@ -44,10 +45,13 @@ const TIMELINE_CURRENT_REGION := Rect2(493, 646, 22, 50)
 const PURIFICATION_EMPTY_REGION := Rect2(779, 19, 49, 57)
 const PURIFICATION_DONE_REGION := Rect2(970, 19, 59, 57)
 const PURIFICATION_ICON_SIZE := Vector2(30, 34)
+const TIMELINE_CARD_EFFECT_MARKER_SIZE := Vector2(16, 25)
 const TIMELINE_SLOT_WIDTH := 84.0
 const TIMELINE_LEFT_PADDING := 22.0
 const TIMELINE_TRACK_Y := 30.0
 const TIMELINE_ACTION_MARKER_Y := 50.0
+const TIMELINE_CARD_EFFECT_MARKER_Y := 4.0
+const TIMELINE_CARD_EFFECT_MARKER_X_OFFSET := 18.0
 const TIMELINE_CURRENT_Y := 14.0
 const TIMELINE_LABEL_Y := 22.0
 const TIMELINE_MIN_HEIGHT := 82.0
@@ -60,6 +64,7 @@ var _last_enemy_block_count_seen: int = -1
 var _last_purification_index_seen: int = -1
 var _pending_definition: BattleDefinition
 var _started_once: bool = false
+var _card_effect_preview_popup: CardEffectPreviewPopup
 
 func _ready() -> void:
 	player_actor_view.set_actor_mode(BattleActorView.MODE_PLAYER)
@@ -67,6 +72,7 @@ func _ready() -> void:
 	ScrollBarSkin.apply_to_scroll_container(log_scroll)
 	ScrollBarSkin.apply_to_rich_text_label(log_text)
 	ScrollBarSkin.apply_compact_horizontal_to_scroll_container(timeline_scroll)
+	_create_card_effect_preview_popup()
 
 	controller.state_changed.connect(_on_state_changed)
 	controller.log_added.connect(_on_log_added)
@@ -200,6 +206,7 @@ func _configure_texture_button_feedback(button: BaseButton) -> void:
 	)
 
 func _rebuild_timeline(state: BattleState) -> void:
+	_hide_card_effect_preview()
 	for child in timeline_strip.get_children():
 		child.queue_free()
 	var entry_count: int = state.timeline_entries.size()
@@ -233,6 +240,9 @@ func _rebuild_timeline(state: BattleState) -> void:
 	for i in range(entry_count):
 		var time_point: int = i
 		var marker_x: float = TIMELINE_LEFT_PADDING + TIMELINE_SLOT_WIDTH * i
+		var card_effect_records := state.get_card_effect_records_at_time(time_point)
+		if not card_effect_records.is_empty():
+			timeline_strip.add_child(_build_card_effect_marker(card_effect_records, marker_x))
 		if _timeline_time_has_action(state, time_point):
 			var action_marker := TextureRect.new()
 			var action_region: Rect2 = TIMELINE_MARKER_REGIONS[0]
@@ -271,6 +281,33 @@ func _align_timeline_scroll_to_current_time(state: BattleState, timeline_width: 
 
 func _timeline_time_has_action(state: BattleState, time_point: int) -> bool:
 	return state.enemy != null and not state.enemy.get_action_labels_at_time(time_point).is_empty()
+
+func _build_card_effect_marker(records: Array[CardEffectRecord], marker_x: float) -> CardEffectTimelineMarker:
+	var marker := CardEffectTimelineMarker.new()
+	var marker_position := Vector2(
+		marker_x + TIMELINE_CARD_EFFECT_MARKER_X_OFFSET - TIMELINE_CARD_EFFECT_MARKER_SIZE.x * 0.5,
+		TIMELINE_CARD_EFFECT_MARKER_Y
+	)
+	marker.setup(records, TIMELINE_CARD_EFFECT_TEXTURE, marker_position, TIMELINE_CARD_EFFECT_MARKER_SIZE)
+	marker.preview_requested.connect(_show_card_effect_preview)
+	marker.preview_dismissed.connect(_hide_card_effect_preview)
+	return marker
+
+func _create_card_effect_preview_popup() -> void:
+	if _card_effect_preview_popup != null:
+		return
+	_card_effect_preview_popup = CardEffectPreviewPopup.new()
+	add_child(_card_effect_preview_popup)
+	_card_effect_preview_popup.z_index = 2000
+
+func _show_card_effect_preview(records: Array[CardEffectRecord], marker_global_rect: Rect2) -> void:
+	if _card_effect_preview_popup == null:
+		return
+	_card_effect_preview_popup.show_records(records, marker_global_rect)
+
+func _hide_card_effect_preview() -> void:
+	if _card_effect_preview_popup != null:
+		_card_effect_preview_popup.hide_preview()
 
 func _on_card_released_outside_hand(index: int) -> void:
 	_play_card_from_hand(index)
