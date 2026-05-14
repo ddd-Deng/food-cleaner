@@ -1,36 +1,64 @@
-extends Control
+extends Node2D
 class_name PlayerActor
 
+const ANIMATION_ROOT := "res://sprites/主角动画_256x144"
+const IDLE_FRONT_DIR := ANIMATION_ROOT + "/主角待机动画前"
+const IDLE_BACK_DIR := ANIMATION_ROOT + "/主角待机动画后"
+const IDLE_SIDE_DIR := ANIMATION_ROOT + "/主角待机动画右"
+const WALK_FRONT_DIR := ANIMATION_ROOT + "/走路动画前"
+const WALK_BACK_DIR := ANIMATION_ROOT + "/走路动画后"
+const WALK_SIDE_DIR := ANIMATION_ROOT + "/走路动画右"
+const OUTLINE_SHADER := preload("res://shaders/player_outline.gdshader")
+
+enum FacingMode {
+	FRONT,
+	BACK,
+	SIDE,
+}
+
 @export var move_speed: float = 260.0
+@export var animation_fps: float = 12.0
+@export var interaction_radius: float = 90.0
+@export var outline_color: Color = Color(1.0, 1.0, 1.0, 1.0):
+	set(value):
+		outline_color = value
+		_update_outline_material()
+@export_range(0.0, 12.0, 0.1) var outline_thickness: float = 2.0:
+	set(value):
+		outline_thickness = value
+		_update_outline_material()
 
 var room_bounds: Rect2 = Rect2(0, 0, 960, 540)
 var is_active: bool = true
-var _fill_color: Color = Color(0.16, 0.43, 0.92, 1.0)
-var _outline_color: Color = Color(0.95, 0.98, 1.0, 1.0)
+var collision_size: Vector2 = Vector2(48, 48)
+var _animation_sets: Dictionary = {}
+var _facing_mode: FacingMode = FacingMode.FRONT
+var _is_facing_left: bool = false
+var _outline_material: ShaderMaterial
 
-@onready var _label: Label = Label.new()
+@onready var _animated_sprite: AnimatedSprite2D = AnimatedSprite2D.new()
+@onready var interaction_area: Area2D = Area2D.new()
+@onready var interaction_shape: CollisionShape2D = CollisionShape2D.new()
 
 func _ready() -> void:
-	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	custom_minimum_size = Vector2(48, 48)
-	size = custom_minimum_size
-	if _label.get_parent() == null:
-		_label.text = "你"
-		_label.add_theme_color_override("font_color", Color.WHITE)
-		_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		_label.anchors_preset = Control.PRESET_FULL_RECT
-		add_child(_label)
-	queue_redraw()
+	_configure_animated_sprite()
+	_configure_interaction_area()
+	_load_animation_sets()
+	_apply_default_size()
+	_configure_outline_material()
+	_update_animation_state(false)
 
 func _process(delta: float) -> void:
 	if not is_active:
+		_update_animation_state(false)
 		return
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	if direction.is_zero_approx():
-		return
-	position += direction * move_speed * delta
-	_clamp_to_room()
+	var is_moving := not direction.is_zero_approx()
+	if is_moving:
+		position += direction * move_speed * delta
+		_clamp_to_room()
+	_update_facing_from_direction(direction)
+	_update_animation_state(is_moving)
 
 func set_room_bounds(bounds: Rect2) -> void:
 	room_bounds = bounds
@@ -38,19 +66,144 @@ func set_room_bounds(bounds: Rect2) -> void:
 
 func center_in_room(bounds: Rect2) -> void:
 	room_bounds = bounds
-	position = room_bounds.position + (room_bounds.size - size) * 0.5
+	position = room_bounds.position + room_bounds.size * 0.5
 	_clamp_to_room()
 
 func set_active(active: bool) -> void:
 	is_active = active
 
 func get_center_point() -> Vector2:
-	return global_position + size * 0.5
+	return position
+
+func get_collision_size() -> Vector2:
+	return collision_size
+
+func get_interaction_area() -> Area2D:
+	return interaction_area
+
+func _configure_animated_sprite() -> void:
+	_animated_sprite.centered = true
+	add_child(_animated_sprite)
+
+func _configure_outline_material() -> void:
+	_outline_material = ShaderMaterial.new()
+	_outline_material.shader = OUTLINE_SHADER
+	_animated_sprite.material = _outline_material
+	_update_outline_material()
+
+func _configure_interaction_area() -> void:
+	add_child(interaction_area)
+	interaction_area.monitoring = true
+	interaction_area.monitorable = false
+	interaction_area.add_child(interaction_shape)
+	var circle := CircleShape2D.new()
+	circle.radius = interaction_radius
+	interaction_shape.shape = circle
+
+func _load_animation_sets() -> void:
+	var sprite_frames := SpriteFrames.new()
+	_animation_sets = {
+		&"idle_front": _load_frames_from_directory(IDLE_FRONT_DIR),
+		&"idle_back": _load_frames_from_directory(IDLE_BACK_DIR),
+		&"idle_side": _load_frames_from_directory(IDLE_SIDE_DIR),
+		&"walk_front": _load_frames_from_directory(WALK_FRONT_DIR),
+		&"walk_back": _load_frames_from_directory(WALK_BACK_DIR),
+		&"walk_side": _load_frames_from_directory(WALK_SIDE_DIR),
+	}
+	for animation_name in _animation_sets.keys():
+		sprite_frames.add_animation(String(animation_name))
+		sprite_frames.set_animation_loop(String(animation_name), true)
+		sprite_frames.set_animation_speed(String(animation_name), animation_fps)
+		var frames: Array[Texture2D] = _animation_sets.get(animation_name, [])
+		for frame in frames:
+			if frame != null:
+				sprite_frames.add_frame(String(animation_name), frame)
+	_animated_sprite.sprite_frames = sprite_frames
+
+func _load_frames_from_directory(directory_path: String) -> Array[Texture2D]:
+	var frames: Array[Texture2D] = []
+	var file_names: PackedStringArray = []
+	var directory := DirAccess.open(directory_path)
+	if directory == null:
+		return frames
+	directory.list_dir_begin()
+	while true:
+		var file_name := directory.get_next()
+		if file_name.is_empty():
+			break
+		if directory.current_is_dir():
+			continue
+		if not file_name.to_lower().ends_with(".png"):
+			continue
+		file_names.append(file_name)
+	directory.list_dir_end()
+	file_names.sort()
+	for file_name in file_names:
+		var texture := _load_texture_from_source_file("%s/%s" % [directory_path, file_name])
+		if texture != null:
+			frames.append(texture)
+	return frames
+
+func _load_texture_from_source_file(resource_path: String) -> Texture2D:
+	var global_path := ProjectSettings.globalize_path(resource_path)
+	if not FileAccess.file_exists(global_path):
+		return null
+	var image := Image.load_from_file(global_path)
+	if image == null:
+		return null
+	return ImageTexture.create_from_image(image)
+
+func _apply_default_size() -> void:
+	var frames: Array[Texture2D] = _animation_sets.get(&"idle_front", [])
+	if frames.is_empty():
+		collision_size = Vector2(48, 48)
+		return
+	collision_size = frames[0].get_size()
+
+func _update_facing_from_direction(direction: Vector2) -> void:
+	if direction.is_zero_approx():
+		return
+	if absf(direction.x) > absf(direction.y):
+		_facing_mode = FacingMode.SIDE
+		_is_facing_left = direction.x < 0.0
+	else:
+		_facing_mode = FacingMode.BACK if direction.y < 0.0 else FacingMode.FRONT
+
+func _update_animation_state(is_moving: bool) -> void:
+	var animation_name := _animation_name_for_state(is_moving)
+	if _animated_sprite.sprite_frames == null or not _animated_sprite.sprite_frames.has_animation(animation_name):
+		return
+	_animated_sprite.flip_h = _facing_mode == FacingMode.SIDE and _is_facing_left
+	_animated_sprite.sprite_frames.set_animation_speed(animation_name, animation_fps)
+	if _animated_sprite.animation != animation_name:
+		_animated_sprite.play(animation_name)
+	elif not _animated_sprite.is_playing():
+		_animated_sprite.play()
+
+func _animation_name_for_state(is_moving: bool) -> StringName:
+	if is_moving:
+		match _facing_mode:
+			FacingMode.SIDE:
+				return &"walk_side"
+			FacingMode.BACK:
+				return &"walk_back"
+			_:
+				return &"walk_front"
+	match _facing_mode:
+		FacingMode.SIDE:
+			return &"idle_side"
+		FacingMode.BACK:
+			return &"idle_back"
+		_:
+			return &"idle_front"
+
+func _update_outline_material() -> void:
+	if _outline_material == null:
+		return
+	_outline_material.set_shader_parameter("outline_color", outline_color)
+	_outline_material.set_shader_parameter("outline_thickness", outline_thickness)
 
 func _clamp_to_room() -> void:
-	position.x = clampf(position.x, room_bounds.position.x, room_bounds.end.x - size.x)
-	position.y = clampf(position.y, room_bounds.position.y, room_bounds.end.y - size.y)
-
-func _draw() -> void:
-	draw_rect(Rect2(Vector2.ZERO, size), _fill_color, true)
-	draw_rect(Rect2(Vector2.ZERO, size), _outline_color, false, 3.0)
+	var half_size := collision_size * 0.5
+	position.x = clampf(position.x, room_bounds.position.x + half_size.x, room_bounds.end.x - half_size.x)
+	position.y = clampf(position.y, room_bounds.position.y + half_size.y, room_bounds.end.y - half_size.y)

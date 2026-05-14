@@ -4,7 +4,7 @@ class_name ExploreScene
 signal battle_requested(room_id: StringName)
 signal restart_requested
 
-const INTERACTABLE_SCENE := preload("res://scripts/explore/explore_interactable.gd")
+const DEFAULT_PLAYER_SPAWN_POSITION := Vector2(456, 246)
 
 @onready var room_title_label: Label = $Root/Layout/Header/RoomTitle
 @onready var room_type_label: Label = $Root/Layout/Header/RoomType
@@ -20,10 +20,17 @@ const INTERACTABLE_SCENE := preload("res://scripts/explore/explore_interactable.
 
 var run_state: RunState
 var _spawned_interactables: Array[ExploreInteractable] = []
+var _interactables_in_range: Array[ExploreInteractable] = []
 var _nearest_interactable: ExploreInteractable
+var _active_room_scene: ExploreRoomScene
+var _pending_room_layout_sync: bool = false
+var _room_layout_sync_version: int = 0
 
 func _ready() -> void:
 	restart_button.pressed.connect(func() -> void: restart_requested.emit())
+	room_canvas.resized.connect(_on_room_canvas_resized)
+	player_actor.get_interaction_area().area_entered.connect(_on_player_interaction_area_entered)
+	player_actor.get_interaction_area().area_exited.connect(_on_player_interaction_area_exited)
 	if run_state != null:
 		_refresh_view()
 
@@ -63,7 +70,7 @@ func _refresh_view() -> void:
 	else:
 		restart_button.visible = false
 	_rebuild_room(room)
-	call_deferred("_reset_player_position")
+	_request_room_layout_sync()
 
 func _reset_player_position() -> void:
 	var inner_margin := Vector2(8, 8)
@@ -72,81 +79,34 @@ func _reset_player_position() -> void:
 		room_canvas.size - inner_margin * 2.0
 	)
 	player_actor.set_active(not run_state.is_run_over)
-	player_actor.center_in_room(bounds)
+	var spawn_center := _get_room_player_spawn_position()
+	player_actor.position = spawn_center
 	player_actor.set_room_bounds(bounds)
 	_update_nearest_interactable()
 
 func _rebuild_room(room: RoomRuntimeData) -> void:
-	for interactable in _spawned_interactables:
-		interactable.queue_free()
+	_clear_room_scene()
 	_spawned_interactables.clear()
+	_interactables_in_range.clear()
+	_nearest_interactable = null
 
-	room_canvas.self_modulate = _room_color(room.room_type)
-	_spawn_room_feature(room)
-	_spawn_room_exits(room)
-
-func _spawn_room_feature(room: RoomRuntimeData) -> void:
-	match room.room_type:
-		MapTypes.RoomType.START:
-			_add_interactable(&"guide", "清扫路线图", "查看提示", &"message", {
-				"message": "前往怪物房清理污染，再尝试进入 Boss 房。宝箱房当前提供基础金币奖励。",
-			}, Vector2(440, 150))
-		MapTypes.RoomType.MONSTER, MapTypes.RoomType.BOSS:
-			var cleared_name := "已净化房间" if room.cleared else "污染怪物"
-			var prompt := "查看房间状态" if room.cleared else "发起战斗"
-			_add_interactable(&"enemy", cleared_name, prompt, &"encounter", {
-				"room_id": room.id,
-			}, Vector2(430, 170))
-		MapTypes.RoomType.CHEST:
-			var opened: bool = room.payload.get("opened", false)
-			_add_interactable(&"chest", "已开宝箱" if opened else "补给宝箱", "开启宝箱", &"chest", {
-				"room_id": room.id,
-			}, Vector2(430, 170))
-		MapTypes.RoomType.SHOP:
-			_add_interactable(&"merchant", "流动商人", "打开商店", &"shop", {
-				"room_id": room.id,
-			}, Vector2(430, 170))
-
-func _spawn_room_exits(room: RoomRuntimeData) -> void:
-	var positions := [
-		Vector2(70, 230),
-		Vector2(822, 230),
-		Vector2(446, 56),
-		Vector2(446, 404),
-	]
-	for index in range(room.linked_room_ids.size()):
-		var target_room_id: StringName = room.linked_room_ids[index]
-		var target_room: RoomRuntimeData = run_state.get_room(target_room_id)
-		if target_room == null:
-			continue
-		var display_name := "出口 -> %s" % target_room.type_label()
-		_add_interactable(
-			StringName("exit_%s" % String(target_room_id)),
-			display_name,
-			"前往 %s" % target_room.display_name,
-			&"exit",
-			{"target_room_id": target_room_id},
-			positions[index % positions.size()]
-		)
-
-func _add_interactable(id: StringName, display_name: String, prompt: String, kind: StringName, payload: Dictionary, position_value: Vector2) -> void:
-	var interactable: ExploreInteractable = INTERACTABLE_SCENE.new()
-	room_canvas.add_child(interactable)
-	interactable.configure(id, display_name, prompt, kind, payload)
-	interactable.position = position_value
-	_spawned_interactables.append(interactable)
+	_load_room_scene(room)
+	_collect_room_interactables(room)
 
 func _update_nearest_interactable() -> void:
 	var best: ExploreInteractable = null
-	var best_distance: float = 120.0
+	var best_distance: float = INF
 	var player_center := player_actor.get_center_point()
-	for interactable in _spawned_interactables:
+	for interactable in _interactables_in_range:
+		if interactable == null or not is_instance_valid(interactable):
+			continue
 		var distance := player_center.distance_to(interactable.get_center_point())
 		if distance < best_distance:
 			best_distance = distance
 			best = interactable
 	for interactable in _spawned_interactables:
-		interactable.set_highlighted(interactable == best)
+		if interactable != null and is_instance_valid(interactable):
+			interactable.set_highlighted(interactable == best)
 	_nearest_interactable = best
 	if best == null:
 		prompt_label.text = "WASD 移动，靠近对象后按 E 交互。"
@@ -220,3 +180,102 @@ func _room_color(room_type: MapTypes.RoomType) -> Color:
 			return Color(0.93, 0.82, 0.82, 1.0)
 		_:
 			return Color(0.9, 0.9, 0.9, 1.0)
+
+func _load_room_scene(room: RoomRuntimeData) -> void:
+	_active_room_scene = null
+	if room == null or room.scene_path.is_empty():
+		room_canvas.self_modulate = _room_color(room.room_type)
+		return
+	var scene_resource := load(room.scene_path)
+	if scene_resource is not PackedScene:
+		room_canvas.self_modulate = _room_color(room.room_type)
+		return
+	var room_scene := (scene_resource as PackedScene).instantiate()
+	if room_scene is not ExploreRoomScene:
+		room_scene.queue_free()
+		room_canvas.self_modulate = _room_color(room.room_type)
+		return
+	_active_room_scene = room_scene as ExploreRoomScene
+	room_canvas.self_modulate = Color.WHITE
+	room_canvas.add_child(_active_room_scene)
+	room_canvas.move_child(_active_room_scene, 0)
+	_active_room_scene.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_active_room_scene.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+func _collect_room_interactables(room: RoomRuntimeData) -> void:
+	if _active_room_scene == null:
+		return
+	for node in _active_room_scene.find_children("*", "ExploreInteractable", true, false):
+		if node is not ExploreInteractable:
+			continue
+		var interactable := node as ExploreInteractable
+		_sync_interactable_runtime_state(interactable, room)
+		_spawned_interactables.append(interactable)
+
+func _sync_interactable_runtime_state(interactable: ExploreInteractable, room: RoomRuntimeData) -> void:
+	match interactable.interactable_kind:
+		&"encounter":
+			if room != null and room.cleared:
+				interactable.display_name = "已净化房间"
+				interactable.prompt_text = "查看房间状态"
+			else:
+				interactable.display_name = "污染怪物"
+				interactable.prompt_text = "发起战斗"
+		&"chest":
+			var opened: bool = room != null and bool(room.payload.get("opened", false))
+			interactable.display_name = "已开宝箱" if opened else "补给宝箱"
+			interactable.prompt_text = "开启宝箱"
+
+func _clear_room_scene() -> void:
+	if _active_room_scene != null:
+		_active_room_scene.queue_free()
+		_active_room_scene = null
+	_interactables_in_range.clear()
+	_nearest_interactable = null
+
+func _get_room_player_spawn_position() -> Vector2:
+	if _active_room_scene == null:
+		return DEFAULT_PLAYER_SPAWN_POSITION
+	return _active_room_scene.get_player_spawn_position(DEFAULT_PLAYER_SPAWN_POSITION)
+
+func _request_room_layout_sync() -> void:
+	_pending_room_layout_sync = true
+	_schedule_room_layout_sync()
+
+func _on_room_canvas_resized() -> void:
+	if not _pending_room_layout_sync:
+		return
+	_schedule_room_layout_sync()
+
+func _schedule_room_layout_sync() -> void:
+	_room_layout_sync_version += 1
+	call_deferred("_run_room_layout_sync", _room_layout_sync_version)
+
+func _run_room_layout_sync(sync_version: int) -> void:
+	await get_tree().process_frame
+	if sync_version != _room_layout_sync_version:
+		return
+	if not _pending_room_layout_sync:
+		return
+	_pending_room_layout_sync = false
+	_reset_player_position()
+
+func _on_player_interaction_area_entered(area: Area2D) -> void:
+	if area == null:
+		return
+	var interactable := area.get_parent()
+	if interactable is not ExploreInteractable:
+		return
+	var typed_interactable := interactable as ExploreInteractable
+	if _interactables_in_range.has(typed_interactable):
+		return
+	_interactables_in_range.append(typed_interactable)
+
+func _on_player_interaction_area_exited(area: Area2D) -> void:
+	if area == null:
+		return
+	var interactable := area.get_parent()
+	if interactable is not ExploreInteractable:
+		return
+	var typed_interactable := interactable as ExploreInteractable
+	_interactables_in_range.erase(typed_interactable)

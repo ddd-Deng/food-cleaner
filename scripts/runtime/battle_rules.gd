@@ -79,9 +79,6 @@ static func _validate_card_play(state: BattleState, card: CardInstance) -> Strin
 		match effect.kind:
 			BattleTypes.EffectKind.EAT_ENEMY_BLOCK:
 				total_requested_eat_count += max(1, effect.amount)
-			BattleTypes.EffectKind.ADVANCE_PURIFICATION:
-				if state.enemy == null or not state.enemy.has_pending_purification_action(effect.purification_action):
-					return "当前没有可匹配的净化任务。"
 	if total_requested_eat_count > 0:
 		if state.enemy == null or state.enemy.blocks.is_empty():
 			return "当前没有可吃掉的敌方食物块。"
