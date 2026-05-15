@@ -2,6 +2,7 @@ extends Control
 class_name ExploreScene
 
 signal battle_requested(room_id: StringName)
+signal room_change_requested(target_room_id: StringName)
 signal restart_requested
 
 const DEFAULT_PLAYER_SPAWN_POSITION := Vector2(456, 246)
@@ -143,10 +144,7 @@ func _try_change_room(interactable: ExploreInteractable) -> void:
 		run_state.set_message("这个房间还没有处理完，出口暂时关闭。")
 		return
 	var target_room_id: Variant = interactable.payload.get("target_room_id", &"")
-	run_state.move_to_room(target_room_id)
-	var target_room := run_state.get_current_room()
-	run_state.set_message("进入了 %s。" % (target_room.display_name if target_room != null else "下一个房间"))
-	_refresh_view()
+	room_change_requested.emit(target_room_id)
 
 func _room_color(room_type: MapTypes.RoomType) -> Color:
 	match room_type:

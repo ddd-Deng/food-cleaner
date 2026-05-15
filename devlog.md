@@ -47,6 +47,21 @@
 
 ## 2026-05-15
 
+### 探索与战斗之间接入顶层转场动画
+- 做了什么：新增独立的 `SceneTransitionOverlay` 顶层转场层，从 `sprites/transitionAnimation/` 目录按文件名顺序加载整套 `1280x720` 帧图，使用 `AnimatedSprite2D` 全屏覆盖显示。`RunController` 里的“探索进战斗”“战斗回探索”不再直接切场，而是统一改成先播放转场、在动画播到中间帧时再执行真实切场、播完后再解除输入锁。转场期间会把当前活动场景的 `process_mode` 置为 `DISABLED`，从而阻止玩家在动画覆盖期间继续移动、出牌或点击 UI；转场层本身也放在 `Main` 顶层最上方，确保能盖住探索、战斗以及所有 HUD/覆盖层。
+- 影响文件：`scripts/ui/scene_transition_overlay.gd`、`scenes/ui/scene_transition_overlay.tscn`、`scenes/main/main.gd`、`scripts/run/run_controller.gd`、`devlog.md`
+- 如何验证：运行游戏后从探索靠近怪物按 `E` 进入战斗，确认会先出现全屏转场动画，且探索场景在动画前半段仍被遮住；动画播到一半时再切进战斗，后半段结束后战斗界面才可操作。战斗胜利点击“继续探索”或战斗失败回探索时，也应先完整播放同一套转场动画，并且在动画期间无法继续移动、点按钮或操作手牌。
+
+### 探索房间之间切换也改为统一走转场
+- 做了什么：把探索内的出口切房从 `ExploreScene` 内部直接 `move_to_room() + _refresh_view()`，改成先发出 `room_change_requested` 信号，再交给 `RunController` 统一调用顶层转场。这样现在无论是“探索进战斗”“战斗回探索”，还是“探索房间切到另一个探索房间”，都会使用同一套全屏转场动画，并保持“播到中点再切场、动画期间不可操作”的规则一致。
+- 影响文件：`scripts/explore/explore_scene.gd`、`scripts/run/run_controller.gd`、`devlog.md`
+- 如何验证：运行探索后从起点进入怪物房、宝箱房，或在怪物房之间来回切换，确认每次通过出口换房时都会先播放全屏转场动画；动画前半段仍遮住旧房间，中点切到新房间，动画结束后才恢复移动与交互。
+
+### 转场层改为独立 CanvasLayer，确保永远压在最上层
+- 做了什么：将 `SceneTransitionOverlay` 从普通 `Control` 改成独立 `CanvasLayer`，并把真正拦截输入与显示动画的内容放到其内部的 `OverlayRoot` 全屏控件上。这样转场动画不再和探索场景里的前景、怪物、主角，或战斗场景里的 HUD/覆盖层共用普通节点排序，而是始终处在单独的顶层画布层里，确保切场时不会再被任何地图元素或 UI 压住。
+- 影响文件：`scripts/ui/scene_transition_overlay.gd`、`scenes/ui/scene_transition_overlay.tscn`、`scenes/main/main.gd`、`devlog.md`
+- 如何验证：运行游戏并触发任意转场，确认转场动画会完整盖住主角、怪物、地图前景以及战斗/探索中的所有 UI；不应再出现任何场景元素显示在转场动画上方。
+
 ### 面包怪物旧采样结果删除后按新原图重新生成
 - 做了什么：由于面包怪物原始素材已替换，先按要求删除了旧的 `sprites/怪物_256x144/面包` 采样结果，再用现有最近邻下采样脚本从新的 `sprites/怪物/面包` 原图重新生成整套输出。面包新原图当前仍是 `1280x720`，因此继续按既有规则采样为 `256x144`，并保持 `MonsterCatalog` 里原有的 `res://sprites/怪物_256x144/面包` 路径不变，这样探索房间和战斗里会自动吃到新素材。
 - 影响文件：`sprites/怪物_256x144/面包/*`、`devlog.md`
