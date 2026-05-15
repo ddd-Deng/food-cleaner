@@ -11,6 +11,16 @@
 
 ## 2026-05-15
 
+### 蛋糕怪物改为按五倍缩小采样
+- 做了什么：发现蛋糕原始帧尺寸不是和其他怪物一致的 `1280x720`，而是更大的 `2276x1280`，因此不再强行采样成 `256x144`；为现有下采样脚本补充了 `--scale-divisor` 选项后，只重生成了 `sprites/怪物_256x144/蛋糕` 目录，使蛋糕帧按五倍缩小输出为 `455x256`，保留其原始纵横比与构图。面包和其他既有怪物未改动，仍保持原先的采样结果。
+- 影响文件：`tools/resize_player_sprites.py`、`sprites/怪物_256x144/蛋糕/*`、`devlog.md`
+- 如何验证：检查 `sprites/怪物_256x144/蛋糕/*.png`，确认输出分辨率已变为 `455x256` 而不是 `256x144`；重新进入蛋糕怪物房与蛋糕战斗，确认动画仍可正常播放，且画面构图比之前更符合原素材比例。
+
+### 新增蛋糕与面包怪物，补齐探索房间与战斗接入
+- 做了什么：使用现有下采样脚本将 `sprites/怪物/蛋糕` 和 `sprites/怪物/面包` 的原始帧统一采样到 `sprites/怪物_256x144/`；随后在 `MonsterCatalog` 中新增 `cake`、`bread` 两个怪物定义，补上各自的探索/战斗动画目录、房间场景和临时战斗逻辑；新增 `cake_room.tscn`、`bread_room.tscn` 两个怪物房，并把地图链路调整为“起点 -> 棉花糖/糖豆 -> 蛋糕/面包 -> 草莓 -> 鱼 Boss”，使新怪物与现有怪物一样支持探索中可视化摆放、靠近高亮、按 `E` 进入战斗。
+- 影响文件：`tools/resize_player_sprites.py`（复用未修改）、`sprites/怪物_256x144/蛋糕/*`、`sprites/怪物_256x144/面包/*`、`scripts/content/monster_catalog.gd`、`scripts/map/map_generator.gd`、`scenes/rooms/cake_room.tscn`、`scenes/rooms/bread_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`devlog.md`
+- 如何验证：运行游戏后从起点进入棉花糖房与糖豆房，确认出口分别会通向新增的蛋糕房与面包房；进入 `cake_room`、`bread_room` 时确认能看到对应怪物动画、靠近后出现高亮描边、按 `E` 能进入战斗；打完后继续前往草莓房和 Boss 房，确认整条房间链路都能正常走通。
+
 ### 优化怪物房加载与进战斗卡顿
 - 做了什么：清理了 `marshmallow/candy_bean/fish_boss` 三个怪物房 `.tscn` 中被意外内嵌进去的大量 `Image/ImageTexture/SpriteFrames` 数据，让房间重新只保留对 `monster_encounter.tscn` 的外部引用；同时把怪物探索动画和战斗动画的加载改成统一走 `MonsterCatalog` 的 `SpriteFrames` 缓存，并直接 `load()` 导入后的贴图资源，不再在进入房间或进入战斗时同步逐帧 `Image.load_from_file()` 解码 PNG。这样可以同时减少“切入怪物房”和“按 E 进战斗”两段主线程卡顿。
 - 影响文件：`scripts/content/monster_catalog.gd`、`scripts/explore/monster_encounter.gd`、`scripts/ui/battle_enemy_sprite.gd`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`

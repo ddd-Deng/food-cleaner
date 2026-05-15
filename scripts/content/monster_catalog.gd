@@ -81,6 +81,22 @@ static func _build_definitions() -> Dictionary:
 		MONSTER_ANIMATION_ROOT + "/草莓",
 		_build_strawberry_enemy()
 	)
+	definitions[&"cake"] = _build_monster(
+		&"cake",
+		"污染怪物",
+		"怪物房",
+		"res://scenes/rooms/cake_room.tscn",
+		MONSTER_ANIMATION_ROOT + "/蛋糕",
+		_build_cake_enemy()
+	)
+	definitions[&"bread"] = _build_monster(
+		&"bread",
+		"污染怪物",
+		"怪物房",
+		"res://scenes/rooms/bread_room.tscn",
+		MONSTER_ANIMATION_ROOT + "/面包",
+		_build_bread_enemy()
+	)
 	definitions[&"fish_boss"] = _build_monster(
 		&"fish_boss",
 		"Boss",
@@ -194,6 +210,46 @@ static func _build_fish_enemy() -> EnemyData:
 		_add_block_action(&"spawn_roe", "抖落鱼卵", _block(&"roe_spawned", "掉落鱼卵", 1, 1, "新掉落的鱼卵。"), 2),
 		_charge_action(&"inhale", "鼓腮蓄力", 3, 2),
 		_attack_action(&"surge", "腥潮冲撞", 6, 1),
+	]
+	return enemy
+
+static func _build_cake_enemy() -> EnemyData:
+	var enemy := EnemyData.new()
+	enemy.id = &"cake"
+	enemy.display_name = "污染怪物"
+	enemy.food_blocks = [
+		_block(&"cream_layer", "奶油层", 1, 2, "黏腻得不好处理。"),
+		_block(&"cake_base", "蛋糕胚", 1, 2, "松软但分量足。"),
+		_block(&"jam_filling", "果酱夹心", 1, 3, "甜得发腻。", [_effect(BattleTypes.EffectKind.DEAL_PLAYER_DAMAGE, 1)]),
+	]
+	enemy.purification_steps = [
+		_step(&"trim", "刮掉奶油", BattleTypes.PurificationActionType.TRIM),
+		_step(&"wash", "冲净果酱", BattleTypes.PurificationActionType.WASH),
+	]
+	enemy.actions = [
+		_add_block_action(&"drop_cream", "奶油塌落", _block(&"cream_blob", "奶油团", 1, 1, "一小团滑腻奶油。"), 2),
+		_attack_action(&"plate_smash", "托盘砸击", 3, 2),
+		_charge_action(&"sugar_rise", "糖分鼓胀", 4, 2),
+	]
+	return enemy
+
+static func _build_bread_enemy() -> EnemyData:
+	var enemy := EnemyData.new()
+	enemy.id = &"bread"
+	enemy.display_name = "污染怪物"
+	enemy.food_blocks = [
+		_block(&"crust", "硬面包壳", 1, 3, "又硬又干。"),
+		_block(&"soft_crumb", "内芯团", 1, 2, "吸水后会膨胀。"),
+		_block(&"burnt_corner", "焦边", 1, 2, "带着苦味。"),
+	]
+	enemy.purification_steps = [
+		_step(&"trim", "切掉焦边", BattleTypes.PurificationActionType.TRIM),
+		_step(&"correct", "回温复原", BattleTypes.PurificationActionType.CORRECT),
+	]
+	enemy.actions = [
+		_attack_action(&"crumb_burst", "碎屑喷散", 2, 2),
+		_add_block_action(&"stale_shed", "掉落干壳", _block(&"stale_piece", "干硬碎块", 1, 2, "卡嗓子的碎块。"), 2),
+		_attack_action(&"roll_press", "翻滚压击", 4, 1),
 	]
 	return enemy
 

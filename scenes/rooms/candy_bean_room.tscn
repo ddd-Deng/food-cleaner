@@ -63,12 +63,12 @@ payload = {
 
 [node name="ExitToStrawberry" parent="." unique_id=319213096 instance=ExtResource("3")]
 position = Vector2(1125, 403)
-interactable_id = &"exit_strawberry"
+interactable_id = &"exit_bread"
 display_name = "出口 -> 怪物房"
 prompt_text = "前往 怪物房"
 interactable_kind = &"exit"
 payload = {
-"target_room_id": &"strawberry_room"
+"target_room_id": &"bread_room"
 }
 
 [editable path="MonsterEncounter"]
