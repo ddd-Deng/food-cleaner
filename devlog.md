@@ -11,6 +11,16 @@
 
 ## 2026-05-15
 
+### 修复手动调整交互物后名称丢失且无法交互的问题
+- 做了什么：将 `ExploreInteractable`、`MonsterEncounter`、`RoomAnchor` 的导出属性读取方式改回与 Godot 场景序列化一致，不再依赖未同步的 backing field；同时把 `payload` 改为可导出字段，并兼容已保存房间里仅修改了 `Label.text` 的旧数据。随后补回 `start/chest/棉花糖/糖豆/Boss` 房间中因可编辑子场景保存而丢失的 `payload`、`monster_id`、`anchor_kind` 等关键字段，恢复出口跳转、提示消息、宝箱和怪物交互。
+- 影响文件：`scripts/explore/explore_interactable.gd`、`scripts/explore/monster_encounter.gd`、`scripts/explore/room_anchor.gd`、`scripts/explore/explore_scene.gd`、`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：打开任一房间场景，确认交互物导出面板中能直接看到 `display_name / interactable_kind / payload`；运行游戏后确认入口提示显示“清扫路线图”而不是“交互物”，靠近出口/宝箱/怪物按 `E` 能正常触发，切房后不会再出现所有交互都失效的情况。
+
+### 出口等基础交互范围改为编辑器内可见
+- 做了什么：将 `ExploreInteractable` 改为 `@tool`，并把 `Area2D`、`CollisionShape2D`、`Label` 直接放进 `scenes/explore/explore_interactable.tscn`，不再只在运行时动态创建；随后又把各房间里实例化的出口、宝箱和怪物节点标记为 `editable` 子节点，解决“子场景内部已有碰撞范围，但在父房间 `.tscn` 中默认仍看不到/不能直接编辑”的问题。
+- 影响文件：`scripts/explore/explore_interactable.gd`、`scenes/explore/explore_interactable.tscn`、`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：在编辑器中打开任一房间场景，确认出口/宝箱/怪物实例可以展开看到内部 `Area2D` 和 `CollisionShape2D`，并能在父场景里直接选中和调整交互范围；运行游戏后交互逻辑仍保持正常。
+
 ### 修正怪物运行时不显示的问题
 - 做了什么：把 `MonsterEncounter` 在运行时加载怪物定义的读取来源从导出属性 `monster_id` 改为 setter 写入的 backing field `_monster_id`，避免场景实例化后实际取到空值导致不加载怪物动画；顺便保持编辑器预览和运行时使用同一份怪物定义路径。
 - 影响文件：`scripts/explore/monster_encounter.gd`、`devlog.md`

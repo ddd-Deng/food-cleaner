@@ -74,3 +74,8 @@ interactable_kind = &"exit"
 payload = {
 "target_room_id": &"fish_boss_room"
 }
+
+[editable path="MonsterEncounter"]
+[editable path="ExitToMarshmallow"]
+[editable path="ExitToCandyBean"]
+[editable path="ExitToBoss"]
