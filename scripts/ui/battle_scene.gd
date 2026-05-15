@@ -30,6 +30,7 @@ signal battle_resolved(result: Dictionary)
 @onready var deck_preview_button: BaseButton = $Root/Layout/HeaderRow/RightButtons/DeckPreviewButton
 @onready var draw_pile_button: BaseButton = $Root/Layout/BottomRow/DeckColumn/DeckPanel
 @onready var discard_pile_button: BaseButton = $Root/Layout/BottomRow/DiscardColumn/DiscardPanel
+const DECK_VIEW_OVERLAY_SCENE: PackedScene = preload("res://scenes/ui/deck_view_overlay.tscn")
 
 const TIMELINE_BASE_TEXTURE: Texture2D = preload("res://sprites/时间轴/时间轴.png")
 const TIMELINE_MARKER_TEXTURE: Texture2D = preload("res://sprites/时间轴/时间轴上的标记点.png")
@@ -66,6 +67,7 @@ var _last_purification_index_seen: int = -1
 var _pending_definition: BattleDefinition
 var _started_once: bool = false
 var _card_effect_preview_popup: CardEffectPreviewPopup
+var _deck_view_overlay: DeckViewOverlay
 
 func _ready() -> void:
 	player_actor_view.set_actor_mode(BattleActorView.MODE_PLAYER)
@@ -74,14 +76,25 @@ func _ready() -> void:
 	ScrollBarSkin.apply_to_rich_text_label(log_text)
 	ScrollBarSkin.apply_compact_horizontal_to_scroll_container(timeline_scroll)
 	_create_card_effect_preview_popup()
+	_create_deck_view_overlay()
 
 	controller.state_changed.connect(_on_state_changed)
+	controller.state_changed.connect(func(state: BattleState) -> void:
+		if _deck_view_overlay != null and _deck_view_overlay.is_open():
+			_deck_view_overlay.refresh_with_state(state)
+	)
 	controller.log_added.connect(_on_log_added)
 	controller.battle_finished.connect(_on_battle_finished)
 	settings_button.pressed.connect(_on_settings_pressed)
-	deck_preview_button.pressed.connect(_on_deck_preview_pressed)
-	draw_pile_button.pressed.connect(_on_draw_pile_pressed)
-	discard_pile_button.pressed.connect(_on_discard_pile_pressed)
+	deck_preview_button.pressed.connect(func() -> void:
+		_open_deck_view(DeckViewOverlay.TAB_ALL)
+	)
+	draw_pile_button.pressed.connect(func() -> void:
+		_open_deck_view(DeckViewOverlay.TAB_DRAW)
+	)
+	discard_pile_button.pressed.connect(func() -> void:
+		_open_deck_view(DeckViewOverlay.TAB_DISCARD)
+	)
 	_configure_texture_button_feedback(settings_button)
 	_configure_texture_button_feedback(deck_preview_button)
 	_configure_texture_button_feedback(draw_pile_button)
@@ -99,6 +112,8 @@ func start_battle(definition: BattleDefinition) -> void:
 		_start_controller_battle(definition)
 
 func _input(event: InputEvent) -> void:
+	if _deck_view_overlay != null and _deck_view_overlay.is_open():
+		return
 	if event is not InputEventMouseButton:
 		return
 	var mouse_event := event as InputEventMouseButton
@@ -301,6 +316,15 @@ func _create_card_effect_preview_popup() -> void:
 	add_child(_card_effect_preview_popup)
 	_card_effect_preview_popup.z_index = 2000
 
+func _create_deck_view_overlay() -> void:
+	if _deck_view_overlay != null:
+		return
+	_deck_view_overlay = DECK_VIEW_OVERLAY_SCENE.instantiate() as DeckViewOverlay
+	if _deck_view_overlay == null:
+		return
+	add_child(_deck_view_overlay)
+	_deck_view_overlay.z_index = 3000
+
 func _show_card_effect_preview(records: Array[CardEffectRecord], marker_global_rect: Rect2) -> void:
 	if _card_effect_preview_popup == null:
 		return
@@ -309,6 +333,12 @@ func _show_card_effect_preview(records: Array[CardEffectRecord], marker_global_r
 func _hide_card_effect_preview() -> void:
 	if _card_effect_preview_popup != null:
 		_card_effect_preview_popup.hide_preview()
+
+func _open_deck_view(tab_id: StringName) -> void:
+	if controller.state == null or _deck_view_overlay == null:
+		return
+	hand_view.cancel_active_drag()
+	_deck_view_overlay.open_with_state(controller.state, tab_id)
 
 func _on_card_released_outside_hand(index: int) -> void:
 	_play_card_from_hand(index)

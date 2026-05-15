@@ -1,4 +1,8 @@
 # 开发日志
+### 新增战斗内卡组阅览覆盖层
+- 做了什么：新增 `DeckViewOverlay` 和 `DeckCardTile`，把战斗里的“查看卡组 / 抽牌堆 / 弃牌堆”从日志占位改成真正的整页阅览层。现在会按攻击、技能、净化、其他分组展示卡牌，并合并同名卡显示数量；打开 `查看卡组` 默认看整个卡组，打开抽牌堆/弃牌堆按钮则切到对应页签，支持 `Esc` 和返回按钮关闭。
+- 影响文件：`scripts/ui/battle_scene.gd`、`scripts/ui/deck_view_overlay.gd`、`scripts/ui/deck_card_tile.gd`、`scenes/ui/deck_view_overlay.tscn`、`scenes/ui/deck_card_tile.tscn`、`devlog.md`
+- 如何验证：进入战斗后点击顶部“查看卡组”应弹出覆盖层；点击抽牌堆和弃牌堆按钮应切到对应页签；覆盖层打开时底层手牌拖拽与战斗按钮不应继续响应；关闭后战斗界面恢复正常交互；打出卡牌后重新打开，抽牌堆/弃牌堆/整个卡组数量应随 `BattleState` 更新。
 
 <<<<<<< HEAD
 ## 2026-05-14
@@ -340,3 +344,7 @@
 - 做了什么：给战斗场景时间日志区的 `EffectBannerLabel` 补了 `custom_minimum_size = Vector2(0, 24)`，让容器里的自动换行 `Label` 有明确最小高度，消除 Godot 的黄色布局警告。
 - 影响文件：`scenes/battle/battle_scene.tscn`、`devlog.md`
 - 如何验证：已完成场景文本静态检查；Godot headless 解析验证被当前运行环境的审批拦截，未实际启动。
+### 修复战斗主角动画脚本 warning 与脚本 UID 引用
+- 做了什么：将 `scripts/ui/battle_player_sprite.gd` 中用于组装 `SpriteFrames` 的局部变量和函数参数从 `sprite_frames` 改为 `frames`，避免和 `AnimatedSprite2D` 基类属性 `sprite_frames` 产生 shadow warning；同时移除 `scenes/battle/battle_scene.tscn` 里该脚本资源的无效 `uid`，改为仅按 `path` 引用，避免加载时出现 `invalid UID` 提示。
+- 影响文件：`scripts/ui/battle_player_sprite.gd`、`scenes/battle/battle_scene.tscn`、`devlog.md`
+- 如何验证：重新打开或重载 `res://scenes/battle/battle_scene.tscn`，确认不再出现 `SHADOWED_VARIABLE_BASE_CLASS` 和 `invalid UID` 相关 warning。

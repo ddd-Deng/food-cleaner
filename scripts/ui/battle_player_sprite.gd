@@ -28,22 +28,22 @@ func play_attack_animation() -> void:
 	_play_attack_phase(ATTACK_FRONT_ANIMATION, PlaybackState.ATTACK_FRONT)
 
 func _load_animations() -> void:
-	var sprite_frames := SpriteFrames.new()
-	_register_animation(sprite_frames, IDLE_ANIMATION, IDLE_SIDE_DIR, true)
-	_register_animation(sprite_frames, ATTACK_FRONT_ANIMATION, ATTACK_FRONT_DIR, false)
-	_register_animation(sprite_frames, ATTACK_BACK_ANIMATION, ATTACK_BACK_DIR, false)
+	var frames := SpriteFrames.new()
+	_register_animation(frames, IDLE_ANIMATION, IDLE_SIDE_DIR, true)
+	_register_animation(frames, ATTACK_FRONT_ANIMATION, ATTACK_FRONT_DIR, false)
+	_register_animation(frames, ATTACK_BACK_ANIMATION, ATTACK_BACK_DIR, false)
 
-	self.sprite_frames = sprite_frames
+	self.sprite_frames = frames
 
-func _register_animation(sprite_frames: SpriteFrames, animation_id: StringName, directory_path: String, loop: bool) -> void:
+func _register_animation(frames: SpriteFrames, animation_id: StringName, directory_path: String, loop: bool) -> void:
 	var animation_name := String(animation_id)
-	sprite_frames.add_animation(animation_name)
-	sprite_frames.set_animation_loop(animation_name, loop)
-	sprite_frames.set_animation_speed(animation_name, animation_fps)
+	frames.add_animation(animation_name)
+	frames.set_animation_loop(animation_name, loop)
+	frames.set_animation_speed(animation_name, animation_fps)
 
 	for texture in _load_frames_from_directory(directory_path):
 		if texture != null:
-			sprite_frames.add_frame(animation_name, texture)
+			frames.add_frame(animation_name, texture)
 
 func _play_idle_animation() -> void:
 	_playback_state = PlaybackState.IDLE

@@ -1,0 +1,119 @@
+[gd_scene format=3 uid="uid://b5w8g2laq1r6t"]
+
+[ext_resource type="Script" uid="uid://chrqcjdridql4" path="res://scripts/ui/deck_view_overlay.gd" id="1"]
+
+[node name="DeckViewOverlay" type="Control" unique_id=603984837]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=944002249]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.101961, 0.0705882, 0.0313726, 0.78)
+
+[node name="SafeArea" type="MarginContainer" parent="." unique_id=1677131645]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 44
+theme_override_constants/margin_top = 34
+theme_override_constants/margin_right = 44
+theme_override_constants/margin_bottom = 34
+
+[node name="Panel" type="PanelContainer" parent="SafeArea" unique_id=1147063768]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="PanelMargin" type="MarginContainer" parent="SafeArea/Panel" unique_id=952330710]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 18
+
+[node name="PanelColumn" type="VBoxContainer" parent="SafeArea/Panel/PanelMargin" unique_id=1606237057]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="HeaderRow" type="HBoxContainer" parent="SafeArea/Panel/PanelMargin/PanelColumn" unique_id=1358292762]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="HeaderText" type="VBoxContainer" parent="SafeArea/Panel/PanelMargin/PanelColumn/HeaderRow" unique_id=2026596738]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="TitleLabel" type="Label" parent="SafeArea/Panel/PanelMargin/PanelColumn/HeaderRow/HeaderText" unique_id=205086015]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "卡组阅览"
+
+[node name="SummaryLabel" type="Label" parent="SafeArea/Panel/PanelMargin/PanelColumn/HeaderRow/HeaderText" unique_id=1546599999]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "共 0 张"
+
+[node name="CloseButton" type="Button" parent="SafeArea/Panel/PanelMargin/PanelColumn/HeaderRow" unique_id=101949289]
+custom_minimum_size = Vector2(118, 44)
+layout_mode = 2
+text = "返回"
+
+[node name="TabRow" type="HBoxContainer" parent="SafeArea/Panel/PanelMargin/PanelColumn" unique_id=1247336189]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="AllTabButton" type="Button" parent="SafeArea/Panel/PanelMargin/PanelColumn/TabRow" unique_id=1302597701]
+custom_minimum_size = Vector2(152, 40)
+layout_mode = 2
+text = "整个卡组"
+
+[node name="DrawTabButton" type="Button" parent="SafeArea/Panel/PanelMargin/PanelColumn/TabRow" unique_id=691588580]
+custom_minimum_size = Vector2(152, 40)
+layout_mode = 2
+text = "抽牌堆"
+
+[node name="DiscardTabButton" type="Button" parent="SafeArea/Panel/PanelMargin/PanelColumn/TabRow" unique_id=622695818]
+custom_minimum_size = Vector2(152, 40)
+layout_mode = 2
+text = "弃牌堆"
+
+[node name="ContentPanel" type="PanelContainer" parent="SafeArea/Panel/PanelMargin/PanelColumn" unique_id=1314631240]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="ContentMargin" type="MarginContainer" parent="SafeArea/Panel/PanelMargin/PanelColumn/ContentPanel" unique_id=1279917977]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 18
+
+[node name="ContentScroll" type="ScrollContainer" parent="SafeArea/Panel/PanelMargin/PanelColumn/ContentPanel/ContentMargin" unique_id=1086000305]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ContentColumn" type="VBoxContainer" parent="SafeArea/Panel/PanelMargin/PanelColumn/ContentPanel/ContentMargin/ContentScroll" unique_id=66714489]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 18

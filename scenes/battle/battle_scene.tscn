@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://dpe8fkikxu52" path="res://scripts/runtime/battle_controller.gd" id="2"]
 [ext_resource type="Script" uid="uid://da2tkcwkvllr4" path="res://scripts/ui/battle_actor_view.gd" id="3"]
 [ext_resource type="Script" path="res://scripts/ui/hand_view.gd" id="4"]
-[ext_resource type="Script" uid="uid://dywudx16a8swr" path="res://scripts/ui/battle_player_sprite.gd" id="4_player_sprite"]
+[ext_resource type="Script" path="res://scripts/ui/battle_player_sprite.gd" id="4_player_sprite"]
 [ext_resource type="Texture2D" uid="uid://dm2gw7nh04wlh" path="res://sprites/按钮/设置.png" id="5_settings"]
 [ext_resource type="Texture2D" uid="uid://cdsisuov65cmv" path="res://sprites/按钮/查看卡组.png" id="6_deck"]
 [ext_resource type="Texture2D" uid="uid://dqdo54c7fucoy" path="res://sprites/抽牌堆.png" id="7_draw_pile"]
