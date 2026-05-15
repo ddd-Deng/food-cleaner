@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/explore/room_anchor.gd" id="2"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" path="res://sprites/map/喷泉地图/前景2.png" id="7"]
 [ext_resource type="Texture2D" path="res://sprites/map/喷泉地图/前景3.png" id="8"]
 [ext_resource type="Texture2D" path="res://sprites/map/喷泉地图/前景4.png" id="9"]
+[ext_resource type="Texture2D" path="res://sprites/map/喷泉地图/前景5.png" id="10"]
 
 [node name="FishBossRoom" type="Control"]
 custom_minimum_size = Vector2(960, 540)
@@ -115,6 +116,19 @@ grow_vertical = 2
 z_index = 13
 mouse_filter = 2
 texture = ExtResource("9")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Foreground5" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+z_index = 14
+mouse_filter = 2
+texture = ExtResource("10")
 expand_mode = 1
 stretch_mode = 6
 

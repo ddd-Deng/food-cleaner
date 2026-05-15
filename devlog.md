@@ -77,6 +77,11 @@
 - 影响文件：`scenes/rooms/cake_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`devlog.md`
 - 如何验证：在编辑器中打开 `cake_room` 和 `strawberry_room`，确认节点树里现在有 `Foreground1` 到 `Foreground7`；运行探索进入这两个房间，确认小镇地图新增的几层前景都会一起显示。
 
+### 喷泉地图新增前景5补齐到对应房间
+- 做了什么：检测到 `sprites/map/喷泉地图/` 新增了 `前景5.png`，因此把当前使用喷泉地图的 `bread_room` 和 `fish_boss_room` 都补成完整挂载 `前景1` 到 `前景5`。新增层继续按全屏平铺方式叠加，并使用更高一档的 `z_index = 14` 放在原有喷泉前景层之后。
+- 影响文件：`scenes/rooms/bread_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：在编辑器中打开 `bread_room` 和 `fish_boss_room`，确认节点树里现在有 `Foreground1` 到 `Foreground5`；运行探索进入这两个房间，确认喷泉地图新增的 `前景5` 会和原有前景一起显示。
+
 ### 部分怪物房接入小镇地图与喷泉地图的前后景
 - 做了什么：将 `cake_room`、`bread_room`、`strawberry_room`、`fish_boss_room` 四个怪物房从单层森林底图改为使用 `小镇地图` / `喷泉地图` 的背景与前景组合，并在每个房间场景里新增全屏 `Foreground` 贴图节点。当前做法是让 `Backdrop` 使用 `z_index = -10` 作为角色和怪物之后的背景层，`Foreground` 使用 `z_index = 10` 作为角色和怪物之前的遮挡层，图片按 `1280x720` 直接全屏铺开，后续可再继续调整每个房间具体用哪套图。
 - 影响文件：`scenes/rooms/cake_room.tscn`、`scenes/rooms/bread_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
