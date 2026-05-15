@@ -11,6 +11,11 @@
 
 ## 2026-05-15
 
+### 优化怪物房加载与进战斗卡顿
+- 做了什么：清理了 `marshmallow/candy_bean/fish_boss` 三个怪物房 `.tscn` 中被意外内嵌进去的大量 `Image/ImageTexture/SpriteFrames` 数据，让房间重新只保留对 `monster_encounter.tscn` 的外部引用；同时把怪物探索动画和战斗动画的加载改成统一走 `MonsterCatalog` 的 `SpriteFrames` 缓存，并直接 `load()` 导入后的贴图资源，不再在进入房间或进入战斗时同步逐帧 `Image.load_from_file()` 解码 PNG。这样可以同时减少“切入怪物房”和“按 E 进战斗”两段主线程卡顿。
+- 影响文件：`scripts/content/monster_catalog.gd`、`scripts/explore/monster_encounter.gd`、`scripts/ui/battle_enemy_sprite.gd`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：运行游戏后从起点进入棉花糖/糖豆/Boss 房，确认切房时不再出现此前那种明显的数秒停顿；靠近怪物按 `E` 进入战斗，确认战斗场景仍能显示对应怪物动画，且进入速度明显快于之前；重新打开上述三个房间 `.tscn`，确认文件体积恢复正常，不再因为展开可编辑子场景而保存出几十 MB 的文本场景。
+
 ### 修复手动调整交互物后名称丢失且无法交互的问题
 - 做了什么：将 `ExploreInteractable`、`MonsterEncounter`、`RoomAnchor` 的导出属性读取方式改回与 Godot 场景序列化一致，不再依赖未同步的 backing field；同时把 `payload` 改为可导出字段，并兼容已保存房间里仅修改了 `Label.text` 的旧数据。随后补回 `start/chest/棉花糖/糖豆/Boss` 房间中因可编辑子场景保存而丢失的 `payload`、`monster_id`、`anchor_kind` 等关键字段，恢复出口跳转、提示消息、宝箱和怪物交互。
 - 影响文件：`scripts/explore/explore_interactable.gd`、`scripts/explore/monster_encounter.gd`、`scripts/explore/room_anchor.gd`、`scripts/explore/explore_scene.gd`、`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`

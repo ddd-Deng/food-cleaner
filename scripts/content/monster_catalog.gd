@@ -2,13 +2,57 @@ extends RefCounted
 class_name MonsterCatalog
 
 const MONSTER_ANIMATION_ROOT := "res://sprites/怪物_256x144"
+static var _definitions_cache: Dictionary = {}
+static var _animation_frames_cache: Dictionary = {}
 
 static func get_monster_definition(monster_id: StringName) -> MonsterDefinition:
-	var definitions := _build_definitions()
-	return definitions.get(monster_id, null)
+	return _definitions().get(monster_id, null)
 
 static func get_all_monster_definitions() -> Array[MonsterDefinition]:
-	return _build_definitions().values()
+	return _definitions().values()
+
+static func get_animation_frames(directory_path: String, animation_fps: float = 10.0) -> SpriteFrames:
+	var cache_key := "%s|%.3f" % [directory_path, animation_fps]
+	var cached_frames: Variant = _animation_frames_cache.get(cache_key, null)
+	if cached_frames is SpriteFrames:
+		return cached_frames as SpriteFrames
+
+	var sprite_frames := SpriteFrames.new()
+	sprite_frames.add_animation("idle")
+	sprite_frames.set_animation_loop("idle", true)
+	sprite_frames.set_animation_speed("idle", animation_fps)
+
+	var directory := DirAccess.open(directory_path)
+	if directory == null:
+		_animation_frames_cache[cache_key] = sprite_frames
+		return sprite_frames
+
+	var file_names: PackedStringArray = []
+	directory.list_dir_begin()
+	while true:
+		var file_name := directory.get_next()
+		if file_name.is_empty():
+			break
+		if directory.current_is_dir():
+			continue
+		if not file_name.to_lower().ends_with(".png"):
+			continue
+		file_names.append(file_name)
+	directory.list_dir_end()
+	file_names.sort()
+
+	for file_name in file_names:
+		var texture := load("%s/%s" % [directory_path, file_name]) as Texture2D
+		if texture != null:
+			sprite_frames.add_frame("idle", texture)
+
+	_animation_frames_cache[cache_key] = sprite_frames
+	return sprite_frames
+
+static func _definitions() -> Dictionary:
+	if _definitions_cache.is_empty():
+		_definitions_cache = _build_definitions()
+	return _definitions_cache
 
 static func _build_definitions() -> Dictionary:
 	var definitions: Dictionary = {}
