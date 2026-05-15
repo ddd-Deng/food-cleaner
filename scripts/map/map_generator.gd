@@ -9,21 +9,22 @@ static func build_demo_rooms() -> Dictionary:
 	start_room.display_name = "入口前厅"
 	start_room.room_type = MapTypes.RoomType.START
 	start_room.scene_path = "res://scenes/rooms/start_room.tscn"
-	start_room.linked_room_ids = [&"monster_room", &"chest_room"]
+	start_room.linked_room_ids = [&"marshmallow_room", &"candy_bean_room", &"chest_room"]
 	rooms[start_room.id] = start_room
 
-	var monster_room := RoomRuntimeData.new()
-	monster_room.id = &"monster_room"
-	monster_room.display_name = "脏污餐台"
-	monster_room.room_type = MapTypes.RoomType.MONSTER
-	monster_room.scene_path = "res://scenes/rooms/monster_room.tscn"
-	monster_room.linked_room_ids = [&"start", &"boss_room"]
-	monster_room.payload = {
-		"enemy_definition": _build_enemy_variant("变质便当", 0),
-		"reward_gold": 8,
-		"reward_claimed": false,
-	}
-	rooms[monster_room.id] = monster_room
+	rooms[&"marshmallow_room"] = _build_monster_room(
+		&"marshmallow_room",
+		&"marshmallow",
+		[&"start", &"strawberry_room"],
+		8
+	)
+
+	rooms[&"candy_bean_room"] = _build_monster_room(
+		&"candy_bean_room",
+		&"candy_bean",
+		[&"start", &"strawberry_room"],
+		10
+	)
 
 	var chest_room := RoomRuntimeData.new()
 	chest_room.id = &"chest_room"
@@ -37,26 +38,41 @@ static func build_demo_rooms() -> Dictionary:
 	}
 	rooms[chest_room.id] = chest_room
 
-	var boss_room := RoomRuntimeData.new()
-	boss_room.id = &"boss_room"
-	boss_room.display_name = "深处后厨"
-	boss_room.room_type = MapTypes.RoomType.BOSS
-	boss_room.scene_path = "res://scenes/rooms/boss_room.tscn"
-	boss_room.linked_room_ids = [&"monster_room"]
-	boss_room.payload = {
-		"enemy_definition": _build_enemy_variant("污秽盛宴", 1),
-		"reward_gold": 20,
-		"reward_claimed": false,
-	}
+	rooms[&"strawberry_room"] = _build_monster_room(
+		&"strawberry_room",
+		&"strawberry",
+		[&"marshmallow_room", &"candy_bean_room", &"fish_boss_room"],
+		12
+	)
+
+	var boss_room := _build_monster_room(
+		&"fish_boss_room",
+		&"fish_boss",
+		[&"strawberry_room"],
+		20,
+		MapTypes.RoomType.BOSS
+	)
 	rooms[boss_room.id] = boss_room
 
 	return rooms
 
-static func _build_enemy_variant(display_name: String, extra_block_count: int) -> EnemyData:
-	var base_battle: BattleDefinition = SampleBattleFactory.create_demo_battle_definition()
-	var enemy: EnemyData = base_battle.enemy.duplicate(true) as EnemyData
-	enemy.display_name = display_name
-	for _i in range(extra_block_count):
-		if not enemy.food_blocks.is_empty():
-			enemy.food_blocks.append(enemy.food_blocks[0].duplicate(true))
-	return enemy
+static func _build_monster_room(
+	room_id: StringName,
+	monster_id: StringName,
+	linked_room_ids: Array[StringName],
+	reward_gold: int,
+	room_type: MapTypes.RoomType = MapTypes.RoomType.MONSTER
+) -> RoomRuntimeData:
+	var monster_definition := MonsterCatalog.get_monster_definition(monster_id)
+	var room := RoomRuntimeData.new()
+	room.id = room_id
+	room.display_name = monster_definition.room_display_name if monster_definition != null else "怪物房"
+	room.room_type = room_type
+	room.scene_path = monster_definition.room_scene_path if monster_definition != null else ""
+	room.linked_room_ids = linked_room_ids
+	room.payload = {
+		"monster_id": monster_id,
+		"reward_gold": reward_gold,
+		"reward_claimed": false,
+	}
+	return room

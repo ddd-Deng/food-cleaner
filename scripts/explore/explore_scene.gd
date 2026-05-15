@@ -6,17 +6,13 @@ signal restart_requested
 
 const DEFAULT_PLAYER_SPAWN_POSITION := Vector2(456, 246)
 
-@onready var room_title_label: Label = $Root/Layout/Header/RoomTitle
-@onready var room_type_label: Label = $Root/Layout/Header/RoomType
-@onready var hp_label: Label = $Root/Layout/Header/Stats/HpValue
-@onready var gold_label: Label = $Root/Layout/Header/Stats/GoldValue
-@onready var room_canvas: Control = $Root/Layout/RoomPanel/RoomCanvas
-@onready var player_actor: PlayerActor = $Root/Layout/RoomPanel/RoomCanvas/PlayerActor
-@onready var prompt_label: Label = $Root/Layout/Footer/FooterInner/PromptValue
-@onready var status_label: RichTextLabel = $Root/Layout/Footer/FooterInner/StatusValue
-@onready var overlay_panel: PanelContainer = $Root/Layout/RoomPanel/OverlayPanel
-@onready var overlay_label: Label = $Root/Layout/RoomPanel/OverlayPanel/OverlayInner/OverlayLabel
-@onready var restart_button: Button = $Root/Layout/RoomPanel/OverlayPanel/OverlayInner/RestartButton
+@onready var hp_label: Label = get_node_or_null("HudLayer/Stats/HpValue")
+@onready var gold_label: Label = get_node_or_null("HudLayer/Stats/GoldValue")
+@onready var room_canvas: Control = $RoomCanvas
+@onready var player_actor: PlayerActor = $RoomCanvas/PlayerActor
+@onready var overlay_panel: PanelContainer = $OverlayPanel
+@onready var overlay_label: Label = $OverlayPanel/OverlayInner/OverlayLabel
+@onready var restart_button: Button = $OverlayPanel/OverlayInner/RestartButton
 
 var run_state: RunState
 var _spawned_interactables: Array[ExploreInteractable] = []
@@ -42,9 +38,6 @@ func setup(state: RunState) -> void:
 func _process(_delta: float) -> void:
 	if run_state == null or not is_visible_in_tree():
 		return
-	if run_state.is_run_over:
-		prompt_label.text = "本局已结束。"
-		return
 	_update_nearest_interactable()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -58,11 +51,10 @@ func _refresh_view() -> void:
 	var room := run_state.get_current_room()
 	if room == null:
 		return
-	room_title_label.text = room.display_name
-	room_type_label.text = room.type_label()
-	hp_label.text = "HP %d / %d" % [run_state.player_hp, run_state.player_max_hp]
-	gold_label.text = "金币 %d" % run_state.gold
-	status_label.text = run_state.last_event_message
+	if hp_label != null:
+		hp_label.text = "HP %d / %d" % [run_state.player_hp, run_state.player_max_hp]
+	if gold_label != null:
+		gold_label.text = "金币 %d" % run_state.gold
 	overlay_panel.visible = run_state.is_run_over
 	if run_state.is_run_over:
 		overlay_label.text = "Boss 已被击败，探索暂时结束。" if run_state.is_run_won else "生命值归零，本局结束。"
@@ -108,32 +100,24 @@ func _update_nearest_interactable() -> void:
 		if interactable != null and is_instance_valid(interactable):
 			interactable.set_highlighted(interactable == best)
 	_nearest_interactable = best
-	if best == null:
-		prompt_label.text = "WASD 移动，靠近对象后按 E 交互。"
-		return
-	prompt_label.text = "E %s" % best.prompt_text
 
 func _activate_interactable(interactable: ExploreInteractable) -> void:
 	match interactable.interactable_kind:
 		&"message":
 			run_state.set_message(String(interactable.payload.get("message", "这里暂时没有更多内容。")))
-			status_label.text = run_state.last_event_message
 		&"encounter":
 			var room: RoomRuntimeData = run_state.get_room(interactable.payload.get("room_id", &""))
 			if room == null:
 				return
 			if room.cleared:
 				run_state.set_message("这个房间已经净化完成，可以直接离开。")
-				status_label.text = run_state.last_event_message
 				return
 			run_state.set_message("准备进入战斗：%s" % room.display_name)
-			status_label.text = run_state.last_event_message
 			battle_requested.emit(room.id)
 		&"chest":
 			_open_chest(interactable)
 		&"shop":
 			run_state.set_message("商店流程还未接入，当前仅保留房间占位。")
-			status_label.text = run_state.last_event_message
 		&"exit":
 			_try_change_room(interactable)
 
@@ -144,7 +128,6 @@ func _open_chest(interactable: ExploreInteractable) -> void:
 		return
 	if room.payload.get("opened", false):
 		run_state.set_message("宝箱已经打开过了。")
-		status_label.text = run_state.last_event_message
 		return
 	var gold_reward: int = int(room.payload.get("gold_reward", 0))
 	room.payload["opened"] = true
@@ -158,7 +141,6 @@ func _try_change_room(interactable: ExploreInteractable) -> void:
 		return
 	if current_room.requires_clear_before_exit() and not current_room.cleared:
 		run_state.set_message("这个房间还没有处理完，出口暂时关闭。")
-		status_label.text = run_state.last_event_message
 		return
 	var target_room_id: Variant = interactable.payload.get("target_room_id", &"")
 	run_state.move_to_room(target_room_id)
@@ -215,11 +197,17 @@ func _collect_room_interactables(room: RoomRuntimeData) -> void:
 func _sync_interactable_runtime_state(interactable: ExploreInteractable, room: RoomRuntimeData) -> void:
 	match interactable.interactable_kind:
 		&"encounter":
+			var monster_name := "污染怪物"
+			var monster_id: StringName = room.payload.get("monster_id", &"") if room != null else &""
+			if not monster_id.is_empty():
+				var monster_definition := MonsterCatalog.get_monster_definition(monster_id)
+				if monster_definition != null:
+					monster_name = monster_definition.display_name
 			if room != null and room.cleared:
 				interactable.display_name = "已净化房间"
 				interactable.prompt_text = "查看房间状态"
 			else:
-				interactable.display_name = "污染怪物"
+				interactable.display_name = monster_name
 				interactable.prompt_text = "发起战斗"
 		&"chest":
 			var opened: bool = room != null and bool(room.payload.get("opened", false))

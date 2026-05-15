@@ -35,16 +35,6 @@ offset_right = 698.0
 offset_bottom = 250.0
 self_modulate = Color(0.82, 0.73, 0.49, 1)
 
-[node name="Title" type="Label" parent="."]
-layout_mode = 1
-offset_left = 336.0
-offset_top = 78.0
-offset_right = 624.0
-offset_bottom = 118.0
-theme_override_font_sizes/font_size = 26
-text = "补给角落"
-horizontal_alignment = 1
-
 [node name="PlayerSpawn" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(48, 48)
 offset_left = 456.0

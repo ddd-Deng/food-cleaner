@@ -25,6 +25,60 @@
 - 影响文件：`scripts/ui/battle_scene.gd`、`scripts/ui/deck_view_overlay.gd`、`scripts/ui/deck_card_tile.gd`、`scenes/ui/deck_view_overlay.tscn`、`scenes/ui/deck_card_tile.tscn`、`devlog.md`
 - 如何验证：进入战斗后点击顶部“查看卡组”应弹出覆盖层；点击抽牌堆和弃牌堆按钮应切到对应页签；覆盖层打开时底层手牌拖拽与战斗按钮不应继续响应；关闭后战斗界面恢复正常交互；打出卡牌后重新打开，抽牌堆/弃牌堆/整个卡组数量应随 `BattleState` 更新。
 
+## 2026-05-15
+
+### 探索界面外层 HUD 精简为仅保留右上角 HP/金币
+- 做了什么：移除探索主界面外层的上方标题区、底部提示/状态区和包裹房间的外围面板，只保留全屏房间画面、游戏结束覆盖层以及右上角 `HP/金币` 文本；同时删除 `start`、`chest` 及四个怪物房场景中的 `Title` 标签，避免房间中央和左上角再出现文字标题。`explore_scene.gd` 同步改为不再依赖这些已删除节点。
+- 影响文件：`scripts/explore/explore_scene.gd`、`scenes/explore/explore_scene.tscn`、`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：进入探索后确认场景四周不再有外围面板、底部提示文字和左上角房间名；右上角仍显示 `HP` 和 `金币`；房间内部也不再出现 `Title` 标签；接近交互物、进入战斗和本局结束覆盖层仍能正常工作。
+
+### 删除怪物房中央装饰性 Panel 色块
+- 做了什么：删除四个新怪物房场景中仅用于衬托站位的装饰性 `Panel` 节点，避免探索房间中央再出现明显的深色半透明矩形块；怪物动画、交互范围、出口和房间逻辑不受影响。
+- 影响文件：`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：分别进入四个怪物房，确认房间中央不再显示额外的半透明矩形底板，只保留背景、怪物动画和交互提示；靠近怪物时高亮描边、按 `E` 进入战斗仍正常。
+
+### 撤掉新增的怪物房与怪物专属显示命名
+- 做了什么：把这轮新增的显示层命名全部改回通用表述，房间标题统一恢复为“怪物房”或“Boss房”，出口提示不再显示“糖霜操作台”“果酱冷柜”等自定义名字，怪物显示名和战斗敌人名也统一回“污染怪物”或“Boss”；内部 `monster_id`、目录和逻辑拆分保持不变。
+- 影响文件：`scripts/content/monster_catalog.gd`、`scenes/rooms/start_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：进入探索后确认界面上不再出现“糖霜操作台”“撒糖走道”“果酱冷柜”“后厨水槽”等命名；普通怪物房显示为“怪物房”，Boss 房显示为“Boss房”，战斗中的敌人名称也不再区分四种怪物的专属名字。
+
+### 探索怪物改为独立 AnimatedSprite，并按怪物拆分房间与战斗定义
+- 做了什么：新增 `MonsterCatalog` / `MonsterDefinition`，按棉花糖、糖豆人、草莓、鱼 Boss 四个怪物分别维护显示名、探索/战斗动画目录、房间场景和战斗 `EnemyData`；探索层新增 `MonsterEncounter`，用 `AnimatedSprite2D + Area2D` 取代旧的矩形怪物交互框，怪物现在固定站在房间中央，玩家靠近时会通过 shader 显示发光描边，按 `E` 后进入战斗；地图房间从原本单一 `monster_room` / `boss_room` 改为四个独立怪物房，战斗定义也新增 `monster_id`，使战斗场景可加载对应怪物动画。
+- 影响文件：`scripts/content/monster_definition.gd`、`scripts/content/monster_catalog.gd`、`scripts/explore/monster_encounter.gd`、`scenes/explore/monster_encounter.tscn`、`shaders/sprite_outline.gdshader`、`scripts/data/battle_definition.gd`、`scripts/run/battle_definition_builder.gd`、`scripts/map/map_generator.gd`、`scripts/run/run_factory.gd`、`scripts/ui/battle_enemy_sprite.gd`、`scripts/ui/battle_scene.gd`、`scenes/battle/battle_scene.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`scenes/rooms/start_room.tscn`、`devlog.md`
+- 如何验证：进入探索后确认起点可通往棉花糖房、糖豆房和宝箱房；进入任一怪物房后确认房间中央显示该怪物的循环动画，主角靠近时怪物出现描边发光，按 `E` 会进入对应战斗；进入战斗后确认战斗场景中会显示与房间一致的怪物动画；击败棉花糖房/糖豆房后可继续前往草莓房，再前往鱼 Boss 房。
+
+## 2026-05-14
+
+### 手牌区上移与日志区压缩
+- 做了什么：为 `HandView` 增加 `HAND_VERTICAL_OFFSET` 手动纵向偏移参数并默认设为 `-22.0`，让手牌整体向上移动，同时同步调整出牌释放判定边界；将战斗底部区域 `BottomRow` 高度从 260 增加到 286，使上方日志区自然缩短，给手牌与时间轴更多空间。
+- 影响文件：`scripts/ui/hand_view.gd`、`scenes/battle/battle_scene.tscn`、`devlog.md`
+- 如何验证：进入战斗后确认手牌整体比之前更靠上，拖拽出牌判定仍以手牌区上方为准；确认日志区高度略短但仍可滚动，底部手牌与时间轴显示正常。
+
+### 卡牌轮廓高亮颜色与时钟边缘优化
+- 做了什么：将卡牌状态高亮主色从白色改为金黄色；为轮廓贴图额外保留 8px 透明采样边界并关闭 `CardView` 裁剪，避免左上角时钟高亮被控件边缘截断；同时把轮廓 shader 改为 16 方向采样并使用平滑 alpha 过渡，减少圆形时钟描边的多边形感。
+- 影响文件：`scripts/ui/card_view.gd`、`scenes/ui/card_view.tscn`、`devlog.md`
+- 如何验证：进入战斗悬停或拖拽卡牌，确认高亮为黄色系，左上角时钟外圈不再明显被切掉，时钟描边比之前更圆滑；确认拖拽、可出牌和不可用状态仍保持不同颜色反馈。
+
+### 卡牌状态高亮改为贴图轮廓描边
+- 做了什么：将 `CardView` 的状态高亮从旧的矩形 `Panel` 边框改为 `TextureRect + canvas_item shader`，根据当前卡牌透明素材的 alpha 边缘绘制轮廓，避免高亮框住透明背景区域；攻击/技能/净化三类卡会复用各自当前背景贴图生成对应轮廓。
+- 影响文件：`scripts/ui/card_view.gd`、`scenes/ui/card_view.tscn`、`devlog.md`
+- 如何验证：进入战斗并悬停、拖拽或移动到可出牌区域，确认高亮沿卡牌本体和左上角时间 UI 的素材边缘显示，不再出现旧版完整矩形白框；确认不可用、拖拽、可出牌状态仍有不同颜色反馈。
+
+### 卡牌 UI 背景改用透明原始素材
+- 做了什么：将 `CardView` 的攻击/技能/净化卡背景从 `sprites/card_backgrounds/*.png` 改为直接读取 `sprites/攻击卡.png`、`sprites/技能卡.png`、`sprites/净化卡.png`，并继续用 `AtlasTexture` 裁出 336x448 的有效卡面区域，避免整张 1024x750 透明画布把卡面缩小。
+- 影响文件：`scripts/ui/card_view.gd`、`scenes/ui/card_view.tscn`、`devlog.md`
+- 如何验证：打开 `res://scenes/ui/card_view.tscn` 或进入战斗，确认三类手牌显示为透明背景版本的卡牌素材，不再使用 `sprites/card_backgrounds` 中的旧裁切图；确认费用、名称、图案占位、描述以及拖拽/悬停状态反馈仍正常显示。
+
+### 战斗时间轴卡牌生效标记与悬停预览
+- 做了什么：新增 `CardEffectRecord` 记录每张成功生效卡牌的时间点、牌名、耗时和效果摘要；卡牌完成耗时推进且未被战斗结束打断后写入历史记录；时间轴在对应时间点绘制 `sprites/时间轴/卡牌生效标记.jpg` 裁切出的标记，鼠标悬停时由独立 `CardEffectTimelineMarker` 发出预览请求，并由 `CardEffectPreviewPopup` 显示该时间点生效过的卡牌。
+- 影响文件：`scripts/runtime/card_effect_record.gd`、`scripts/runtime/battle_state.gd`、`scripts/runtime/battle_rules.gd`、`scripts/ui/card_effect_timeline_marker.gd`、`scripts/ui/card_effect_preview_popup.gd`、`scripts/ui/battle_scene.gd`、`devlog.md`
+- 如何验证：进入战斗后打出带耗时或 `0t` 的卡牌，确认时间轴对应时间点出现卡牌生效标记；拖动时间轴回看历史时标记仍保留；鼠标悬停标记会显示牌名、耗时和效果摘要，移开后隐藏；同一时间点有敌人行动时敌人行动标记和卡牌标记都应可见。
+
+### 时间轴卡牌生效标记透明化与缩小
+- 做了什么：从 `sprites/时间轴/卡牌生效标记.jpg` 派生只包含卡牌本体的透明 PNG `sprites/时间轴/卡牌生效卡牌标记.png`，移除原素材中的白底和下方三角回合标记；时间轴改用新小图，并把显示尺寸缩小、略微右移，减少与当前回合标记重合。
+- 影响文件：`sprites/时间轴/卡牌生效卡牌标记.png`、`scripts/ui/battle_scene.gd`、`devlog.md`
+- 如何验证：进入战斗后打出卡牌，确认时间轴卡牌生效标记不再有白底，也不再包含三角回合标记；当前时间点附近的卡牌标记不会直接压在当前回合标记中心。
+
 ## 2026-05-13
 
 ### 探索主角接入背面待机与走路动画
@@ -126,8 +180,25 @@
 - 做了什么：将探索层原本由 `ExploreScene` 直接按房间类型生成背景色和固定坐标交互物的做法，改为“运行时房间数据 + 独立房间 `.tscn` 模板”结构；为 `RoomRuntimeData` 增加 `scene_path`，新增 `ExploreRoomScene` 与 `RoomAnchor` 脚本，用于在房间模板里可视化标记功能物、出口和玩家出生点；把当前已有的 `start`、`monster_room`、`chest_room`、`boss_room` 四个房间分别拆到 `scenes/rooms/` 下独立场景中，并让 `ExploreScene` 运行时按模板加载房间，再根据模板锚点放置交互物和出口。
 - 影响文件：`scripts/map/room_runtime_data.gd`、`scripts/map/map_generator.gd`、`scripts/explore/explore_scene.gd`、`scripts/explore/room_scene.gd`、`scripts/explore/room_anchor.gd`、`scenes/rooms/start_room.tscn`、`scenes/rooms/monster_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/boss_room.tscn`、`devlog.md`
 - 如何验证：当前环境未安装 Godot，无法执行 headless 场景加载。请在编辑器中分别打开 `res://scenes/rooms/start_room.tscn`、`monster_room.tscn`、`chest_room.tscn`、`boss_room.tscn`，确认能直接可视化编辑房间内容，并能看到 `feature/exit/player_spawn` 锚点；再运行项目，确认进入不同房间时会加载对应模板，玩家出生点、房间中央功能物和出口位置以各房间 scene 中的锚点为准，怪物房/Boss 房仍会阻止未清理前离开，宝箱房仍能正常给金币并返回探索。
+>>>>>>> a8d086c83cd5fad08cb5929690baf8c546b881c5
 
-### 战斗场景食物槽移到右侧并修复日志面板收缩
-- 做了什么：将战斗场景中的 `FoodSlot` 重新锚定到右侧，避免它继续停留在左边的玩家侧；日志面板保留在中间列内，并改用 `HBoxContainer` 居中对齐，避免之前 `CenterContainer` 把日志区压缩成细长条导致看不到日志内容。
+## 2026-05-12
+
+### 调整 CardView 卡面文字锚定布局
+- 做了什么：将 `CardView` 的文字覆盖层从纵向 `VBoxContainer` 排布改为按卡面美术区域锚定，费用贴近左上角时钟区域，卡牌名落在顶部纸条中间，图案占位居中在椭圆图片区，描述移动到下方云朵上方的左侧阅读区。
+- 影响文件：`scenes/ui/card_view.tscn`、`devlog.md`
+- 如何验证：已运行 `D:\Godot\Godot_v4.6.2-stable_win64.exe --headless --path . --scene res://scenes/ui/card_view.tscn --quit`，场景可正常加载；需要在编辑器中打开 `res://scenes/ui/card_view.tscn` 或进入战斗确认文字位置与当前卡面素材匹配。
+
+> 已按阶段精简历史记录，只保留当前仍有参考价值的结果、影响文件和验证方式。后续新增记录默认使用中文。
+
+## 2026-05-12
+
+### 清理 battle_scene 旧隐藏节点
+- 做了什么：从 `scenes/battle/battle_scene.tscn` 中移除旧的隐藏 UI 节点 `DeckInfo`、`CapacityValue` 与 `EnemySummary`；脚本中已确认没有这三个节点名的直接引用，因此未修改 GDScript。
+- 影响文件：`scenes/battle/battle_scene.tscn`、`devlog.md`
+- 如何验证：全局搜索 `DeckInfo|CapacityValue|EnemySummary`，确认 `scenes/` 与 `scripts/` 中不再存在这些节点名；使用 `D:\Godot\Godot_v4.6.2-stable_win64.exe --headless --path . --quit` 加载项目后再次搜索，确认 Godot 没有把节点写回。
+
+### 战斗净化进度 UI 场景预览补充
+- 做了什么：为 `battle_scene.tscn` 的 `PurificationTaskRow` 增加可见预览节点，打开场景时无需运行脚本也能看到右上角“名字 + 方块”的净化进度 UI；运行时仍会由 `BattleScene` 根据真实战斗状态清空预览并重新生成任务项。
 - 影响文件：`scenes/battle/battle_scene.tscn`、`scripts/ui/battle_scene.gd`、`devlog.md`
 - 如何验证：进入战斗场景后，食物槽应出现在屏幕右侧；日志区域应恢复为原来的大矩形并能显示战斗开始、抽牌、出牌等日志，同时整体不再向右铺满整个屏幕。

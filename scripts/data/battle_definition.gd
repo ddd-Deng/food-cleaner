@@ -12,4 +12,5 @@ class_name BattleDefinition
 @export var starting_items: Array[PlayerItemData] = []
 @export var starting_deck: Array[CardPileEntryData] = []
 @export var enemy: EnemyData
+@export var monster_id: StringName = &""
 @export var description: String = ""
