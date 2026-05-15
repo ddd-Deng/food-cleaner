@@ -13,7 +13,7 @@ static func create_demo_run() -> RunState:
 	run_state.player_items = [_create_starter_item()]
 	run_state.rooms = MapGenerator.build_demo_rooms()
 	run_state.move_to_room(&"start")
-	run_state.set_message("已进入探索。WASD 移动，E 交互。")
+	run_state.set_message("已进入探索。WASD 移动，E 交互，先清理各个怪物房再前往 Boss 房。")
 	return run_state
 
 static func _create_starter_item() -> PlayerItemInstance:

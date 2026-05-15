@@ -7,6 +7,7 @@ signal battle_resolved(result: Dictionary)
 
 @onready var controller: BattleController = $BattleController
 @onready var battle_player_sprite: BattlePlayerSprite = $BattlePlayerSprite
+@onready var battle_enemy_sprite: BattleEnemySprite = $BattleEnemySprite
 @onready var player_hp_bar: Control = $Root/Layout/HeaderRow/PlayerHud/StatusColumn/PlayerHpPanel/PlayerHpBar
 @onready var player_hp_fill: NinePatchRect = $Root/Layout/HeaderRow/PlayerHud/StatusColumn/PlayerHpPanel/PlayerHpBar/PlayerHpFill
 @onready var player_hp_overlay: Label = $Root/Layout/HeaderRow/PlayerHud/StatusColumn/PlayerHpPanel/PlayerHpLabel
@@ -446,6 +447,8 @@ func _start_controller_battle(definition: BattleDefinition) -> void:
 	if definition == null:
 		return
 	_pending_definition = definition
+	if battle_enemy_sprite != null:
+		battle_enemy_sprite.setup_from_monster(definition.monster_id)
 	if _started_once:
 		log_text.clear()
 		_last_effect_sequence_seen = -1

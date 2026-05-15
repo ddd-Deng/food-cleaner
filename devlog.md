@@ -1,5 +1,27 @@
 # 开发日志
 
+## 2026-05-15
+
+### 探索界面外层 HUD 精简为仅保留右上角 HP/金币
+- 做了什么：移除探索主界面外层的上方标题区、底部提示/状态区和包裹房间的外围面板，只保留全屏房间画面、游戏结束覆盖层以及右上角 `HP/金币` 文本；同时删除 `start`、`chest` 及四个怪物房场景中的 `Title` 标签，避免房间中央和左上角再出现文字标题。`explore_scene.gd` 同步改为不再依赖这些已删除节点。
+- 影响文件：`scripts/explore/explore_scene.gd`、`scenes/explore/explore_scene.tscn`、`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：进入探索后确认场景四周不再有外围面板、底部提示文字和左上角房间名；右上角仍显示 `HP` 和 `金币`；房间内部也不再出现 `Title` 标签；接近交互物、进入战斗和本局结束覆盖层仍能正常工作。
+
+### 删除怪物房中央装饰性 Panel 色块
+- 做了什么：删除四个新怪物房场景中仅用于衬托站位的装饰性 `Panel` 节点，避免探索房间中央再出现明显的深色半透明矩形块；怪物动画、交互范围、出口和房间逻辑不受影响。
+- 影响文件：`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：分别进入四个怪物房，确认房间中央不再显示额外的半透明矩形底板，只保留背景、怪物动画和交互提示；靠近怪物时高亮描边、按 `E` 进入战斗仍正常。
+
+### 撤掉新增的怪物房与怪物专属显示命名
+- 做了什么：把这轮新增的显示层命名全部改回通用表述，房间标题统一恢复为“怪物房”或“Boss房”，出口提示不再显示“糖霜操作台”“果酱冷柜”等自定义名字，怪物显示名和战斗敌人名也统一回“污染怪物”或“Boss”；内部 `monster_id`、目录和逻辑拆分保持不变。
+- 影响文件：`scripts/content/monster_catalog.gd`、`scenes/rooms/start_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：进入探索后确认界面上不再出现“糖霜操作台”“撒糖走道”“果酱冷柜”“后厨水槽”等命名；普通怪物房显示为“怪物房”，Boss 房显示为“Boss房”，战斗中的敌人名称也不再区分四种怪物的专属名字。
+
+### 探索怪物改为独立 AnimatedSprite，并按怪物拆分房间与战斗定义
+- 做了什么：新增 `MonsterCatalog` / `MonsterDefinition`，按棉花糖、糖豆人、草莓、鱼 Boss 四个怪物分别维护显示名、探索/战斗动画目录、房间场景和战斗 `EnemyData`；探索层新增 `MonsterEncounter`，用 `AnimatedSprite2D + Area2D` 取代旧的矩形怪物交互框，怪物现在固定站在房间中央，玩家靠近时会通过 shader 显示发光描边，按 `E` 后进入战斗；地图房间从原本单一 `monster_room` / `boss_room` 改为四个独立怪物房，战斗定义也新增 `monster_id`，使战斗场景可加载对应怪物动画。
+- 影响文件：`scripts/content/monster_definition.gd`、`scripts/content/monster_catalog.gd`、`scripts/explore/monster_encounter.gd`、`scenes/explore/monster_encounter.tscn`、`shaders/sprite_outline.gdshader`、`scripts/data/battle_definition.gd`、`scripts/run/battle_definition_builder.gd`、`scripts/map/map_generator.gd`、`scripts/run/run_factory.gd`、`scripts/ui/battle_enemy_sprite.gd`、`scripts/ui/battle_scene.gd`、`scenes/battle/battle_scene.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`scenes/rooms/start_room.tscn`、`devlog.md`
+- 如何验证：进入探索后确认起点可通往棉花糖房、糖豆房和宝箱房；进入任一怪物房后确认房间中央显示该怪物的循环动画，主角靠近时怪物出现描边发光，按 `E` 会进入对应战斗；进入战斗后确认战斗场景中会显示与房间一致的怪物动画；击败棉花糖房/糖豆房后可继续前往草莓房，再前往鱼 Boss 房。
+
 <<<<<<< HEAD
 ## 2026-05-14
 

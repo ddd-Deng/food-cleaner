@@ -27,16 +27,6 @@ texture = ExtResource("4")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Title" type="Label" parent="."]
-layout_mode = 1
-offset_left = 360.0
-offset_top = 90.0
-offset_right = 600.0
-offset_bottom = 130.0
-theme_override_font_sizes/font_size = 26
-text = "入口前厅"
-horizontal_alignment = 1
-
 [node name="PlayerSpawn" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(48, 48)
 offset_left = 456.0
@@ -53,25 +43,35 @@ display_name = "清扫路线图"
 prompt_text = "查看提示"
 interactable_kind = &"message"
 payload = {
-"message": "前往怪物房清理污染，再尝试进入 Boss 房。宝箱房当前提供基础金币奖励。"
+"message": "先清理怪物房，再尝试进入 Boss 房。宝箱房当前提供基础金币奖励。"
 }
 
-[node name="ExitToMonster" parent="." instance=ExtResource("3")]
-position = Vector2(168, 260)
-interactable_id = &"exit_monster_room"
+[node name="ExitToMonsterA" parent="." instance=ExtResource("3")]
+position = Vector2(140, 260)
+interactable_id = &"exit_monster_room_a"
 display_name = "出口 -> 怪物房"
-prompt_text = "前往 脏污餐台"
+prompt_text = "前往 怪物房"
 interactable_kind = &"exit"
 payload = {
-"target_room_id": &"monster_room"
+"target_room_id": &"marshmallow_room"
 }
 
 [node name="ExitToChest" parent="." instance=ExtResource("3")]
-position = Vector2(792, 260)
+position = Vector2(820, 260)
 interactable_id = &"exit_chest_room"
 display_name = "出口 -> 宝箱房"
 prompt_text = "前往 补给角落"
 interactable_kind = &"exit"
 payload = {
 "target_room_id": &"chest_room"
+}
+
+[node name="ExitToMonsterB" parent="." instance=ExtResource("3")]
+position = Vector2(480, 260)
+interactable_id = &"exit_monster_room_b"
+display_name = "出口 -> 怪物房"
+prompt_text = "前往 怪物房"
+interactable_kind = &"exit"
+payload = {
+"target_room_id": &"candy_bean_room"
 }
