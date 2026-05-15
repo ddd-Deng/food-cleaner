@@ -21,11 +21,11 @@ enum FacingMode {
 @export var interaction_radius: float = 90.0
 @export var outline_color: Color = Color(1.0, 1.0, 1.0, 1.0):
 	set(value):
-		outline_color = value
+		_outline_color = value
 		_update_outline_material()
 @export_range(0.0, 12.0, 0.1) var outline_thickness: float = 2.0:
 	set(value):
-		outline_thickness = value
+		_outline_thickness = value
 		_update_outline_material()
 
 var room_bounds: Rect2 = Rect2(0, 0, 960, 540)
@@ -35,6 +35,8 @@ var _animation_sets: Dictionary = {}
 var _facing_mode: FacingMode = FacingMode.FRONT
 var _is_facing_left: bool = false
 var _outline_material: ShaderMaterial
+var _outline_color: Color = Color(1.0, 1.0, 1.0, 1.0)
+var _outline_thickness: float = 2.0
 
 @onready var _animated_sprite: AnimatedSprite2D = AnimatedSprite2D.new()
 @onready var interaction_area: Area2D = Area2D.new()
@@ -200,8 +202,8 @@ func _animation_name_for_state(is_moving: bool) -> StringName:
 func _update_outline_material() -> void:
 	if _outline_material == null:
 		return
-	_outline_material.set_shader_parameter("outline_color", outline_color)
-	_outline_material.set_shader_parameter("outline_thickness", outline_thickness)
+	_outline_material.set_shader_parameter("outline_color", _outline_color)
+	_outline_material.set_shader_parameter("outline_thickness", _outline_thickness)
 
 func _clamp_to_room() -> void:
 	var half_size := collision_size * 0.5

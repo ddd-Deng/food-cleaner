@@ -11,6 +11,16 @@
 
 ## 2026-05-15
 
+### 修正怪物运行时不显示的问题
+- 做了什么：把 `MonsterEncounter` 在运行时加载怪物定义的读取来源从导出属性 `monster_id` 改为 setter 写入的 backing field `_monster_id`，避免场景实例化后实际取到空值导致不加载怪物动画；顺便保持编辑器预览和运行时使用同一份怪物定义路径。
+- 影响文件：`scripts/explore/monster_encounter.gd`、`devlog.md`
+- 如何验证：进入任一怪物房，确认运行时怪物动画正常出现；编辑器里打开对应 `.tscn` 也仍能看到怪物预览。
+
+### 怪物交互节点改为场景内可视化编辑
+- 做了什么：将 `MonsterEncounter` 从运行时动态创建 `AnimatedSprite2D / Area2D / CollisionShape2D` 的形式，改为直接把这些节点放进 `scenes/explore/monster_encounter.tscn`；同时给脚本加上 `@tool` 和编辑器预览刷新逻辑，使怪物房 `.tscn` 在 Godot 编辑器中打开时就能直接看到怪物动画、选中交互范围并手动调整位置。`ExploreInteractable` 也同步兼容“优先复用场景里现成子节点，缺失时再运行时补建”的模式。
+- 影响文件：`scripts/explore/explore_interactable.gd`、`scripts/explore/monster_encounter.gd`、`scenes/explore/monster_encounter.tscn`、`devlog.md`
+- 如何验证：在编辑器中直接打开任一怪物房场景，确认场景树下的怪物节点包含 `AnimatedSprite2D`、`Area2D`、`CollisionShape2D`；视口中应能直接看到怪物预览，并能选中/调整交互范围；运行探索后怪物高亮和按 `E` 进入战斗仍正常。
+
 ### 探索界面外层 HUD 精简为仅保留右上角 HP/金币
 - 做了什么：移除探索主界面外层的上方标题区、底部提示/状态区和包裹房间的外围面板，只保留全屏房间画面、游戏结束覆盖层以及右上角 `HP/金币` 文本；同时删除 `start`、`chest` 及四个怪物房场景中的 `Title` 标签，避免房间中央和左上角再出现文字标题。`explore_scene.gd` 同步改为不再依赖这些已删除节点。
 - 影响文件：`scripts/explore/explore_scene.gd`、`scenes/explore/explore_scene.tscn`、`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`

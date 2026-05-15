@@ -4,9 +4,10 @@ class_name RoomAnchor
 
 @export var anchor_kind: StringName = &"feature":
 	set(value):
-		anchor_kind = value
+		_anchor_kind = value
 		_apply_editor_visual()
 @export var anchor_order: int = 0
+var _anchor_kind: StringName = &"feature"
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -21,7 +22,7 @@ func _ready() -> void:
 func _apply_editor_visual() -> void:
 	if not Engine.is_editor_hint():
 		return
-	match anchor_kind:
+	match _anchor_kind:
 		&"feature":
 			color = Color(0.97, 0.72, 0.31, 0.55)
 		&"exit":
@@ -30,4 +31,3 @@ func _apply_editor_visual() -> void:
 			color = Color(0.41, 0.84, 0.56, 0.55)
 		_:
 			color = Color(0.82, 0.82, 0.82, 0.45)
-
