@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://chrqcjdridql4" path="res://scripts/ui/deck_view_overlay.gd" id="1"]
 
 [node name="DeckViewOverlay" type="Control" unique_id=603984837]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

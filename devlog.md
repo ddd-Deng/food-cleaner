@@ -1,4 +1,9 @@
 # 开发日志
+### 战斗顶部净化进度条加底板提升可读性
+- 做了什么：将战斗顶部的净化任务区从直接压在背景上的裸文字/图标，改为带深色半透明底板的任务条；同时给每个净化步骤增加浅色胶囊底板，未完成与已完成使用不同底色，文字颜色也同步提亮并补了轻微描边，减少在复杂战斗背景下被吃掉的问题。
+- 影响文件：`scenes/battle/battle_scene.tscn`、`scripts/ui/battle_scene.gd`、`devlog.md`
+- 如何验证：进入战斗后确认顶部净化任务区整体有一层独立深色底板；每个净化步骤各自有浅色小底块，已完成项底色与未完成不同；切换到美术新给的战斗背景下，任务文字和进度图标应明显比之前更容易辨认。
+
 ### 新增战斗内卡组阅览覆盖层
 - 做了什么：新增 `DeckViewOverlay` 和 `DeckCardTile`，把战斗里的“查看卡组 / 抽牌堆 / 弃牌堆”从日志占位改成真正的整页阅览层。现在会按攻击、技能、净化、其他分组展示卡牌，并合并同名卡显示数量；打开 `查看卡组` 默认看整个卡组，打开抽牌堆/弃牌堆按钮则切到对应页签，支持 `Esc` 和返回按钮关闭。
 - 影响文件：`scripts/ui/battle_scene.gd`、`scripts/ui/deck_view_overlay.gd`、`scripts/ui/deck_card_tile.gd`、`scenes/ui/deck_view_overlay.tscn`、`scenes/ui/deck_card_tile.tscn`、`devlog.md`

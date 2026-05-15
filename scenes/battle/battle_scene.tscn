@@ -41,6 +41,56 @@ region = Rect2(779, 19, 49, 57)
 atlas = ExtResource("13_purification_progress")
 region = Rect2(970, 19, 59, 57)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_task_strip_panel"]
+bg_color = Color(0.13, 0.11, 0.07, 0.84)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.89, 0.79, 0.56, 0.82)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_color = Color(0, 0, 0, 0.2)
+shadow_size = 8
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_task_pending"]
+bg_color = Color(0.95, 0.88, 0.7, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.56, 0.42, 0.23, 0.72)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_task_done"]
+bg_color = Color(0.79, 0.88, 0.72, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.45, 0.26, 0.8)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_deck_button"]
 atlas = ExtResource("6_deck")
 region = Rect2(1120, 16, 63, 62)
@@ -206,63 +256,72 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TaskStripPanel" type="MarginContainer" parent="Root/Layout/HeaderRow" unique_id=176934834]
+[node name="TaskStripPanel" type="PanelContainer" parent="Root/Layout/HeaderRow" unique_id=176934834]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_task_strip_panel")
 
 [node name="PurificationTaskRow" type="HBoxContainer" parent="Root/Layout/HeaderRow/TaskStripPanel" unique_id=1954513484]
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 10
 
-[node name="PreviewTaskWash" type="HBoxContainer" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow" unique_id=1988270094]
+[node name="PreviewTaskWash" type="PanelContainer" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow" unique_id=1988270094]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_styles/panel = SubResource("StyleBoxFlat_task_pending")
 
-[node name="Name" type="Label" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskWash" unique_id=1390223300]
+[node name="Content" type="HBoxContainer" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskWash" unique_id=1139002230]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.42, 0.27, 0.14, 1)
+theme_override_constants/separation = 8
+
+[node name="Name" type="Label" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskWash/Content" unique_id=1390223300]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.18, 0.11, 0.04, 1)
 theme_override_font_sizes/font_size = 18
 text = "脏污"
 vertical_alignment = 1
 
-[node name="Icon" type="TextureRect" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskWash" unique_id=1090028734]
+[node name="Icon" type="TextureRect" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskWash/Content" unique_id=1090028734]
 custom_minimum_size = Vector2(30, 34)
 layout_mode = 2
 texture = SubResource("AtlasTexture_purification_empty")
 stretch_mode = 5
 
-[node name="PreviewTaskTrim" type="HBoxContainer" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow" unique_id=981264343]
+[node name="PreviewTaskTrim" type="PanelContainer" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow" unique_id=981264343]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_styles/panel = SubResource("StyleBoxFlat_task_pending")
 
-[node name="Name" type="Label" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskTrim" unique_id=104135796]
+[node name="Content" type="HBoxContainer" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskTrim" unique_id=1104135796]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.42, 0.27, 0.14, 1)
+theme_override_constants/separation = 8
+
+[node name="Name" type="Label" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskTrim/Content" unique_id=104135796]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.18, 0.11, 0.04, 1)
 theme_override_font_sizes/font_size = 18
 text = "腐败"
 vertical_alignment = 1
 
-[node name="Icon" type="TextureRect" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskTrim" unique_id=1574046331]
+[node name="Icon" type="TextureRect" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskTrim/Content" unique_id=1574046331]
 custom_minimum_size = Vector2(30, 34)
 layout_mode = 2
 texture = SubResource("AtlasTexture_purification_empty")
 stretch_mode = 5
 
-[node name="PreviewTaskPurge" type="HBoxContainer" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow" unique_id=308136475]
+[node name="PreviewTaskPurge" type="PanelContainer" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow" unique_id=308136475]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_styles/panel = SubResource("StyleBoxFlat_task_done")
 
-[node name="Name" type="Label" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskPurge" unique_id=975008771]
+[node name="Content" type="HBoxContainer" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskPurge" unique_id=1975008771]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.29, 0.2, 0.11, 1)
+theme_override_constants/separation = 8
+
+[node name="Name" type="Label" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskPurge/Content" unique_id=975008771]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.11, 0.18, 0.1, 1)
 theme_override_font_sizes/font_size = 18
 text = "污秽"
 vertical_alignment = 1
 
-[node name="Icon" type="TextureRect" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskPurge" unique_id=809159193]
+[node name="Icon" type="TextureRect" parent="Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow/PreviewTaskPurge/Content" unique_id=809159193]
 custom_minimum_size = Vector2(30, 34)
 layout_mode = 2
 texture = SubResource("AtlasTexture_purification_done")

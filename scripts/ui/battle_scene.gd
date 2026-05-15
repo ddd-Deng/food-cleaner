@@ -47,6 +47,9 @@ const TIMELINE_CURRENT_REGION := Rect2(493, 646, 22, 50)
 const PURIFICATION_EMPTY_REGION := Rect2(779, 19, 49, 57)
 const PURIFICATION_DONE_REGION := Rect2(970, 19, 59, 57)
 const PURIFICATION_ICON_SIZE := Vector2(30, 34)
+const PURIFICATION_ITEM_LABEL_COLOR := Color(0.18, 0.11, 0.04, 1.0)
+const PURIFICATION_DONE_LABEL_COLOR := Color(0.11, 0.18, 0.10, 1.0)
+const PURIFICATION_LABEL_OUTLINE_COLOR := Color(1.0, 0.96, 0.87, 0.55)
 const TIMELINE_CARD_EFFECT_MARKER_SIZE := Vector2(16, 25)
 const TIMELINE_SLOT_WIDTH := 84.0
 const TIMELINE_LEFT_PADDING := 22.0
@@ -364,11 +367,17 @@ func _refresh_purification_task_row(state: BattleState) -> void:
 		child.queue_free()
 
 	if state.enemy == null or state.enemy.definition == null or state.enemy.definition.purification_steps.is_empty():
+		var empty_panel := PanelContainer.new()
+		empty_panel.add_theme_stylebox_override("panel", _build_purification_item_style(false))
 		var empty_label := Label.new()
 		empty_label.text = "暂无净化任务"
 		empty_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		empty_label.add_theme_font_size_override("font_size", 18)
-		purification_task_row.add_child(empty_label)
+		empty_label.add_theme_color_override("font_color", PURIFICATION_ITEM_LABEL_COLOR)
+		empty_label.add_theme_color_override("font_outline_color", PURIFICATION_LABEL_OUTLINE_COLOR)
+		empty_label.add_theme_constant_override("outline_size", 1)
+		empty_panel.add_child(empty_label)
+		purification_task_row.add_child(empty_panel)
 		return
 
 	for i in range(state.enemy.definition.purification_steps.size()):
@@ -376,16 +385,22 @@ func _refresh_purification_task_row(state: BattleState) -> void:
 		var done: bool = state.enemy.purification_completed[i]
 		purification_task_row.add_child(_build_purification_task_item(step.display_name, done))
 
-func _build_purification_task_item(step_name: String, done: bool) -> HBoxContainer:
+func _build_purification_task_item(step_name: String, done: bool) -> PanelContainer:
+	var item_panel := PanelContainer.new()
+	item_panel.add_theme_stylebox_override("panel", _build_purification_item_style(done))
+
 	var item_row := HBoxContainer.new()
 	item_row.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	item_row.add_theme_constant_override("separation", 6)
+	item_row.add_theme_constant_override("separation", 8)
+	item_panel.add_child(item_row)
 
 	var label := Label.new()
 	label.text = step_name
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", 18)
-	label.add_theme_color_override("font_color", Color(0.29, 0.20, 0.11, 1.0) if done else Color(0.42, 0.27, 0.14, 1.0))
+	label.add_theme_color_override("font_color", PURIFICATION_DONE_LABEL_COLOR if done else PURIFICATION_ITEM_LABEL_COLOR)
+	label.add_theme_color_override("font_outline_color", PURIFICATION_LABEL_OUTLINE_COLOR)
+	label.add_theme_constant_override("outline_size", 1)
 	item_row.add_child(label)
 
 	var icon := TextureRect.new()
@@ -395,7 +410,29 @@ func _build_purification_task_item(step_name: String, done: bool) -> HBoxContain
 	icon.texture = _build_purification_icon_texture(done)
 	item_row.add_child(icon)
 
-	return item_row
+	return item_panel
+
+func _build_purification_item_style(done: bool) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	if done:
+		style.bg_color = Color(0.79, 0.88, 0.72, 0.92)
+		style.border_color = Color(0.3, 0.45, 0.26, 0.8)
+	else:
+		style.bg_color = Color(0.95, 0.88, 0.70, 0.92)
+		style.border_color = Color(0.56, 0.42, 0.23, 0.72)
+	style.border_width_left = 1
+	style.border_width_top = 1
+	style.border_width_right = 1
+	style.border_width_bottom = 1
+	style.corner_radius_top_left = 14
+	style.corner_radius_top_right = 14
+	style.corner_radius_bottom_left = 14
+	style.corner_radius_bottom_right = 14
+	style.content_margin_left = 12.0
+	style.content_margin_top = 6.0
+	style.content_margin_right = 10.0
+	style.content_margin_bottom = 6.0
+	return style
 
 func _build_purification_icon_texture(done: bool) -> AtlasTexture:
 	var texture := AtlasTexture.new()
