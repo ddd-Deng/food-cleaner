@@ -34,6 +34,7 @@ const TYPE_ORDER: Array[BattleTypes.CardType] = [
 ]
 const TILE_WIDTH := 168.0
 const GRID_SEPARATION := 14.0
+const OPEN_LAYOUT_MAX_RETRIES := 8
 
 @onready var backdrop: ColorRect = $Backdrop
 @onready var panel: PanelContainer = $SafeArea/Panel
@@ -51,6 +52,8 @@ var _state: BattleState
 var _current_tab: StringName = TAB_ALL
 var _tab_buttons: Dictionary = {}
 var _pending_rebuild_after_open: bool = false
+var _open_layout_retry_count: int = 0
+var _open_layout_rebuild_queued: bool = false
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -65,6 +68,8 @@ func _ready() -> void:
 	discard_tab_button.pressed.connect(func() -> void: _switch_tab(TAB_DISCARD))
 	ScrollBarSkin.apply_to_scroll_container(content_scroll)
 	resized.connect(_on_overlay_resized)
+	content_scroll.resized.connect(_on_content_area_resized)
+	content_panel.resized.connect(_on_content_area_resized)
 	_apply_shell_styles()
 	_rebuild_tabs()
 	_rebuild_content()
@@ -75,7 +80,7 @@ func open_with_state(state: BattleState, initial_tab: StringName) -> void:
 	visible = true
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	_rebuild_tabs()
-	_request_open_layout_rebuild()
+	_request_open_layout_rebuild(true)
 	call_deferred("_focus_close_button")
 
 func refresh_with_state(state: BattleState) -> void:
@@ -85,6 +90,9 @@ func refresh_with_state(state: BattleState) -> void:
 
 func close() -> void:
 	visible = false
+	_pending_rebuild_after_open = false
+	_open_layout_retry_count = 0
+	_open_layout_rebuild_queued = false
 
 func is_open() -> bool:
 	return visible
@@ -342,9 +350,7 @@ func _type_title(card_type: BattleTypes.CardType) -> String:
 			return "其他"
 
 func _grid_columns_for_current_width() -> int:
-	var available_width := content_scroll.size.x
-	if available_width <= 0.0:
-		available_width = content_panel.size.x
+	var available_width := _current_content_width()
 	if available_width <= 0.0:
 		return 1
 	return clampi(int(floor((available_width + GRID_SEPARATION) / (TILE_WIDTH + GRID_SEPARATION))), 1, 5)
@@ -369,17 +375,42 @@ func _on_overlay_resized() -> void:
 		else:
 			call_deferred("_rebuild_content")
 
+func _on_content_area_resized() -> void:
+	if visible and _pending_rebuild_after_open:
+		_request_open_layout_rebuild()
+
 func _focus_close_button() -> void:
 	if close_button != null:
 		close_button.grab_focus()
 
-func _request_open_layout_rebuild() -> void:
+func _request_open_layout_rebuild(reset_retry_count: bool = false) -> void:
+	if reset_retry_count:
+		_open_layout_retry_count = 0
 	_pending_rebuild_after_open = true
+	if _open_layout_rebuild_queued:
+		return
+	_open_layout_rebuild_queued = true
 	call_deferred("_finish_open_layout_rebuild")
 
 func _finish_open_layout_rebuild() -> void:
+	_open_layout_rebuild_queued = false
 	if not visible:
 		_pending_rebuild_after_open = false
+		_open_layout_retry_count = 0
+		return
+	if not _content_width_is_ready() and _open_layout_retry_count < OPEN_LAYOUT_MAX_RETRIES:
+		_open_layout_retry_count += 1
+		_request_open_layout_rebuild()
 		return
 	_pending_rebuild_after_open = false
+	_open_layout_retry_count = 0
 	_rebuild_content()
+
+func _current_content_width() -> float:
+	return maxf(
+		maxf(content_scroll.size.x, content_scroll.get_rect().size.x),
+		maxf(content_panel.size.x, content_panel.get_rect().size.x)
+	)
+
+func _content_width_is_ready() -> bool:
+	return _current_content_width() >= TILE_WIDTH * 2.0 + GRID_SEPARATION

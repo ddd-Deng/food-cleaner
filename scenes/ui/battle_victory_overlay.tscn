@@ -1,0 +1,304 @@
+[gd_scene format=3 uid="uid://cgy0si8t4mj4g"]
+
+[ext_resource type="Script" path="res://scripts/ui/battle_victory_overlay.gd" id="1"]
+[ext_resource type="Texture2D" path="res://sprites/大框.png" id="2"]
+[ext_resource type="Texture2D" path="res://sprites/中框.png" id="3"]
+[ext_resource type="Texture2D" path="res://sprites/小框.png" id="4"]
+[ext_resource type="Texture2D" path="res://sprites/分类框/平常分类.png" id="5"]
+[ext_resource type="Texture2D" path="res://sprites/分类框/选中分类.png" id="6"]
+[ext_resource type="Texture2D" path="res://sprites/金币槽.png" id="7"]
+[ext_resource type="Texture2D" path="res://sprites/抽牌堆.png" id="8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_outer"]
+atlas = ExtResource("2")
+region = Rect2(38, 33, 1199, 656)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_outer"]
+texture = SubResource("AtlasTexture_outer")
+draw_center = true
+texture_margin_left = 28.0
+texture_margin_top = 28.0
+texture_margin_right = 28.0
+texture_margin_bottom = 28.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_inner"]
+atlas = ExtResource("3")
+region = Rect2(62, 189, 1152, 480)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_inner"]
+texture = SubResource("AtlasTexture_inner")
+draw_center = true
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_title"]
+atlas = ExtResource("4")
+region = Rect2(81, 208, 1088, 302)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_title"]
+texture = SubResource("AtlasTexture_title")
+draw_center = true
+texture_margin_left = 20.0
+texture_margin_top = 20.0
+texture_margin_right = 20.0
+texture_margin_bottom = 20.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_reward"]
+atlas = ExtResource("6")
+region = Rect2(64, 137, 154, 45)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_reward"]
+texture = SubResource("AtlasTexture_reward")
+draw_center = true
+texture_margin_left = 14.0
+texture_margin_top = 14.0
+texture_margin_right = 14.0
+texture_margin_bottom = 14.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_button_normal"]
+atlas = ExtResource("5")
+region = Rect2(225, 138, 156, 45)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_button_normal"]
+texture = SubResource("AtlasTexture_button_normal")
+draw_center = true
+texture_margin_left = 14.0
+texture_margin_top = 14.0
+texture_margin_right = 14.0
+texture_margin_bottom = 14.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_button_hover"]
+atlas = ExtResource("6")
+region = Rect2(64, 137, 154, 45)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_button_hover"]
+texture = SubResource("AtlasTexture_button_hover")
+draw_center = true
+texture_margin_left = 14.0
+texture_margin_top = 14.0
+texture_margin_right = 14.0
+texture_margin_bottom = 14.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gold_icon"]
+atlas = ExtResource("7")
+region = Rect2(110, 63, 58, 54)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_card_icon"]
+atlas = ExtResource("8")
+region = Rect2(36, 570, 118, 106)
+
+[node name="BattleVictoryOverlay" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PanelRoot" type="Control" parent="Center"]
+custom_minimum_size = Vector2(468, 372)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="OuterPanel" type="PanelContainer" parent="Center/PanelRoot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_outer")
+
+[node name="OuterMargin" type="MarginContainer" parent="Center/PanelRoot/OuterPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="Column" type="VBoxContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleCenter" type="CenterContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column"]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+
+[node name="TitlePanel" type="PanelContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/TitleCenter"]
+custom_minimum_size = Vector2(240, 54)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_title")
+
+[node name="TitleLabel" type="Label" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/TitleCenter/TitlePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.27, 0.18, 0.1, 1)
+theme_override_font_sizes/font_size = 28
+text = "战斗胜利"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SummaryLabel" type="Label" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.43, 0.31, 0.19, 1)
+theme_override_font_sizes/font_size = 15
+text = "本次奖励预览"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="InnerPanel" type="PanelContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_inner")
+
+[node name="InnerMargin" type="MarginContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="RewardsColumn" type="VBoxContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="GoldRewardPanel" type="PanelContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_reward")
+
+[node name="GoldMargin" type="MarginContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/GoldRewardPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="GoldRow" type="HBoxContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/GoldRewardPanel/GoldMargin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="GoldIcon" type="TextureRect" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/GoldRewardPanel/GoldMargin/GoldRow"]
+custom_minimum_size = Vector2(34, 30)
+layout_mode = 2
+texture = SubResource("AtlasTexture_gold_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="GoldTextColumn" type="VBoxContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/GoldRewardPanel/GoldMargin/GoldRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="GoldMainLabel" type="Label" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/GoldRewardPanel/GoldMargin/GoldRow/GoldTextColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.96, 0.94, 1)
+theme_override_font_sizes/font_size = 19
+text = "获得 0 金币"
+vertical_alignment = 1
+
+[node name="GoldSubLabel" type="Label" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/GoldRewardPanel/GoldMargin/GoldRow/GoldTextColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84, 0.9, 0.86, 1)
+theme_override_font_sizes/font_size = 13
+text = "确认后结算"
+vertical_alignment = 1
+
+[node name="CardRewardPanel" type="PanelContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_reward")
+
+[node name="CardMargin" type="MarginContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/CardRewardPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="CardRow" type="HBoxContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/CardRewardPanel/CardMargin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="CardIcon" type="TextureRect" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/CardRewardPanel/CardMargin/CardRow"]
+custom_minimum_size = Vector2(30, 28)
+layout_mode = 2
+texture = SubResource("AtlasTexture_card_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CardTextColumn" type="VBoxContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/CardRewardPanel/CardMargin/CardRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="CardMainLabel" type="Label" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/CardRewardPanel/CardMargin/CardRow/CardTextColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.96, 0.94, 1)
+theme_override_font_sizes/font_size = 19
+text = "将 1 张牌加入你的牌组"
+vertical_alignment = 1
+
+[node name="CardSubLabel" type="Label" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/CardRewardPanel/CardMargin/CardRow/CardTextColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84, 0.9, 0.86, 1)
+theme_override_font_sizes/font_size = 13
+text = "当前为展示占位"
+vertical_alignment = 1
+
+[node name="FooterHintLabel" type="Label" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn"]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.39, 0.29, 0.18, 1)
+theme_override_font_sizes/font_size = 13
+text = "奖励逻辑后续接入"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ContinueCenter" type="CenterContainer" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+
+[node name="ContinueButton" type="Button" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/ContinueCenter"]
+custom_minimum_size = Vector2(152, 40)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_button_normal")
+theme_override_styles/hover = SubResource("StyleBoxTexture_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_button_hover")
+theme_override_styles/focus = SubResource("StyleBoxTexture_button_hover")
+theme_override_colors/font_color = Color(0.3, 0.22, 0.13, 1)
+theme_override_colors/font_hover_color = Color(0.96, 0.96, 0.93, 1)
+theme_override_colors/font_pressed_color = Color(0.96, 0.96, 0.93, 1)
+theme_override_colors/font_focus_color = Color(0.96, 0.96, 0.93, 1)
+theme_override_font_sizes/font_size = 18
+text = "继续探索"

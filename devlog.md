@@ -1,5 +1,15 @@
 # 开发日志
 
+### 实现敌人让前排好食物块变质的 `CORRUPT_BLOCK`
+- 做了什么：补全了敌方动作 `CORRUPT_BLOCK` 的真实战斗逻辑，不再只是日志占位。现在敌人触发该动作时，会从自己的食物队列前往后扫描，把前 `2` 个当前仍可视为“好”的食物块变成“变质”状态；本轮先采用可演进的运行时规则：已经自带玩家伤害型消化效果、或已带 `corrupted/spoiled/rotten/sour/dirty` 等坏标签的食物块不再重复变质，其余食物块会被加上 `corrupted` 标记、名称前缀改为“变质”、消化时间额外延长 `1t`，并在原有效果基础上额外附带 `1` 点消化反噬伤害。这样先把“前两个好的食物块会变坏”的设定落到战斗里，后续你们再细化什么算“好”、以及坏块具体类型时，也可以沿着这个运行时状态继续扩展。顺手把演示战斗和草莓怪物都接入了实际的 `腐坏扩散` 动作，方便直接观察效果。
+- 影响文件：`scripts/runtime/food_block_instance.gd`、`scripts/runtime/battle_rules.gd`、`scripts/content/sample_battle_factory.gd`、`scripts/content/monster_catalog.gd`、`devlog.md`
+- 如何验证：进入演示战斗或遭遇草莓怪物，推进时间直到敌人触发 `腐坏扩散`；确认敌方队列中从前往后数的前 `2` 个原本没有坏效果的食物块会立即改名为“变质…”，并在右侧敌人掉落队列中保留新名字；之后再吃下这些变质块，确认它们比原来多 `1t` 消化时间，并在消化完成时额外对玩家造成 `1` 点伤害；若队列前方本来就是坏块或已变质块，则应跳过它们，继续尝试污染后面的好块。
+
+### 新增战斗胜利结算画面与奖励展示占位
+- 做了什么：新增独立的 `BattleVictoryOverlay` 结算层，并接入到 `BattleScene` 的胜利流程中。现在战斗在胜利后不会立刻切回探索，而是先弹出结算画面，展示胜利标题、结算摘要、金币奖励区、卡牌奖励区和“继续探索 / 完成本局”按钮；金币数值直接读取当前房间已有的 `reward_gold` 作为展示预览，卡牌奖励暂时只保留 UI 展示位，不接入发放或选牌逻辑。玩家点击继续后，才会把结果交回 `RunController`，再按原有规则发金币并返回探索或结束 Boss 局。
+- 影响文件：`scenes/ui/battle_victory_overlay.tscn`、`scripts/ui/battle_victory_overlay.gd`、`scripts/ui/battle_scene.gd`、`scripts/run/run_controller.gd`、`devlog.md`
+- 如何验证：进入任意一场战斗并取得胜利，确认不会立刻跳回探索，而是先出现新的胜利结算画面；结算画面应包含金币奖励区和卡牌奖励区，其中金币区显示当前房间配置的金币数，卡牌区显示占位文案；点击“继续探索”后才返回探索并结算金币；若是 Boss 战胜利，按钮文案应变为“完成本局”，点击后进入本局结束状态。
+
 ### 移除战斗底部旧占位图标并清理相关代码
 - 做了什么：删除了战斗场景底部原先用于占位的 `PlayerActorView` / `EnemyActorView` 两个旧图标节点，并从 `battle_scene.gd` 中移除了对应的引用、初始化、状态刷新和闪烁反馈逻辑；同时直接删除了已经完全无用的 `scripts/ui/battle_actor_view.gd`。现在战斗场景只保留美术同事已经接入的 `BattlePlayerSprite` / `BattleEnemySprite` 作为角色展示，不再混用旧占位表现。顺手修复了 `battle_enemy_sprite.gd` 中局部变量 `sprite_frames` 遮蔽 `AnimatedSprite2D.sprite_frames` 基类属性的 warning。
 - 影响文件：`scenes/battle/battle_scene.tscn`、`scripts/ui/battle_scene.gd`、`scripts/ui/battle_enemy_sprite.gd`、`scripts/ui/battle_actor_view.gd`、`devlog.md`
@@ -38,9 +48,9 @@
 ## 2026-05-15
 
 ### 修复卡组预览首次打开时卡牌列表错误变成单列
-- 做了什么：调整 `DeckViewOverlay` 在 `open_with_state()` 里的内容重建时机。此前覆盖层从隐藏切到显示后，会立刻按 `content_scroll.size.x` 计算 `GridContainer.columns`，但首次打开这一帧滚动区宽度还没完成布局，导致列数回退成 `1`，卡牌竖着一张一行；现在改为先显示界面，再 `call_deferred()` 到下一帧完成一次延后重建，确保首次打开也能拿到正确宽度，同时兼容首次打开阶段如果又触发了 resize 或切 tab 的情况。
+- 做了什么：继续修正 `DeckViewOverlay` 的网格重建时机。前一版只把首次打开延后到下一帧，但实际从“弃牌堆”等入口打开时，内容区宽度有时在下一帧仍未稳定，依旧可能按 `1` 列生成网格。现在改为统一监听 overlay、本体内容面板和滚动区的 `resized`，并在内容区宽度达到可容纳至少两列卡牌前持续延后重建，最多重试数帧；列数计算也统一改成从内容区实际宽度 helper 获取，避免某些入口仍读到 0 宽度。
 - 影响文件：`scripts/ui/deck_view_overlay.gd`、`devlog.md`
-- 如何验证：已运行 `D:\Godot\Godot_v4.6.2-stable_win64.exe --headless --path . --scene res://scenes/ui/deck_view_overlay.tscn --quit` 与 `D:\Godot\Godot_v4.6.2-stable_win64.exe --headless --path . --quit`；进入战斗后第一次点击“查看卡组”，确认卡牌分组内直接按多列网格显示，不再先出现“一张卡占一行”，关闭后再次打开也应保持正常。
+- 如何验证：已运行 `D:\Godot\Godot_v4.6.2-stable_win64.exe --headless --path . --scene res://scenes/ui/deck_view_overlay.tscn --quit` 与 `D:\Godot\Godot_v4.6.2-stable_win64.exe --headless --path . --quit`；进入战斗后分别从“查看卡组”“抽牌堆”“弃牌堆”三个入口第一次打开覆盖层，确认卡牌分组都直接按多列网格显示，不再出现“一张卡占一行”，切换 tab 后也应保持正常。
 
 ### 卡组预览覆盖层改用手绘版外框与分类按钮素材
 - 做了什么：将 `DeckViewOverlay` 的外层面板、内部内容区、分类分组容器、顶部分类按钮和右上角返回按钮改为直接使用 `sprites/大框.png`、`sprites/中框.png`、`sprites/小框.png`、`sprites/分类框/平常分类.png`、`sprites/分类框/选中分类.png` 与 `sprites/返回.png` 中的有效区域；保留原有卡组数据分组、切页和关闭交互，只替换界面外壳与按钮表现，并补上了基于贴图的 hover / pressed 反馈。

@@ -80,7 +80,7 @@ static func _build_marshmallow_enemy() -> EnemyData:
 	]
 	enemy.purification_steps = [
 		_step(&"wash", "洗去糖霜", BattleTypes.PurificationActionType.WASH),
-		_step(&"trim", "刮掉焦层", BattleTypes.PurificationActionType.TRIM),
+		_step(&"trim", "剔掉焦层", BattleTypes.PurificationActionType.TRIM),
 	]
 	enemy.actions = [
 		_attack_action(&"sticky_hit", "黏弹拍击", 2, 2),
@@ -125,6 +125,7 @@ static func _build_strawberry_enemy() -> EnemyData:
 	]
 	enemy.actions = [
 		_add_block_action(&"grow_seed", "籽团增殖", _block(&"seed_cluster_extra", "增殖籽团", 1, 2, "不断长出。"), 3),
+		_corrupt_action(&"rot_spread", "腐坏扩散", 2, 2),
 		_attack_action(&"acid_splash", "酸汁喷溅", 2, 2),
 		_attack_action(&"vine_whip", "果蒂抽打", 3, 2),
 	]
@@ -200,6 +201,15 @@ static func _charge_action(id: StringName, display_name: String, amount: int, ti
 	action.id = id
 	action.display_name = display_name
 	action.action_type = BattleTypes.EnemyActionType.CHARGE_ATTACK
+	action.amount = amount
+	action.time_delay = time_delay
+	return action
+
+static func _corrupt_action(id: StringName, display_name: String, amount: int, time_delay: int) -> EnemyActionData:
+	var action := EnemyActionData.new()
+	action.id = id
+	action.display_name = display_name
+	action.action_type = BattleTypes.EnemyActionType.CORRUPT_BLOCK
 	action.amount = amount
 	action.time_delay = time_delay
 	return action
