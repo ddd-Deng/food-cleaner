@@ -1,5 +1,15 @@
 # 开发日志
 
+### 移除战斗底部旧占位图标并清理相关代码
+- 做了什么：删除了战斗场景底部原先用于占位的 `PlayerActorView` / `EnemyActorView` 两个旧图标节点，并从 `battle_scene.gd` 中移除了对应的引用、初始化、状态刷新和闪烁反馈逻辑；同时直接删除了已经完全无用的 `scripts/ui/battle_actor_view.gd`。现在战斗场景只保留美术同事已经接入的 `BattlePlayerSprite` / `BattleEnemySprite` 作为角色展示，不再混用旧占位表现。顺手修复了 `battle_enemy_sprite.gd` 中局部变量 `sprite_frames` 遮蔽 `AnimatedSprite2D.sprite_frames` 基类属性的 warning。
+- 影响文件：`scenes/battle/battle_scene.tscn`、`scripts/ui/battle_scene.gd`、`scripts/ui/battle_enemy_sprite.gd`、`scripts/ui/battle_actor_view.gd`、`devlog.md`
+- 如何验证：进入战斗后，确认底部抽牌堆与弃牌堆上方不再显示那两个简笔画占位图标；场景中只保留新的玩家与敌人大素材表现；重新加载脚本时不应再出现 `battle_enemy_sprite.gd` 里关于 `sprite_frames` 的 `SHADOWED_VARIABLE_BASE_CLASS` warning。
+
+### 玩家默认胃容量从 3 提升到 6
+- 做了什么：将项目当前默认玩家胃容量统一从 `3` 调整为 `6`，不只修改演示战斗，还同步更新了战斗定义、探索 run 初始值和战斗运行时默认值，避免从不同入口进入战斗时容量不一致。
+- 影响文件：`scripts/content/sample_battle_factory.gd`、`scripts/data/battle_definition.gd`、`scripts/run/run_factory.gd`、`scripts/run/run_state.gd`、`scripts/runtime/battle_state.gd`、`devlog.md`
+- 如何验证：进入演示战斗或从探索进入一场战斗后，确认玩家胃袋可容纳 6 个体积为 1 的食物块；连续吃下 6 个普通食物块前不应再出现“胃容量不足”，吃第 7 个时才应触发容量不足判定。
+
 ### 战斗场景新增玩家胃袋顺序与敌人掉落顺序显示
 - 做了什么：把原本右侧单一的 `FoodSlot` 扩展为左右两套顺序面板，左侧新增“玩家胃袋”显示，明确表示玩家胃中待消化食物块的前后顺序；右侧保留“敌人掉落”显示，表示敌人身上还能获取的食物块顺序。两边继续复用现有 `食物槽` 素材作为底槽，但新增 `FoodQueueView` 用文字色块来代替缺失的单独食物图标，并在玩家胃袋里额外显示每块的剩余消化时间与体积。现在当玩家吃入新食物、食物自然消化、被卡牌立即消化、或顺序被前后调换时，胃袋顺序会同步变化；敌人新增或失去食物块时，右侧顺序也会同步刷新。
 - 影响文件：`scenes/battle/battle_scene.tscn`、`scripts/ui/battle_scene.gd`、`scripts/ui/food_queue_view.gd`、`devlog.md`

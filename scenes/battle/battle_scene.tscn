@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://bpol45bkl8i45" path="res://scripts/ui/battle_scene.gd" id="1"]
 [ext_resource type="Script" uid="uid://dpe8fkikxu52" path="res://scripts/runtime/battle_controller.gd" id="2"]
-[ext_resource type="Script" uid="uid://da2tkcwkvllr4" path="res://scripts/ui/battle_actor_view.gd" id="3"]
 [ext_resource type="Script" uid="uid://dnsl22ty8ukef" path="res://scripts/ui/hand_view.gd" id="4"]
 [ext_resource type="Script" uid="uid://dywudx16a8swr" uid="uid://dywudx16a8swr" path="res://scripts/ui/battle_player_sprite.gd" id="4_player_sprite"]
 [ext_resource type="Script" path="res://scripts/ui/food_queue_view.gd" id="4_food_queue"]
@@ -511,11 +510,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PlayerActorView" type="Control" parent="Root/Layout/BottomRow/DeckColumn/ActorAnchor" unique_id=1838247660]
-custom_minimum_size = Vector2(148, 180)
-layout_mode = 2
-script = ExtResource("3")
-
 [node name="DeckPanel" type="TextureButton" parent="Root/Layout/BottomRow/DeckColumn" unique_id=451597229]
 custom_minimum_size = Vector2(96, 92)
 layout_mode = 2
@@ -579,11 +573,6 @@ custom_minimum_size = Vector2(0, 190)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="EnemyActorView" type="Control" parent="Root/Layout/BottomRow/DiscardColumn/ActorAnchor" unique_id=1979800179]
-custom_minimum_size = Vector2(148, 180)
-layout_mode = 2
-script = ExtResource("3")
 
 [node name="DiscardPanel" type="TextureButton" parent="Root/Layout/BottomRow/DiscardColumn" unique_id=2117097553]
 custom_minimum_size = Vector2(96, 92)

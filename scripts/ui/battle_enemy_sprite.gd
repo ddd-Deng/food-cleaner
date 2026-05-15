@@ -15,15 +15,15 @@ func setup_from_monster(monster_id: StringName) -> void:
 	_load_animation(definition.battle_animation_dir, definition.animation_fps)
 
 func _load_animation(directory_path: String, animation_fps: float) -> void:
-	var sprite_frames := SpriteFrames.new()
-	sprite_frames.add_animation("idle")
-	sprite_frames.set_animation_loop("idle", true)
-	sprite_frames.set_animation_speed("idle", animation_fps if animation_fps > 0.0 else fallback_animation_fps)
+	var loaded_frames: SpriteFrames = SpriteFrames.new()
+	loaded_frames.add_animation("idle")
+	loaded_frames.set_animation_loop("idle", true)
+	loaded_frames.set_animation_speed("idle", animation_fps if animation_fps > 0.0 else fallback_animation_fps)
 	for texture in _load_frames_from_directory(directory_path):
 		if texture != null:
-			sprite_frames.add_frame("idle", texture)
-	self.sprite_frames = sprite_frames
-	if sprite_frames.get_frame_count("idle") > 0:
+			loaded_frames.add_frame("idle", texture)
+	self.sprite_frames = loaded_frames
+	if loaded_frames.get_frame_count("idle") > 0:
 		play("idle")
 
 func _load_frames_from_directory(directory_path: String) -> Array[Texture2D]:

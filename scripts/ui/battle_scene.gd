@@ -21,11 +21,9 @@ signal battle_resolved(result: Dictionary)
 @onready var log_text: RichTextLabel = $Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner/LogScroll/LogText
 @onready var draw_pile_label: Label = $Root/Layout/BottomRow/DeckColumn/DeckPanel/DeckPanelInner/DrawValue
 @onready var discard_pile_label: Label = $Root/Layout/BottomRow/DiscardColumn/DiscardPanel/DiscardPanelInner/DiscardValue
-@onready var player_actor_view: BattleActorView = $Root/Layout/BottomRow/DeckColumn/ActorAnchor/PlayerActorView
 @onready var hand_view: HandView = $Root/Layout/BottomRow/BottomCenter/HandCenter/HandView
 @onready var timeline_scroll: ScrollContainer = $Root/Layout/BottomRow/BottomCenter/TimelineCenter/TimelineScroll
 @onready var timeline_strip: Control = $Root/Layout/BottomRow/BottomCenter/TimelineCenter/TimelineScroll/TimelineStrip
-@onready var enemy_actor_view: BattleActorView = $Root/Layout/BottomRow/DiscardColumn/ActorAnchor/EnemyActorView
 @onready var player_food_queue: FoodQueueView = $PlayerFoodQueue
 @onready var enemy_food_queue: FoodQueueView = $EnemyFoodQueue
 @onready var settings_button: BaseButton = $Root/Layout/HeaderRow/RightButtons/SettingsButton
@@ -75,8 +73,6 @@ var _card_effect_preview_popup: CardEffectPreviewPopup
 var _deck_view_overlay: DeckViewOverlay
 
 func _ready() -> void:
-	player_actor_view.set_actor_mode(BattleActorView.MODE_PLAYER)
-	enemy_actor_view.set_actor_mode(BattleActorView.MODE_ENEMY)
 	ScrollBarSkin.apply_to_scroll_container(log_scroll)
 	ScrollBarSkin.apply_to_rich_text_label(log_text)
 	ScrollBarSkin.apply_compact_horizontal_to_scroll_container(timeline_scroll)
@@ -131,20 +127,6 @@ func _on_state_changed(state: BattleState) -> void:
 	_flash_state_changes(state)
 	_refresh_player_hp_bar(state.player_hp, state.player_max_hp)
 	player_hp_overlay.text = "HP %d / %d" % [state.player_hp, state.player_max_hp]
-	player_actor_view.set_player_snapshot(
-		state.player_hp,
-		state.player_max_hp,
-		state.player_block,
-		state.get_stomach_used(),
-		state.player_max_stomach_volume + state.player_extra_stomach_capacity
-	)
-	enemy_actor_view.set_enemy_snapshot(
-		_enemy_name(state),
-		state.player_current_intent,
-		state.get_purification_completed(),
-		state.get_purification_total(),
-		state.enemy.blocks.size() if state.enemy != null else 0
-	)
 	_refresh_purification_task_row(state)
 	gold_value_label.text = str(state.player_gold)
 	draw_pile_label.text = "抽牌堆：%d" % state.draw_pile.size()
@@ -516,9 +498,6 @@ func _flash_state_changes(state: BattleState) -> void:
 	_last_player_hp_seen = state.player_hp
 
 	var enemy_block_count: int = state.enemy.blocks.size() if state.enemy != null else 0
-	if _last_enemy_block_count_seen >= 0 and _last_enemy_block_count_seen != enemy_block_count:
-		var block_color := Color(0.72, 1.0, 0.72, 1.0) if enemy_block_count < _last_enemy_block_count_seen else Color(1.0, 0.92, 0.66, 1.0)
-		_flash_control(enemy_actor_view, block_color)
 	_last_enemy_block_count_seen = enemy_block_count
 
 	var purification_index: int = state.enemy.purification_index if state.enemy != null else 0

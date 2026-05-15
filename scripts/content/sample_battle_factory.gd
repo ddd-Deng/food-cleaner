@@ -9,7 +9,7 @@ static func create_demo_battle_definition() -> BattleDefinition:
 	battle.player_starting_hp = 20
 	battle.player_max_hand_size = 8
 	battle.player_starting_hand_size = 4
-	battle.player_max_stomach_volume = 3
+	battle.player_max_stomach_volume = 6
 	battle.starting_items = [_starter_item()]
 	battle.starting_deck = CardCatalog.build_card_entries()
 	battle.monster_id = &"marshmallow"

@@ -7,7 +7,7 @@ static func create_demo_run() -> RunState:
 	run_state.player_hp = 20
 	run_state.player_max_hand_size = 8
 	run_state.player_starting_hand_size = 4
-	run_state.player_max_stomach_volume = 3
+	run_state.player_max_stomach_volume = 6
 	run_state.gold = 10
 	run_state.deck_entries = CardCatalog.build_card_entries()
 	run_state.player_items = [_create_starter_item()]
