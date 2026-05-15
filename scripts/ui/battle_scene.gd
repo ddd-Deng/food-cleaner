@@ -31,6 +31,7 @@ signal battle_resolved(result: Dictionary)
 @onready var draw_pile_button: BaseButton = $Root/Layout/BottomRow/DeckColumn/DeckPanel
 @onready var discard_pile_button: BaseButton = $Root/Layout/BottomRow/DiscardColumn/DiscardPanel
 const DECK_VIEW_OVERLAY_SCENE: PackedScene = preload("res://scenes/ui/deck_view_overlay.tscn")
+const BATTLE_VICTORY_OVERLAY_SCENE: PackedScene = preload("res://scenes/ui/battle_victory_overlay.tscn")
 
 const TIMELINE_BASE_TEXTURE: Texture2D = preload("res://sprites/时间轴/时间轴.png")
 const TIMELINE_MARKER_TEXTURE: Texture2D = preload("res://sprites/时间轴/时间轴上的标记点.png")
@@ -71,6 +72,11 @@ var _pending_definition: BattleDefinition
 var _started_once: bool = false
 var _card_effect_preview_popup: CardEffectPreviewPopup
 var _deck_view_overlay: DeckViewOverlay
+var _battle_victory_overlay: BattleVictoryOverlay
+var _pending_resolution: Dictionary = {}
+var _victory_reward_gold: int = 0
+var _victory_is_boss_room: bool = false
+var _victory_has_card_reward: bool = true
 
 func _ready() -> void:
 	ScrollBarSkin.apply_to_scroll_container(log_scroll)
@@ -78,6 +84,7 @@ func _ready() -> void:
 	ScrollBarSkin.apply_compact_horizontal_to_scroll_container(timeline_scroll)
 	_create_card_effect_preview_popup()
 	_create_deck_view_overlay()
+	_create_battle_victory_overlay()
 
 	controller.state_changed.connect(_on_state_changed)
 	controller.state_changed.connect(func(state: BattleState) -> void:
@@ -112,7 +119,14 @@ func start_battle(definition: BattleDefinition) -> void:
 	if is_node_ready():
 		_start_controller_battle(definition)
 
+func set_victory_reward_preview(gold_reward: int, is_boss_room: bool = false, has_card_reward: bool = true) -> void:
+	_victory_reward_gold = max(0, gold_reward)
+	_victory_is_boss_room = is_boss_room
+	_victory_has_card_reward = has_card_reward
+
 func _input(event: InputEvent) -> void:
+	if _battle_victory_overlay != null and _battle_victory_overlay.is_open():
+		return
 	if _deck_view_overlay != null and _deck_view_overlay.is_open():
 		return
 	if event is not InputEventMouseButton:
@@ -147,11 +161,17 @@ func _on_log_added(message: String) -> void:
 func _on_battle_finished(outcome: BattleTypes.BattleOutcome) -> void:
 	log_text.append_text("\n战斗结束：%s" % _outcome_text(outcome))
 	log_text.scroll_to_line(log_text.get_line_count())
-	battle_resolved.emit({
+	var result := {
 		"outcome": outcome,
 		"player_hp": controller.state.player_hp if controller.state != null else 0,
 		"player_max_hp": controller.state.player_max_hp if controller.state != null else 0,
-	})
+		"reward_gold_preview": _victory_reward_gold,
+	}
+	if outcome == BattleTypes.BattleOutcome.DEFEAT:
+		battle_resolved.emit(result)
+		return
+	_pending_resolution = result
+	_show_victory_overlay(outcome)
 
 func _on_settings_pressed() -> void:
 	log_text.append_text("\n设置界面占位。")
@@ -342,6 +362,16 @@ func _create_deck_view_overlay() -> void:
 	add_child(_deck_view_overlay)
 	_deck_view_overlay.z_index = 3000
 
+func _create_battle_victory_overlay() -> void:
+	if _battle_victory_overlay != null:
+		return
+	_battle_victory_overlay = BATTLE_VICTORY_OVERLAY_SCENE.instantiate() as BattleVictoryOverlay
+	if _battle_victory_overlay == null:
+		return
+	add_child(_battle_victory_overlay)
+	_battle_victory_overlay.z_index = 4000
+	_battle_victory_overlay.continue_pressed.connect(_on_victory_overlay_continue_pressed)
+
 func _show_card_effect_preview(records: Array[CardEffectRecord], marker_global_rect: Rect2) -> void:
 	if _card_effect_preview_popup == null:
 		return
@@ -358,6 +388,8 @@ func _open_deck_view(tab_id: StringName) -> void:
 	_deck_view_overlay.open_with_state(controller.state, tab_id)
 
 func _on_card_released_outside_hand(index: int) -> void:
+	if _battle_victory_overlay != null and _battle_victory_overlay.is_open():
+		return
 	_play_card_from_hand(index)
 
 func _on_drag_cancelled() -> void:
@@ -514,6 +546,9 @@ func _start_controller_battle(definition: BattleDefinition) -> void:
 	if definition == null:
 		return
 	_pending_definition = definition
+	_pending_resolution.clear()
+	if _battle_victory_overlay != null:
+		_battle_victory_overlay.hide_overlay()
 	if battle_enemy_sprite != null:
 		battle_enemy_sprite.setup_from_monster(definition.monster_id)
 	if _started_once:
@@ -524,3 +559,35 @@ func _start_controller_battle(definition: BattleDefinition) -> void:
 		_last_purification_index_seen = -1
 	_started_once = true
 	controller.start_battle(definition)
+
+func _show_victory_overlay(outcome: BattleTypes.BattleOutcome) -> void:
+	if _battle_victory_overlay == null:
+		battle_resolved.emit(_pending_resolution)
+		_pending_resolution.clear()
+		return
+	if _deck_view_overlay != null and _deck_view_overlay.is_open():
+		_deck_view_overlay.close()
+	hand_view.cancel_active_drag()
+	var enemy_name := _enemy_name(controller.state)
+	var title := "净化完成" if outcome == BattleTypes.BattleOutcome.VICTORY_PURIFIED else "战斗胜利"
+	var footer_hint := "确认后将返回探索。" if not _victory_is_boss_room else "确认后将进入本局结束状态。"
+	_battle_victory_overlay.show_result({
+		"title": title,
+		"summary": "%s 已清理完成" % enemy_name,
+		"gold_reward": _victory_reward_gold,
+		"gold_main": "获得 %d 金币" % _victory_reward_gold if _victory_reward_gold > 0 else "本场暂无金币奖励",
+		"gold_sub": "确认后结算到探索进度" if _victory_reward_gold > 0 else "当前房间没有配置金币掉落",
+		"card_main": "将 1 张牌加入你的牌组" if _victory_has_card_reward else "卡牌奖励占位",
+		"card_sub": "暂时只展示结算 UI，选牌逻辑后续接入" if _victory_has_card_reward else "后续可在这里接入真实奖励",
+		"footer_hint": footer_hint,
+		"continue_text": "完成本局" if _victory_is_boss_room else "继续探索",
+	})
+
+func _on_victory_overlay_continue_pressed() -> void:
+	if _battle_victory_overlay != null:
+		_battle_victory_overlay.hide_overlay()
+	if _pending_resolution.is_empty():
+		return
+	var result := _pending_resolution.duplicate(true)
+	_pending_resolution.clear()
+	battle_resolved.emit(result)

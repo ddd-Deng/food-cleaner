@@ -120,8 +120,9 @@ static func _digest_front_food_for_time_step(state: BattleState) -> void:
 			break
 		state.stomach.remove_at(0)
 		state.add_log("%s 被自然消化完毕。" % current.get_display_name())
-		if current.definition != null and not current.definition.digest_effects.is_empty():
-			for effect in current.definition.digest_effects:
+		var digest_effects := current.get_digest_effects()
+		if not digest_effects.is_empty():
+			for effect in digest_effects:
 				_apply_effect(state, effect)
 				if state.is_finished():
 					return
@@ -148,7 +149,7 @@ static func _execute_enemy_action(state: BattleState) -> void:
 			else:
 				state.add_log("%s 想生成食物块，但当前没有配置内容。" % _enemy_name(state))
 		BattleTypes.EnemyActionType.CORRUPT_BLOCK:
-			state.add_log("%s 触发了变质效果，但目前仍是占位实现。" % _enemy_name(state))
+			_corrupt_enemy_blocks(state, maxi(1, action.amount))
 		BattleTypes.EnemyActionType.CHARGE_ATTACK:
 			state.enemy.charged_attack_bonus += action.amount
 			state.add_log("%s 正在蓄力，下次攻击额外造成 %d 点伤害。" % [_enemy_name(state), action.amount])
@@ -240,8 +241,9 @@ static func _digest_stomach_item(state: BattleState) -> void:
 	var item: FoodBlockInstance = state.stomach[0]
 	state.stomach.remove_at(0)
 	state.add_log("立即消化了 %s。" % item.get_display_name())
-	if item.definition != null and not item.definition.digest_effects.is_empty():
-		for effect in item.definition.digest_effects:
+	var digest_effects := item.get_digest_effects()
+	if not digest_effects.is_empty():
+		for effect in digest_effects:
 			_apply_effect(state, effect)
 
 static func _digest_last_stomach_item(state: BattleState) -> void:
@@ -251,8 +253,9 @@ static func _digest_last_stomach_item(state: BattleState) -> void:
 	var item: FoodBlockInstance = state.stomach[state.stomach.size() - 1]
 	state.stomach.remove_at(state.stomach.size() - 1)
 	state.add_log("立即消化了最后一个食物块：%s。" % item.get_display_name())
-	if item.definition != null and not item.definition.digest_effects.is_empty():
-		for effect in item.definition.digest_effects:
+	var digest_effects := item.get_digest_effects()
+	if not digest_effects.is_empty():
+		for effect in digest_effects:
 			_apply_effect(state, effect)
 
 static func _digest_all_stomach_items(state: BattleState) -> void:
@@ -261,6 +264,27 @@ static func _digest_all_stomach_items(state: BattleState) -> void:
 		return
 	while not state.stomach.is_empty():
 		_digest_stomach_item(state)
+
+static func _corrupt_enemy_blocks(state: BattleState, count: int) -> void:
+	if state.enemy == null or state.enemy.blocks.is_empty():
+		state.add_log("%s 想让食物块变质，但当前队列是空的。" % _enemy_name(state))
+		return
+	var corrupted_names: PackedStringArray = []
+	for block in state.enemy.blocks:
+		if block == null or not block.can_be_corrupted():
+			continue
+		if block.corrupt():
+			corrupted_names.append(block.get_display_name())
+		if corrupted_names.size() >= count:
+			break
+	if corrupted_names.is_empty():
+		state.add_log("%s 想让前排食物块变质，但当前已经没有可变质的“好”食物块了。" % _enemy_name(state))
+		return
+	state.add_log("%s 让前排 %d 个好食物块变质了：%s。" % [
+		_enemy_name(state),
+		corrupted_names.size(),
+		"、".join(corrupted_names),
+	])
 
 static func _move_stomach_front_to_back(state: BattleState) -> void:
 	if state.stomach.size() <= 1:

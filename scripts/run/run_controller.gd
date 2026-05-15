@@ -33,6 +33,10 @@ func _on_battle_requested(room_id: StringName) -> void:
 	_replace_active_node()
 	var battle_scene := BATTLE_SCENE.instantiate() as BattleScene
 	battle_scene.start_demo_on_ready = false
+	battle_scene.set_victory_reward_preview(
+		int(room.payload.get("reward_gold", 0)),
+		room.room_type == MapTypes.RoomType.BOSS
+	)
 	add_child(battle_scene)
 	_active_node = battle_scene
 	battle_scene.battle_resolved.connect(func(result: Dictionary) -> void:

@@ -31,7 +31,8 @@ static func _build_enemy() -> EnemyData:
 		_step(&"filthy", "污秽", BattleTypes.PurificationActionType.PURGE),
 	]
 	enemy.actions = [
-		_attack_action(&"peck", "啄咬", 2, 4),
+		_attack_action(&"peck", "啃咬", 2, 4),
+		_corrupt_action(&"rot_spread", "腐坏扩散", 2, 2),
 		_attack_action(&"scratch", "抓挠", 3, 3),
 		_add_block_action(&"crumb", "掉落碎屑", _block_crumb(), 5),
 	]
@@ -103,6 +104,15 @@ static func _add_block_action(id: StringName, name: String, block_definition: Fo
 	action.display_name = name
 	action.action_type = BattleTypes.EnemyActionType.ADD_BLOCK
 	action.payload = {"block_definition": block_definition}
+	action.time_delay = time_delay
+	return action
+
+static func _corrupt_action(id: StringName, name: String, amount: int, time_delay: int) -> EnemyActionData:
+	var action: EnemyActionData = EnemyActionData.new()
+	action.id = id
+	action.display_name = name
+	action.action_type = BattleTypes.EnemyActionType.CORRUPT_BLOCK
+	action.amount = amount
 	action.time_delay = time_delay
 	return action
 
