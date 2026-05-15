@@ -7,7 +7,7 @@ signal transition_finished
 const ANIMATION_DIR := "res://sprites/transitionAnimation"
 const ANIMATION_NAME := &"transition"
 
-@export var animation_fps: float = 20.0
+@export var animation_fps: float = 30.0
 
 @onready var overlay_root: Control = $OverlayRoot
 @onready var animated_sprite: AnimatedSprite2D = $OverlayRoot/AnimatedSprite2D

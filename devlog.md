@@ -47,6 +47,11 @@
 
 ## 2026-05-15
 
+### 转场动画播放帧率提升到 30 FPS
+- 做了什么：将 `SceneTransitionOverlay` 的默认 `animation_fps` 从 `20.0` 提高到 `30.0`，让探索换房、探索进战斗和战斗回探索时的转场动画播放更快、更顺滑。切场时机仍然保持“播放到动画中点再切场”的规则不变，只是整体节奏会比之前更紧凑。
+- 影响文件：`scripts/ui/scene_transition_overlay.gd`、`devlog.md`
+- 如何验证：运行游戏并触发任意一次转场，确认动画明显比之前更快；同时切场仍应发生在动画中段，而不是提前或拖到结尾。
+
 ### 探索与战斗之间接入顶层转场动画
 - 做了什么：新增独立的 `SceneTransitionOverlay` 顶层转场层，从 `sprites/transitionAnimation/` 目录按文件名顺序加载整套 `1280x720` 帧图，使用 `AnimatedSprite2D` 全屏覆盖显示。`RunController` 里的“探索进战斗”“战斗回探索”不再直接切场，而是统一改成先播放转场、在动画播到中间帧时再执行真实切场、播完后再解除输入锁。转场期间会把当前活动场景的 `process_mode` 置为 `DISABLED`，从而阻止玩家在动画覆盖期间继续移动、出牌或点击 UI；转场层本身也放在 `Main` 顶层最上方，确保能盖住探索、战斗以及所有 HUD/覆盖层。
 - 影响文件：`scripts/ui/scene_transition_overlay.gd`、`scenes/ui/scene_transition_overlay.tscn`、`scenes/main/main.gd`、`scripts/run/run_controller.gd`、`devlog.md`
@@ -66,6 +71,11 @@
 - 做了什么：由于面包怪物原始素材已替换，先按要求删除了旧的 `sprites/怪物_256x144/面包` 采样结果，再用现有最近邻下采样脚本从新的 `sprites/怪物/面包` 原图重新生成整套输出。面包新原图当前仍是 `1280x720`，因此继续按既有规则采样为 `256x144`，并保持 `MonsterCatalog` 里原有的 `res://sprites/怪物_256x144/面包` 路径不变，这样探索房间和战斗里会自动吃到新素材。
 - 影响文件：`sprites/怪物_256x144/面包/*`、`devlog.md`
 - 如何验证：检查 `sprites/怪物_256x144/面包/`，确认已重新生成 `50` 张 `256x144` 的 PNG；运行游戏进入 `bread_room` 或对应战斗，确认显示的面包怪物已经切换为新的动画素材。
+
+### 小镇地图新增前景补齐到对应房间
+- 做了什么：检测到 `sprites/map/小镇地图/` 下新增了 `前景3` 到 `前景7`，因此把当前使用小镇地图的 `cake_room` 和 `strawberry_room` 都从原先只挂 `前景1/2`，补成完整挂载 `前景1` 到 `前景7`。新前景继续按全屏平铺方式叠加，并沿用现有规则用递增 `z_index` 放在角色、怪物和 UI 前面。
+- 影响文件：`scenes/rooms/cake_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`devlog.md`
+- 如何验证：在编辑器中打开 `cake_room` 和 `strawberry_room`，确认节点树里现在有 `Foreground1` 到 `Foreground7`；运行探索进入这两个房间，确认小镇地图新增的几层前景都会一起显示。
 
 ### 部分怪物房接入小镇地图与喷泉地图的前后景
 - 做了什么：将 `cake_room`、`bread_room`、`strawberry_room`、`fish_boss_room` 四个怪物房从单层森林底图改为使用 `小镇地图` / `喷泉地图` 的背景与前景组合，并在每个房间场景里新增全屏 `Foreground` 贴图节点。当前做法是让 `Backdrop` 使用 `z_index = -10` 作为角色和怪物之后的背景层，`Foreground` 使用 `z_index = 10` 作为角色和怪物之前的遮挡层，图片按 `1280x720` 直接全屏铺开，后续可再继续调整每个房间具体用哪套图。
