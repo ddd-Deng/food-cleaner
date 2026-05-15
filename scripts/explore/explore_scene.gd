@@ -213,6 +213,7 @@ func _sync_interactable_runtime_state(interactable: ExploreInteractable, room: R
 			var opened: bool = room != null and bool(room.payload.get("opened", false))
 			interactable.display_name = "已开宝箱" if opened else "补给宝箱"
 			interactable.prompt_text = "开启宝箱"
+	interactable.refresh_runtime_visual()
 
 func _clear_room_scene() -> void:
 	if _active_room_scene != null:

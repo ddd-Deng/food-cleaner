@@ -15,14 +15,14 @@ static func build_demo_rooms() -> Dictionary:
 	rooms[&"marshmallow_room"] = _build_monster_room(
 		&"marshmallow_room",
 		&"marshmallow",
-		[&"start", &"strawberry_room"],
+		[&"start", &"cake_room"],
 		8
 	)
 
 	rooms[&"candy_bean_room"] = _build_monster_room(
 		&"candy_bean_room",
 		&"candy_bean",
-		[&"start", &"strawberry_room"],
+		[&"start", &"bread_room"],
 		10
 	)
 
@@ -38,10 +38,24 @@ static func build_demo_rooms() -> Dictionary:
 	}
 	rooms[chest_room.id] = chest_room
 
+	rooms[&"cake_room"] = _build_monster_room(
+		&"cake_room",
+		&"cake",
+		[&"marshmallow_room", &"strawberry_room"],
+		11
+	)
+
+	rooms[&"bread_room"] = _build_monster_room(
+		&"bread_room",
+		&"bread",
+		[&"candy_bean_room", &"strawberry_room"],
+		11
+	)
+
 	rooms[&"strawberry_room"] = _build_monster_room(
 		&"strawberry_room",
 		&"strawberry",
-		[&"marshmallow_room", &"candy_bean_room", &"fish_boss_room"],
+		[&"cake_room", &"bread_room", &"fish_boss_room"],
 		12
 	)
 

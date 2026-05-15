@@ -47,22 +47,22 @@ payload = {
 
 [node name="ExitToMarshmallow" parent="." instance=ExtResource("3")]
 position = Vector2(180, 432)
-interactable_id = &"exit_marshmallow"
+interactable_id = &"exit_cake"
 display_name = "出口 -> 怪物房"
 prompt_text = "前往 怪物房"
 interactable_kind = &"exit"
 payload = {
-"target_room_id": &"marshmallow_room"
+"target_room_id": &"cake_room"
 }
 
 [node name="ExitToCandyBean" parent="." instance=ExtResource("3")]
 position = Vector2(480, 432)
-interactable_id = &"exit_candy_bean"
+interactable_id = &"exit_bread"
 display_name = "出口 -> 怪物房"
 prompt_text = "前往 怪物房"
 interactable_kind = &"exit"
 payload = {
-"target_room_id": &"candy_bean_room"
+"target_room_id": &"bread_room"
 }
 
 [node name="ExitToBoss" parent="." instance=ExtResource("3")]
@@ -74,3 +74,8 @@ interactable_kind = &"exit"
 payload = {
 "target_room_id": &"fish_boss_room"
 }
+
+[editable path="MonsterEncounter"]
+[editable path="ExitToMarshmallow"]
+[editable path="ExitToCandyBean"]
+[editable path="ExitToBoss"]

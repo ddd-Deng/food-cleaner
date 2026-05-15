@@ -15,7 +15,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
-fallback_room_tint = Color(0.98, 0.89, 0.84, 1)
+fallback_room_tint = Color(0.98, 0.88, 0.82, 1)
 
 [node name="Backdrop" type="TextureRect" parent="."]
 layout_mode = 1
@@ -30,23 +30,29 @@ stretch_mode = 6
 
 [node name="PlayerSpawn" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(48, 48)
-offset_left = 456.0
-offset_top = 356.0
-offset_right = 504.0
-offset_bottom = 404.0
+layout_mode = 0
+offset_left = 594.0
+offset_top = 544.0
+offset_right = 642.0
+offset_bottom = 592.0
+mouse_filter = 2
+color = Color(0.41, 0.84, 0.56, 0.55)
 script = ExtResource("2")
 anchor_kind = &"player_spawn"
 
-[node name="MonsterEncounter" parent="." instance=ExtResource("4")]
-position = Vector2(480, 210)
+[node name="MonsterEncounter" parent="." unique_id=97673464 instance=ExtResource("4")]
+position = Vector2(618, 312)
 monster_id = &"marshmallow"
 interactable_id = &"enemy"
+display_name = "污染怪物"
+prompt_text = "发起战斗"
+interactable_kind = &"encounter"
 payload = {
 "room_id": &"marshmallow_room"
 }
 
-[node name="ExitToStart" parent="." instance=ExtResource("3")]
-position = Vector2(188, 432)
+[node name="ExitToStart" parent="." unique_id=127994574 instance=ExtResource("3")]
+position = Vector2(134, 346)
 interactable_id = &"exit_start"
 display_name = "出口 -> 起点"
 prompt_text = "前往 入口前厅"
@@ -55,12 +61,16 @@ payload = {
 "target_room_id": &"start"
 }
 
-[node name="ExitToStrawberry" parent="." instance=ExtResource("3")]
-position = Vector2(772, 432)
-interactable_id = &"exit_strawberry"
+[node name="ExitToStrawberry" parent="." unique_id=1722632289 instance=ExtResource("3")]
+position = Vector2(1163, 372)
+interactable_id = &"exit_cake"
 display_name = "出口 -> 怪物房"
 prompt_text = "前往 怪物房"
 interactable_kind = &"exit"
 payload = {
-"target_room_id": &"strawberry_room"
+"target_room_id": &"cake_room"
 }
+
+[editable path="MonsterEncounter"]
+[editable path="ExitToStart"]
+[editable path="ExitToStrawberry"]

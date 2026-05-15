@@ -2,10 +2,7 @@
 extends ColorRect
 class_name RoomAnchor
 
-@export var anchor_kind: StringName = &"feature":
-	set(value):
-		anchor_kind = value
-		_apply_editor_visual()
+@export var anchor_kind: StringName = &"feature"
 @export var anchor_order: int = 0
 
 func _ready() -> void:
@@ -30,4 +27,3 @@ func _apply_editor_visual() -> void:
 			color = Color(0.41, 0.84, 0.56, 0.55)
 		_:
 			color = Color(0.82, 0.82, 0.82, 0.45)
-

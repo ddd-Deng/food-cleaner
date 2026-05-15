@@ -1,11 +1,23 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://b6vcatl02lcp8"]
 
-[ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/explore/room_anchor.gd" id="2"]
+[ext_resource type="Script" uid="uid://c8cc8jx0ebp32" path="res://scripts/explore/room_scene.gd" id="1"]
+[ext_resource type="Script" uid="uid://bgvn7fnrkcagx" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
-[ext_resource type="Texture2D" path="res://sprites/map/森林地图/背景.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://bdc001as4kr4" path="res://sprites/map/森林地图/背景.png" id="4"]
 
-[node name="StartRoom" type="Control"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_86g8l"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6afpx"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c2s5r"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r74nl"]
+size = Vector2(220, 64)
+
+[node name="StartRoom" type="Control" unique_id=1928279502]
 custom_minimum_size = Vector2(960, 540)
 layout_mode = 3
 anchors_preset = 15
@@ -16,7 +28,7 @@ grow_vertical = 2
 script = ExtResource("1")
 fallback_room_tint = Color(0.88, 0.94, 0.88, 1)
 
-[node name="Backdrop" type="TextureRect" parent="."]
+[node name="Backdrop" type="TextureRect" parent="." unique_id=149815197]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,27 +39,44 @@ texture = ExtResource("4")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="PlayerSpawn" type="ColorRect" parent="."]
+[node name="PlayerSpawn" type="ColorRect" parent="." unique_id=1467688366]
 custom_minimum_size = Vector2(48, 48)
-offset_left = 456.0
-offset_top = 316.0
-offset_right = 504.0
-offset_bottom = 364.0
+layout_mode = 0
+offset_left = 628.0
+offset_top = 332.0
+offset_right = 676.0
+offset_bottom = 380.0
+mouse_filter = 2
+color = Color(0.41, 0.84, 0.56, 0.55)
 script = ExtResource("2")
 anchor_kind = &"player_spawn"
 
-[node name="GuideInteractable" parent="." instance=ExtResource("3")]
-position = Vector2(480, 182)
+[node name="GuideInteractable" parent="." unique_id=997475294 instance=ExtResource("3")]
+position = Vector2(596, 113)
 interactable_id = &"guide"
 display_name = "清扫路线图"
 prompt_text = "查看提示"
 interactable_kind = &"message"
 payload = {
-"message": "先清理怪物房，再尝试进入 Boss 房。宝箱房当前提供基础金币奖励。"
+"message": "按方向键或 WASD 移动，靠近交互物后按 E 互动。先从怪物房开始，清理完房间后再继续前进。"
 }
 
-[node name="ExitToMonsterA" parent="." instance=ExtResource("3")]
-position = Vector2(140, 260)
+[node name="CollisionShape2D" parent="GuideInteractable/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_86g8l")
+
+[node name="Label" parent="GuideInteractable" index="1"]
+offset_left = -110.0
+offset_top = -32.0
+offset_right = 110.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "清扫路线图"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="ExitToMonsterA" parent="." unique_id=1150833793 instance=ExtResource("3")]
+position = Vector2(126, 366)
 interactable_id = &"exit_monster_room_a"
 display_name = "出口 -> 怪物房"
 prompt_text = "前往 怪物房"
@@ -56,8 +85,22 @@ payload = {
 "target_room_id": &"marshmallow_room"
 }
 
-[node name="ExitToChest" parent="." instance=ExtResource("3")]
-position = Vector2(820, 260)
+[node name="CollisionShape2D" parent="ExitToMonsterA/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_6afpx")
+
+[node name="Label" parent="ExitToMonsterA" index="1"]
+offset_left = -110.0
+offset_top = -32.0
+offset_right = 110.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "出口 -> 怪物房"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="ExitToChest" parent="." unique_id=1986580814 instance=ExtResource("3")]
+position = Vector2(1134, 382)
 interactable_id = &"exit_chest_room"
 display_name = "出口 -> 宝箱房"
 prompt_text = "前往 补给角落"
@@ -66,8 +109,22 @@ payload = {
 "target_room_id": &"chest_room"
 }
 
-[node name="ExitToMonsterB" parent="." instance=ExtResource("3")]
-position = Vector2(480, 260)
+[node name="CollisionShape2D" parent="ExitToChest/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_c2s5r")
+
+[node name="Label" parent="ExitToChest" index="1"]
+offset_left = -110.0
+offset_top = -32.0
+offset_right = 110.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "出口 -> 宝箱房"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="ExitToMonsterB" parent="." unique_id=408718996 instance=ExtResource("3")]
+position = Vector2(567, 588)
 interactable_id = &"exit_monster_room_b"
 display_name = "出口 -> 怪物房"
 prompt_text = "前往 怪物房"
@@ -75,3 +132,22 @@ interactable_kind = &"exit"
 payload = {
 "target_room_id": &"candy_bean_room"
 }
+
+[node name="CollisionShape2D" parent="ExitToMonsterB/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_r74nl")
+
+[node name="Label" parent="ExitToMonsterB" index="1"]
+offset_left = -110.0
+offset_top = -32.0
+offset_right = 110.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "出口 -> 怪物房"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[editable path="GuideInteractable"]
+[editable path="ExitToMonsterA"]
+[editable path="ExitToChest"]
+[editable path="ExitToMonsterB"]

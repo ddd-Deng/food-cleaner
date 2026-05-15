@@ -47,6 +47,41 @@
 - 影响文件：`scripts/ui/deck_view_overlay.gd`、`devlog.md`
 - 如何验证：已运行 `D:\Godot\Godot_v4.6.2-stable_win64.exe --headless --path . --scene res://scenes/ui/deck_view_overlay.tscn --quit` 与 `D:\Godot\Godot_v4.6.2-stable_win64.exe --headless --path . --quit`，确认项目和该界面场景都能正常加载；进入战斗后打开“查看卡组”，确认整体外框、内部内容框、分类按钮选中态和右上角返回按钮都切换为新的手绘素材，并检查切换“整个卡组 / 抽牌堆 / 弃牌堆”以及按 `Esc` / 点击返回关闭仍然正常。
 
+### 蛋糕怪物改为按五倍缩小采样
+- 做了什么：发现蛋糕原始帧尺寸不是和其他怪物一致的 `1280x720`，而是更大的 `2276x1280`，因此不再强行采样成 `256x144`；为现有下采样脚本补充了 `--scale-divisor` 选项后，只重生成了 `sprites/怪物_256x144/蛋糕` 目录，使蛋糕帧按五倍缩小输出为 `455x256`，保留其原始纵横比与构图。面包和其他既有怪物未改动，仍保持原先的采样结果。
+- 影响文件：`tools/resize_player_sprites.py`、`sprites/怪物_256x144/蛋糕/*`、`devlog.md`
+- 如何验证：检查 `sprites/怪物_256x144/蛋糕/*.png`，确认输出分辨率已变为 `455x256` 而不是 `256x144`；重新进入蛋糕怪物房与蛋糕战斗，确认动画仍可正常播放，且画面构图比之前更符合原素材比例。
+
+### 新增蛋糕与面包怪物，补齐探索房间与战斗接入
+- 做了什么：使用现有下采样脚本将 `sprites/怪物/蛋糕` 和 `sprites/怪物/面包` 的原始帧统一采样到 `sprites/怪物_256x144/`；随后在 `MonsterCatalog` 中新增 `cake`、`bread` 两个怪物定义，补上各自的探索/战斗动画目录、房间场景和临时战斗逻辑；新增 `cake_room.tscn`、`bread_room.tscn` 两个怪物房，并把地图链路调整为“起点 -> 棉花糖/糖豆 -> 蛋糕/面包 -> 草莓 -> 鱼 Boss”，使新怪物与现有怪物一样支持探索中可视化摆放、靠近高亮、按 `E` 进入战斗。
+- 影响文件：`tools/resize_player_sprites.py`（复用未修改）、`sprites/怪物_256x144/蛋糕/*`、`sprites/怪物_256x144/面包/*`、`scripts/content/monster_catalog.gd`、`scripts/map/map_generator.gd`、`scenes/rooms/cake_room.tscn`、`scenes/rooms/bread_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`devlog.md`
+- 如何验证：运行游戏后从起点进入棉花糖房与糖豆房，确认出口分别会通向新增的蛋糕房与面包房；进入 `cake_room`、`bread_room` 时确认能看到对应怪物动画、靠近后出现高亮描边、按 `E` 能进入战斗；打完后继续前往草莓房和 Boss 房，确认整条房间链路都能正常走通。
+
+### 优化怪物房加载与进战斗卡顿
+- 做了什么：清理了 `marshmallow/candy_bean/fish_boss` 三个怪物房 `.tscn` 中被意外内嵌进去的大量 `Image/ImageTexture/SpriteFrames` 数据，让房间重新只保留对 `monster_encounter.tscn` 的外部引用；同时把怪物探索动画和战斗动画的加载改成统一走 `MonsterCatalog` 的 `SpriteFrames` 缓存，并直接 `load()` 导入后的贴图资源，不再在进入房间或进入战斗时同步逐帧 `Image.load_from_file()` 解码 PNG。这样可以同时减少“切入怪物房”和“按 E 进战斗”两段主线程卡顿。
+- 影响文件：`scripts/content/monster_catalog.gd`、`scripts/explore/monster_encounter.gd`、`scripts/ui/battle_enemy_sprite.gd`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：运行游戏后从起点进入棉花糖/糖豆/Boss 房，确认切房时不再出现此前那种明显的数秒停顿；靠近怪物按 `E` 进入战斗，确认战斗场景仍能显示对应怪物动画，且进入速度明显快于之前；重新打开上述三个房间 `.tscn`，确认文件体积恢复正常，不再因为展开可编辑子场景而保存出几十 MB 的文本场景。
+
+### 修复手动调整交互物后名称丢失且无法交互的问题
+- 做了什么：将 `ExploreInteractable`、`MonsterEncounter`、`RoomAnchor` 的导出属性读取方式改回与 Godot 场景序列化一致，不再依赖未同步的 backing field；同时把 `payload` 改为可导出字段，并兼容已保存房间里仅修改了 `Label.text` 的旧数据。随后补回 `start/chest/棉花糖/糖豆/Boss` 房间中因可编辑子场景保存而丢失的 `payload`、`monster_id`、`anchor_kind` 等关键字段，恢复出口跳转、提示消息、宝箱和怪物交互。
+- 影响文件：`scripts/explore/explore_interactable.gd`、`scripts/explore/monster_encounter.gd`、`scripts/explore/room_anchor.gd`、`scripts/explore/explore_scene.gd`、`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：打开任一房间场景，确认交互物导出面板中能直接看到 `display_name / interactable_kind / payload`；运行游戏后确认入口提示显示“清扫路线图”而不是“交互物”，靠近出口/宝箱/怪物按 `E` 能正常触发，切房后不会再出现所有交互都失效的情况。
+
+### 出口等基础交互范围改为编辑器内可见
+- 做了什么：将 `ExploreInteractable` 改为 `@tool`，并把 `Area2D`、`CollisionShape2D`、`Label` 直接放进 `scenes/explore/explore_interactable.tscn`，不再只在运行时动态创建；随后又把各房间里实例化的出口、宝箱和怪物节点标记为 `editable` 子节点，解决“子场景内部已有碰撞范围，但在父房间 `.tscn` 中默认仍看不到/不能直接编辑”的问题。
+- 影响文件：`scripts/explore/explore_interactable.gd`、`scenes/explore/explore_interactable.tscn`、`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：在编辑器中打开任一房间场景，确认出口/宝箱/怪物实例可以展开看到内部 `Area2D` 和 `CollisionShape2D`，并能在父场景里直接选中和调整交互范围；运行游戏后交互逻辑仍保持正常。
+
+### 修正怪物运行时不显示的问题
+- 做了什么：把 `MonsterEncounter` 在运行时加载怪物定义的读取来源从导出属性 `monster_id` 改为 setter 写入的 backing field `_monster_id`，避免场景实例化后实际取到空值导致不加载怪物动画；顺便保持编辑器预览和运行时使用同一份怪物定义路径。
+- 影响文件：`scripts/explore/monster_encounter.gd`、`devlog.md`
+- 如何验证：进入任一怪物房，确认运行时怪物动画正常出现；编辑器里打开对应 `.tscn` 也仍能看到怪物预览。
+
+### 怪物交互节点改为场景内可视化编辑
+- 做了什么：将 `MonsterEncounter` 从运行时动态创建 `AnimatedSprite2D / Area2D / CollisionShape2D` 的形式，改为直接把这些节点放进 `scenes/explore/monster_encounter.tscn`；同时给脚本加上 `@tool` 和编辑器预览刷新逻辑，使怪物房 `.tscn` 在 Godot 编辑器中打开时就能直接看到怪物动画、选中交互范围并手动调整位置。`ExploreInteractable` 也同步兼容“优先复用场景里现成子节点，缺失时再运行时补建”的模式。
+- 影响文件：`scripts/explore/explore_interactable.gd`、`scripts/explore/monster_encounter.gd`、`scenes/explore/monster_encounter.tscn`、`devlog.md`
+- 如何验证：在编辑器中直接打开任一怪物房场景，确认场景树下的怪物节点包含 `AnimatedSprite2D`、`Area2D`、`CollisionShape2D`；视口中应能直接看到怪物预览，并能选中/调整交互范围；运行探索后怪物高亮和按 `E` 进入战斗仍正常。
+
 ### 探索界面外层 HUD 精简为仅保留右上角 HP/金币
 - 做了什么：移除探索主界面外层的上方标题区、底部提示/状态区和包裹房间的外围面板，只保留全屏房间画面、游戏结束覆盖层以及右上角 `HP/金币` 文本；同时删除 `start`、`chest` 及四个怪物房场景中的 `Title` 标签，避免房间中央和左上角再出现文字标题。`explore_scene.gd` 同步改为不再依赖这些已删除节点。
 - 影响文件：`scripts/explore/explore_scene.gd`、`scenes/explore/explore_scene.tscn`、`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
@@ -200,7 +235,6 @@
 - 做了什么：将探索层原本由 `ExploreScene` 直接按房间类型生成背景色和固定坐标交互物的做法，改为“运行时房间数据 + 独立房间 `.tscn` 模板”结构；为 `RoomRuntimeData` 增加 `scene_path`，新增 `ExploreRoomScene` 与 `RoomAnchor` 脚本，用于在房间模板里可视化标记功能物、出口和玩家出生点；把当前已有的 `start`、`monster_room`、`chest_room`、`boss_room` 四个房间分别拆到 `scenes/rooms/` 下独立场景中，并让 `ExploreScene` 运行时按模板加载房间，再根据模板锚点放置交互物和出口。
 - 影响文件：`scripts/map/room_runtime_data.gd`、`scripts/map/map_generator.gd`、`scripts/explore/explore_scene.gd`、`scripts/explore/room_scene.gd`、`scripts/explore/room_anchor.gd`、`scenes/rooms/start_room.tscn`、`scenes/rooms/monster_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/boss_room.tscn`、`devlog.md`
 - 如何验证：当前环境未安装 Godot，无法执行 headless 场景加载。请在编辑器中分别打开 `res://scenes/rooms/start_room.tscn`、`monster_room.tscn`、`chest_room.tscn`、`boss_room.tscn`，确认能直接可视化编辑房间内容，并能看到 `feature/exit/player_spawn` 锚点；再运行项目，确认进入不同房间时会加载对应模板，玩家出生点、房间中央功能物和出口位置以各房间 scene 中的锚点为准，怪物房/Boss 房仍会阻止未清理前离开，宝箱房仍能正常给金币并返回探索。
->>>>>>> a8d086c83cd5fad08cb5929690baf8c546b881c5
 
 ## 2026-05-12
 

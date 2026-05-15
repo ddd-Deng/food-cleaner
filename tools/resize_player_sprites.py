@@ -190,10 +190,10 @@ def write_png_rgba(path: Path, width: int, height: int, rgba: bytes) -> None:
     path.write_bytes(bytes(png))
 
 
-def resize_png(source: Path, target: Path) -> None:
+def resize_png(source: Path, target: Path, target_width: int, target_height: int) -> None:
     width, height, rgba = decode_png_rgba(source)
-    resized_rgba = resize_rgba_nearest(width, height, rgba, TARGET_WIDTH, TARGET_HEIGHT)
-    write_png_rgba(target, TARGET_WIDTH, TARGET_HEIGHT, resized_rgba)
+    resized_rgba = resize_rgba_nearest(width, height, rgba, target_width, target_height)
+    write_png_rgba(target, target_width, target_height, resized_rgba)
 
 
 def main() -> int:
@@ -217,6 +217,12 @@ def main() -> int:
         action="store_true",
         help="Remove the output root before resizing.",
     )
+    parser.add_argument(
+        "--scale-divisor",
+        type=int,
+        default=0,
+        help="If greater than 0, ignore the default target size and resize by dividing source width/height by this value.",
+    )
     args = parser.parse_args()
 
     source_root: Path = args.source_root
@@ -235,7 +241,13 @@ def main() -> int:
     for source_path in png_files:
         relative_path = source_path.relative_to(source_root)
         target_path = output_root / relative_path
-        resize_png(source_path, target_path)
+        target_width = TARGET_WIDTH
+        target_height = TARGET_HEIGHT
+        if args.scale_divisor > 0:
+            source_width, source_height, _ = decode_png_rgba(source_path)
+            target_width = max(1, source_width // args.scale_divisor)
+            target_height = max(1, source_height // args.scale_divisor)
+        resize_png(source_path, target_path, target_width, target_height)
 
     print(f"resized {len(png_files)} png files into {output_root} with nearest-neighbor sampling")
     return 0

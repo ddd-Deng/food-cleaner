@@ -1,31 +1,27 @@
+@tool
 extends Node2D
 class_name ExploreInteractable
 
 @export var interactable_id: StringName = &""
-@export var display_name: String = "交互物":
-	set(value):
-		display_name = value
-		_refresh_visual()
+@export var display_name: String = "交互物"
 @export var prompt_text: String = "交互"
 @export var interactable_kind: StringName = &"generic"
-@export var area_size: Vector2 = Vector2(220, 64):
-	set(value):
-		area_size = value
-		_refresh_shape()
-var payload: Dictionary = {}
+@export var area_size: Vector2 = Vector2(220, 64)
+@export var payload: Dictionary = {}
 var _base_fill: Color = Color(0.29, 0.31, 0.35, 0.95)
 var _base_outline: Color = Color(0.86, 0.90, 0.95, 1.0)
 var _highlight_fill: Color = Color(0.91, 0.78, 0.43, 0.98)
 var _highlight_outline: Color = Color(1.0, 0.98, 0.90, 1.0)
 var _is_highlighted: bool = false
 
-@onready var area: Area2D = Area2D.new()
-@onready var collision_shape: CollisionShape2D = CollisionShape2D.new()
-@onready var label: Label = Label.new()
+@onready var area: Area2D = get_node_or_null("Area2D")
+@onready var collision_shape: CollisionShape2D = get_node_or_null("Area2D/CollisionShape2D")
+@onready var label: Label = get_node_or_null("Label")
 
 func _ready() -> void:
 	_configure_area()
 	_configure_label()
+	_hydrate_from_scene_overrides()
 	_refresh_shape()
 	_refresh_visual()
 
@@ -36,7 +32,14 @@ func configure(new_id: StringName, new_name: String, new_prompt_text: String, ne
 	interactable_kind = new_kind
 	payload = new_payload
 	if is_node_ready():
+		_refresh_shape()
 		_refresh_visual()
+
+func refresh_runtime_visual() -> void:
+	if not is_node_ready():
+		return
+	_refresh_shape()
+	_refresh_visual()
 
 func set_highlighted(highlighted: bool) -> void:
 	_is_highlighted = highlighted
@@ -46,12 +49,25 @@ func get_center_point() -> Vector2:
 	return global_position
 
 func _configure_area() -> void:
-	add_child(area)
-	area.add_child(collision_shape)
+	if area == null:
+		area = Area2D.new()
+		area.name = "Area2D"
+	if area.get_parent() == null:
+		add_child(area)
+	if collision_shape == null:
+		collision_shape = CollisionShape2D.new()
+		collision_shape.name = "CollisionShape2D"
+	if collision_shape.get_parent() == null:
+		area.add_child(collision_shape)
 	area.monitoring = true
 	area.monitorable = true
 
 func _configure_label() -> void:
+	if label == null:
+		label = Label.new()
+		label.name = "Label"
+	if label.get_parent() == null:
+		add_child(label)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -61,7 +77,12 @@ func _configure_label() -> void:
 	label.add_theme_font_size_override("font_size", 16)
 	label.position = -area_size * 0.5
 	label.size = area_size
-	add_child(label)
+
+func _hydrate_from_scene_overrides() -> void:
+	if collision_shape != null and collision_shape.shape is RectangleShape2D:
+		area_size = (collision_shape.shape as RectangleShape2D).size
+	if label != null and not label.text.is_empty() and display_name == "交互物":
+		display_name = label.text
 
 func _refresh_shape() -> void:
 	if collision_shape == null:

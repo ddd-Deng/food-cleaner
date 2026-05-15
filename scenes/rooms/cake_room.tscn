@@ -1,0 +1,73 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/explore/room_anchor.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/explore/monster_encounter.tscn" id="4"]
+[ext_resource type="Texture2D" path="res://sprites/map/森林地图/背景.png" id="5"]
+
+[node name="CakeRoom" type="Control"]
+custom_minimum_size = Vector2(960, 540)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+fallback_room_tint = Color(0.97, 0.86, 0.79, 1)
+
+[node name="Backdrop" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PlayerSpawn" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 0
+offset_left = 243.0
+offset_top = 356.0
+offset_right = 291.0
+offset_bottom = 404.0
+mouse_filter = 2
+color = Color(0.41, 0.84, 0.56, 0.55)
+script = ExtResource("2")
+anchor_kind = &"player_spawn"
+
+[node name="MonsterEncounter" parent="." instance=ExtResource("4")]
+position = Vector2(603, 243)
+monster_id = &"cake"
+interactable_id = &"enemy"
+payload = {
+"room_id": &"cake_room"
+}
+
+[node name="ExitToMarshmallow" parent="." instance=ExtResource("3")]
+position = Vector2(170, 432)
+interactable_id = &"exit_marshmallow"
+display_name = "出口 -> 怪物房"
+prompt_text = "前往 怪物房"
+interactable_kind = &"exit"
+payload = {
+"target_room_id": &"marshmallow_room"
+}
+
+[node name="ExitToStrawberry" parent="." instance=ExtResource("3")]
+position = Vector2(1096, 393)
+interactable_id = &"exit_strawberry"
+display_name = "出口 -> 怪物房"
+prompt_text = "前往 怪物房"
+interactable_kind = &"exit"
+payload = {
+"target_room_id": &"strawberry_room"
+}
+
+[editable path="MonsterEncounter"]
+[editable path="ExitToMarshmallow"]
+[editable path="ExitToStrawberry"]

@@ -2,13 +2,57 @@ extends RefCounted
 class_name MonsterCatalog
 
 const MONSTER_ANIMATION_ROOT := "res://sprites/怪物_256x144"
+static var _definitions_cache: Dictionary = {}
+static var _animation_frames_cache: Dictionary = {}
 
 static func get_monster_definition(monster_id: StringName) -> MonsterDefinition:
-	var definitions := _build_definitions()
-	return definitions.get(monster_id, null)
+	return _definitions().get(monster_id, null)
 
 static func get_all_monster_definitions() -> Array[MonsterDefinition]:
-	return _build_definitions().values()
+	return _definitions().values()
+
+static func get_animation_frames(directory_path: String, animation_fps: float = 10.0) -> SpriteFrames:
+	var cache_key := "%s|%.3f" % [directory_path, animation_fps]
+	var cached_frames: Variant = _animation_frames_cache.get(cache_key, null)
+	if cached_frames is SpriteFrames:
+		return cached_frames as SpriteFrames
+
+	var sprite_frames := SpriteFrames.new()
+	sprite_frames.add_animation("idle")
+	sprite_frames.set_animation_loop("idle", true)
+	sprite_frames.set_animation_speed("idle", animation_fps)
+
+	var directory := DirAccess.open(directory_path)
+	if directory == null:
+		_animation_frames_cache[cache_key] = sprite_frames
+		return sprite_frames
+
+	var file_names: PackedStringArray = []
+	directory.list_dir_begin()
+	while true:
+		var file_name := directory.get_next()
+		if file_name.is_empty():
+			break
+		if directory.current_is_dir():
+			continue
+		if not file_name.to_lower().ends_with(".png"):
+			continue
+		file_names.append(file_name)
+	directory.list_dir_end()
+	file_names.sort()
+
+	for file_name in file_names:
+		var texture := load("%s/%s" % [directory_path, file_name]) as Texture2D
+		if texture != null:
+			sprite_frames.add_frame("idle", texture)
+
+	_animation_frames_cache[cache_key] = sprite_frames
+	return sprite_frames
+
+static func _definitions() -> Dictionary:
+	if _definitions_cache.is_empty():
+		_definitions_cache = _build_definitions()
+	return _definitions_cache
 
 static func _build_definitions() -> Dictionary:
 	var definitions: Dictionary = {}
@@ -36,6 +80,22 @@ static func _build_definitions() -> Dictionary:
 		"res://scenes/rooms/strawberry_room.tscn",
 		MONSTER_ANIMATION_ROOT + "/草莓",
 		_build_strawberry_enemy()
+	)
+	definitions[&"cake"] = _build_monster(
+		&"cake",
+		"污染怪物",
+		"怪物房",
+		"res://scenes/rooms/cake_room.tscn",
+		MONSTER_ANIMATION_ROOT + "/蛋糕",
+		_build_cake_enemy()
+	)
+	definitions[&"bread"] = _build_monster(
+		&"bread",
+		"污染怪物",
+		"怪物房",
+		"res://scenes/rooms/bread_room.tscn",
+		MONSTER_ANIMATION_ROOT + "/面包",
+		_build_bread_enemy()
 	)
 	definitions[&"fish_boss"] = _build_monster(
 		&"fish_boss",
@@ -150,6 +210,46 @@ static func _build_fish_enemy() -> EnemyData:
 		_add_block_action(&"spawn_roe", "抖落鱼卵", _block(&"roe_spawned", "掉落鱼卵", 1, 1, "新掉落的鱼卵。"), 2),
 		_charge_action(&"inhale", "鼓腮蓄力", 3, 2),
 		_attack_action(&"surge", "腥潮冲撞", 6, 1),
+	]
+	return enemy
+
+static func _build_cake_enemy() -> EnemyData:
+	var enemy := EnemyData.new()
+	enemy.id = &"cake"
+	enemy.display_name = "污染怪物"
+	enemy.food_blocks = [
+		_block(&"cream_layer", "奶油层", 1, 2, "黏腻得不好处理。"),
+		_block(&"cake_base", "蛋糕胚", 1, 2, "松软但分量足。"),
+		_block(&"jam_filling", "果酱夹心", 1, 3, "甜得发腻。", [_effect(BattleTypes.EffectKind.DEAL_PLAYER_DAMAGE, 1)]),
+	]
+	enemy.purification_steps = [
+		_step(&"trim", "刮掉奶油", BattleTypes.PurificationActionType.TRIM),
+		_step(&"wash", "冲净果酱", BattleTypes.PurificationActionType.WASH),
+	]
+	enemy.actions = [
+		_add_block_action(&"drop_cream", "奶油塌落", _block(&"cream_blob", "奶油团", 1, 1, "一小团滑腻奶油。"), 2),
+		_attack_action(&"plate_smash", "托盘砸击", 3, 2),
+		_charge_action(&"sugar_rise", "糖分鼓胀", 4, 2),
+	]
+	return enemy
+
+static func _build_bread_enemy() -> EnemyData:
+	var enemy := EnemyData.new()
+	enemy.id = &"bread"
+	enemy.display_name = "污染怪物"
+	enemy.food_blocks = [
+		_block(&"crust", "硬面包壳", 1, 3, "又硬又干。"),
+		_block(&"soft_crumb", "内芯团", 1, 2, "吸水后会膨胀。"),
+		_block(&"burnt_corner", "焦边", 1, 2, "带着苦味。"),
+	]
+	enemy.purification_steps = [
+		_step(&"trim", "切掉焦边", BattleTypes.PurificationActionType.TRIM),
+		_step(&"correct", "回温复原", BattleTypes.PurificationActionType.CORRECT),
+	]
+	enemy.actions = [
+		_attack_action(&"crumb_burst", "碎屑喷散", 2, 2),
+		_add_block_action(&"stale_shed", "掉落干壳", _block(&"stale_piece", "干硬碎块", 1, 2, "卡嗓子的碎块。"), 2),
+		_attack_action(&"roll_press", "翻滚压击", 4, 1),
 	]
 	return enemy
 
