@@ -3,8 +3,9 @@
 [ext_resource type="Script" uid="uid://bpol45bkl8i45" path="res://scripts/ui/battle_scene.gd" id="1"]
 [ext_resource type="Script" uid="uid://dpe8fkikxu52" path="res://scripts/runtime/battle_controller.gd" id="2"]
 [ext_resource type="Script" uid="uid://da2tkcwkvllr4" path="res://scripts/ui/battle_actor_view.gd" id="3"]
-[ext_resource type="Script" path="res://scripts/ui/hand_view.gd" id="4"]
-[ext_resource type="Script" path="res://scripts/ui/battle_player_sprite.gd" id="4_player_sprite"]
+[ext_resource type="Script" uid="uid://dnsl22ty8ukef" path="res://scripts/ui/hand_view.gd" id="4"]
+[ext_resource type="Script" uid="uid://dywudx16a8swr" path="res://scripts/ui/battle_player_sprite.gd" id="4_player_sprite"]
+[ext_resource type="Script" path="res://scripts/ui/food_queue_view.gd" id="4_food_queue"]
 [ext_resource type="Texture2D" uid="uid://dm2gw7nh04wlh" path="res://sprites/按钮/设置.png" id="5_settings"]
 [ext_resource type="Texture2D" uid="uid://cdsisuov65cmv" path="res://sprites/按钮/查看卡组.png" id="6_deck"]
 [ext_resource type="Texture2D" uid="uid://dqdo54c7fucoy" path="res://sprites/抽牌堆.png" id="7_draw_pile"]
@@ -16,6 +17,11 @@
 [ext_resource type="Texture2D" uid="uid://c6i5jfak7uake" path="res://sprites/净化进度、.png" id="13_purification_progress"]
 [ext_resource type="Texture2D" uid="uid://5yvutjetcuo3" path="res://sprites/map/战斗场景/背景.png" id="14_battle_background"]
 [ext_resource type="Texture2D" uid="uid://056l2vj5of4v" path="res://sprites/map/战斗场景/光.png" id="15_battle_foreground"]
+[ext_resource type="Texture2D" uid="uid://dd1vsj07c48yc" path="res://sprites/食物槽.png" id="16_food_slot"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_food_slot"]
+atlas = ExtResource("16_food_slot")
+region = Rect2(1134, 145, 139, 351)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_avatar_frame"]
 atlas = ExtResource("11_avatar_frame")
@@ -33,15 +39,11 @@ region = Rect2(116, 28, 200, 31)
 atlas = ExtResource("12_gold_slot")
 region = Rect2(110, 63, 170, 54)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_purification_empty"]
-atlas = ExtResource("13_purification_progress")
-region = Rect2(779, 19, 49, 57)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_purification_done"]
-atlas = ExtResource("13_purification_progress")
-region = Rect2(970, 19, 59, 57)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_task_strip_panel"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
 bg_color = Color(0.13, 0.11, 0.07, 0.84)
 border_width_left = 2
 border_width_top = 2
@@ -54,12 +56,12 @@ corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
 shadow_color = Color(0, 0, 0, 0.2)
 shadow_size = 8
-content_margin_left = 14.0
-content_margin_top = 8.0
-content_margin_right = 14.0
-content_margin_bottom = 8.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_task_pending"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
 bg_color = Color(0.95, 0.88, 0.7, 0.92)
 border_width_left = 1
 border_width_top = 1
@@ -70,12 +72,16 @@ corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_purification_empty"]
+atlas = ExtResource("13_purification_progress")
+region = Rect2(779, 19, 49, 57)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_task_done"]
 content_margin_left = 12.0
 content_margin_top = 6.0
 content_margin_right = 10.0
 content_margin_bottom = 6.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_task_done"]
 bg_color = Color(0.79, 0.88, 0.72, 0.92)
 border_width_left = 1
 border_width_top = 1
@@ -86,10 +92,10 @@ corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
-content_margin_left = 12.0
-content_margin_top = 6.0
-content_margin_right = 10.0
-content_margin_bottom = 6.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_purification_done"]
+atlas = ExtResource("13_purification_progress")
+region = Rect2(970, 19, 59, 57)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_deck_button"]
 atlas = ExtResource("6_deck")
@@ -146,6 +152,60 @@ mouse_filter = 2
 texture = ExtResource("15_battle_foreground")
 expand_mode = 1
 stretch_mode = 6
+
+[node name="PlayerFoodSlot" type="TextureRect" parent="." unique_id=2136149213]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 22.0
+offset_top = 117.0
+offset_right = 161.0
+offset_bottom = 468.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_food_slot")
+stretch_mode = 5
+
+[node name="PlayerFoodQueue" type="Control" parent="." unique_id=1522440001]
+custom_minimum_size = Vector2(139, 351)
+layout_mode = 1
+anchors_preset = 0
+offset_left = 22.0
+offset_top = 117.0
+offset_right = 161.0
+offset_bottom = 468.0
+mouse_filter = 2
+script = ExtResource("4_food_queue")
+title_text = "玩家胃袋"
+accent_mode = &"player"
+
+[node name="EnemyFoodSlot" type="TextureRect" parent="." unique_id=2136149214]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -160.0
+offset_top = 117.0
+offset_right = -21.0
+offset_bottom = 468.0
+grow_horizontal = 0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_food_slot")
+stretch_mode = 5
+
+[node name="EnemyFoodQueue" type="Control" parent="." unique_id=1522440002]
+custom_minimum_size = Vector2(139, 351)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -160.0
+offset_top = 117.0
+offset_right = -21.0
+offset_bottom = 468.0
+grow_horizontal = 0
+mouse_filter = 2
+script = ExtResource("4_food_queue")
+title_text = "敌人掉落"
+accent_mode = &"enemy"
 
 [node name="Root" type="MarginContainer" parent="." unique_id=750512397]
 layout_mode = 1
@@ -354,20 +414,10 @@ size_flags_vertical = 3
 theme_override_constants/separation = 28
 
 [node name="LeftColumn" type="VBoxContainer" parent="Root/Layout/MainRow" unique_id=245272272]
-custom_minimum_size = Vector2(190, 0)
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 6
-
-[node name="PlayerStatus" type="Label" parent="Root/Layout/MainRow/LeftColumn" unique_id=848161232]
-custom_minimum_size = Vector2(0, 122)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-text = "玩家
-护盾 0
-胃 0/0"
-autowrap_mode = 2
 
 [node name="LeftSpacer" type="Control" parent="Root/Layout/MainRow/LeftColumn" unique_id=759846578]
 layout_mode = 2
@@ -379,72 +429,66 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.6
 theme_override_constants/separation = 8
 
-[node name="TimeLogPanel" type="PanelContainer" parent="Root/Layout/MainRow/CentreColumn" unique_id=70771226]
+[node name="TimeLogCenter" type="HBoxContainer" parent="Root/Layout/MainRow/CentreColumn" unique_id=70771227]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TimeLogInner" type="VBoxContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel" unique_id=180011127]
+[node name="TimeLogPanel" type="PanelContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter" unique_id=70771226]
+custom_minimum_size = Vector2(840, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+
+[node name="TimeLogInner" type="VBoxContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel" unique_id=180011127]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="TimelineValue" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner" unique_id=769047376]
+[node name="TimelineValue" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner" unique_id=769047376]
 layout_mode = 2
 text = "战斗时间：0t"
 
-[node name="EffectBanner" type="PanelContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner" unique_id=1188837986]
+[node name="EffectBanner" type="PanelContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner" unique_id=1188837986]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 
-[node name="EffectBannerInner" type="MarginContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/EffectBanner" unique_id=1555356340]
+[node name="EffectBannerInner" type="MarginContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner/EffectBanner" unique_id=1555356340]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 8
 
-[node name="EffectBannerLabel" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/EffectBanner/EffectBannerInner" unique_id=1938284100]
+[node name="EffectBannerLabel" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner/EffectBanner/EffectBannerInner" unique_id=1938284100]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 text = "拖拽手牌到出牌区后，这里会显示效果摘要。"
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="LogTitle" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner" unique_id=751006090]
+[node name="LogTitle" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner" unique_id=751006090]
 layout_mode = 2
 text = "日志"
 
-[node name="LogScroll" type="ScrollContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner" unique_id=602774726]
+[node name="EnemyIntentLabel" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner" unique_id=934510221]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_font_sizes/font_size = 13
+text = "敌人行动：等待"
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="LogScroll" type="ScrollContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner" unique_id=602774726]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="LogText" type="RichTextLabel" parent="Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/LogScroll" unique_id=1473608164]
+[node name="LogText" type="RichTextLabel" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner/LogScroll" unique_id=1473608164]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 autowrap_mode = 2
-
-[node name="RightColumn" type="VBoxContainer" parent="Root/Layout/MainRow" unique_id=47337126]
-custom_minimum_size = Vector2(190, 0)
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 6
-
-[node name="EnemyStatus" type="Label" parent="Root/Layout/MainRow/RightColumn" unique_id=920689639]
-custom_minimum_size = Vector2(0, 122)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-text = "敌人
-净化 0/0
-待机"
-horizontal_alignment = 2
-autowrap_mode = 2
-
-[node name="RightSpacer" type="Control" parent="Root/Layout/MainRow/RightColumn" unique_id=1500564966]
-layout_mode = 2
-size_flags_vertical = 3
 
 [node name="BottomRow" type="HBoxContainer" parent="Root/Layout" unique_id=2026744775]
 custom_minimum_size = Vector2(0, 286)

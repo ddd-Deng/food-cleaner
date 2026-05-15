@@ -13,12 +13,11 @@ signal battle_resolved(result: Dictionary)
 @onready var gold_value_label: Label = $Root/Layout/HeaderRow/PlayerHud/StatusColumn/GoldPanel/GoldValue
 @onready var task_strip_panel: Control = $Root/Layout/HeaderRow/TaskStripPanel
 @onready var purification_task_row: HBoxContainer = $Root/Layout/HeaderRow/TaskStripPanel/PurificationTaskRow
-@onready var player_status_label: Label = $Root/Layout/MainRow/LeftColumn/PlayerStatus
-@onready var timeline_value_label: Label = $Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/TimelineValue
-@onready var effect_banner_label: Label = $Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/EffectBanner/EffectBannerInner/EffectBannerLabel
-@onready var log_scroll: ScrollContainer = $Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/LogScroll
-@onready var log_text: RichTextLabel = $Root/Layout/MainRow/CentreColumn/TimeLogPanel/TimeLogInner/LogScroll/LogText
-@onready var enemy_status_label: Label = $Root/Layout/MainRow/RightColumn/EnemyStatus
+@onready var timeline_value_label: Label = $Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner/TimelineValue
+@onready var effect_banner_label: Label = $Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner/EffectBanner/EffectBannerInner/EffectBannerLabel
+@onready var enemy_intent_label: Label = $Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner/EnemyIntentLabel
+@onready var log_scroll: ScrollContainer = $Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner/LogScroll
+@onready var log_text: RichTextLabel = $Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner/LogScroll/LogText
 @onready var draw_pile_label: Label = $Root/Layout/BottomRow/DeckColumn/DeckPanel/DeckPanelInner/DrawValue
 @onready var discard_pile_label: Label = $Root/Layout/BottomRow/DiscardColumn/DiscardPanel/DiscardPanelInner/DiscardValue
 @onready var player_actor_view: BattleActorView = $Root/Layout/BottomRow/DeckColumn/ActorAnchor/PlayerActorView
@@ -26,6 +25,8 @@ signal battle_resolved(result: Dictionary)
 @onready var timeline_scroll: ScrollContainer = $Root/Layout/BottomRow/BottomCenter/TimelineCenter/TimelineScroll
 @onready var timeline_strip: Control = $Root/Layout/BottomRow/BottomCenter/TimelineCenter/TimelineScroll/TimelineStrip
 @onready var enemy_actor_view: BattleActorView = $Root/Layout/BottomRow/DiscardColumn/ActorAnchor/EnemyActorView
+@onready var player_food_queue: FoodQueueView = $PlayerFoodQueue
+@onready var enemy_food_queue: FoodQueueView = $EnemyFoodQueue
 @onready var settings_button: BaseButton = $Root/Layout/HeaderRow/RightButtons/SettingsButton
 @onready var deck_preview_button: BaseButton = $Root/Layout/HeaderRow/RightButtons/DeckPreviewButton
 @onready var draw_pile_button: BaseButton = $Root/Layout/BottomRow/DeckColumn/DeckPanel
@@ -143,13 +144,13 @@ func _on_state_changed(state: BattleState) -> void:
 		state.get_purification_total(),
 		state.enemy.blocks.size() if state.enemy != null else 0
 	)
-	player_status_label.text = _player_status_text(state)
-	enemy_status_label.text = _battle_status_text(state)
 	_refresh_purification_task_row(state)
 	gold_value_label.text = str(state.player_gold)
 	draw_pile_label.text = "抽牌堆：%d" % state.draw_pile.size()
 	discard_pile_label.text = "弃牌堆：%d" % state.discard_pile.size()
 	timeline_value_label.text = "战斗时间：%dt" % state.battle_time
+	enemy_intent_label.text = "敌人行动：%s" % _enemy_intent_text(state)
+	_refresh_food_queues(state)
 	_rebuild_hand(state)
 	_rebuild_timeline(state)
 	_refresh_effect_banner(state)
@@ -195,6 +196,36 @@ func _on_discard_pile_pressed() -> void:
 
 func _rebuild_hand(state: BattleState) -> void:
 	hand_view.rebuild_hand(state.hand, not state.is_finished())
+
+func _refresh_food_queues(state: BattleState) -> void:
+	var stomach_capacity := state.player_max_stomach_volume + state.player_extra_stomach_capacity
+	player_food_queue.set_queue(
+		"玩家胃袋",
+		_build_food_queue_items(state.stomach, true),
+		stomach_capacity
+	)
+	var enemy_count := state.enemy.blocks.size() if state.enemy != null else 0
+	enemy_food_queue.set_queue(
+		"敌人掉落",
+		_build_food_queue_items(state.enemy.blocks if state.enemy != null else [], false),
+		max(enemy_count, 3)
+	)
+
+func _build_food_queue_items(blocks: Array, include_digest_time: bool) -> Array[Dictionary]:
+	var items: Array[Dictionary] = []
+	for block_variant in blocks:
+		if block_variant is not FoodBlockInstance:
+			continue
+		var block := block_variant as FoodBlockInstance
+		var meta_parts: PackedStringArray = []
+		meta_parts.append("体积 %d" % max(1, block.volume))
+		if include_digest_time:
+			meta_parts.append("消化 %dt" % max(0, block.remaining_digest_time))
+		items.append({
+			"name": block.get_display_name(),
+			"meta": " | ".join(meta_parts),
+		})
+	return items
 
 func _refresh_player_hp_bar(current_hp: int, max_hp: int) -> void:
 	var safe_max_hp: int = max(1, max_hp)
@@ -440,27 +471,17 @@ func _build_purification_icon_texture(done: bool) -> AtlasTexture:
 	texture.region = PURIFICATION_DONE_REGION if done else PURIFICATION_EMPTY_REGION
 	return texture
 
-func _player_status_text(state: BattleState) -> String:
-	return "玩家\n护盾 %d\n胃 %d/%d" % [
-		state.player_block,
-		state.get_stomach_used(),
-		state.player_max_stomach_volume + state.player_extra_stomach_capacity
-	]
-
-func _battle_status_text(state: BattleState) -> String:
-	var enemy_block_count: int = state.enemy.blocks.size() if state.enemy != null else 0
-	return "%s\n净化 %d/%d\n食物块 %d\n意图 %s" % [
-		_enemy_name(state),
-		state.get_purification_completed(),
-		state.get_purification_total(),
-		enemy_block_count,
-		state.player_current_intent,
-	]
-
 func _enemy_name(state: BattleState) -> String:
 	if state.enemy == null or state.enemy.definition == null:
 		return "敌人"
 	return state.enemy.definition.display_name
+
+func _enemy_intent_text(state: BattleState) -> String:
+	if state == null or state.enemy == null:
+		return "暂无"
+	if state.player_current_intent.is_empty():
+		return "等待"
+	return state.player_current_intent
 
 func _outcome_text(outcome: BattleTypes.BattleOutcome) -> String:
 	match outcome:

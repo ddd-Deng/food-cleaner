@@ -8,7 +8,6 @@ var records: Array[CardEffectRecord] = []
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	tooltip_text = "查看卡牌生效"
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 
@@ -23,4 +22,3 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	preview_dismissed.emit()
-
