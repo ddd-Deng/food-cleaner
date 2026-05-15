@@ -12,6 +12,7 @@ static func create_demo_battle_definition() -> BattleDefinition:
 	battle.player_max_stomach_volume = 3
 	battle.starting_items = [_starter_item()]
 	battle.starting_deck = CardCatalog.build_card_entries()
+	battle.monster_id = &"marshmallow"
 	battle.enemy = _build_enemy()
 	return battle
 

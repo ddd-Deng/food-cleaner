@@ -4,7 +4,8 @@
 [ext_resource type="Script" uid="uid://dpe8fkikxu52" path="res://scripts/runtime/battle_controller.gd" id="2"]
 [ext_resource type="Script" uid="uid://da2tkcwkvllr4" path="res://scripts/ui/battle_actor_view.gd" id="3"]
 [ext_resource type="Script" path="res://scripts/ui/hand_view.gd" id="4"]
-[ext_resource type="Script" path="res://scripts/ui/battle_player_sprite.gd" id="4_player_sprite"]
+[ext_resource type="Script" uid="uid://dywudx16a8swr" path="res://scripts/ui/battle_player_sprite.gd" id="4_player_sprite"]
+[ext_resource type="Script" path="res://scripts/ui/battle_enemy_sprite.gd" id="4_enemy_sprite"]
 [ext_resource type="Texture2D" uid="uid://dm2gw7nh04wlh" path="res://sprites/按钮/设置.png" id="5_settings"]
 [ext_resource type="Texture2D" uid="uid://cdsisuov65cmv" path="res://sprites/按钮/查看卡组.png" id="6_deck"]
 [ext_resource type="Texture2D" uid="uid://dqdo54c7fucoy" path="res://sprites/抽牌堆.png" id="7_draw_pile"]
@@ -134,6 +135,10 @@ stretch_mode = 6
 [node name="BattlePlayerSprite" type="AnimatedSprite2D" parent="." unique_id=1087421911]
 position = Vector2(472, 314)
 script = ExtResource("4_player_sprite")
+
+[node name="BattleEnemySprite" type="AnimatedSprite2D" parent="." unique_id=1087421912]
+position = Vector2(820, 296)
+script = ExtResource("4_enemy_sprite")
 
 [node name="Foreground" type="TextureRect" parent="." unique_id=1547819240]
 layout_mode = 1
