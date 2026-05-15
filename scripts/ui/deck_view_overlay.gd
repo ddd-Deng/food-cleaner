@@ -2,6 +2,26 @@ extends Control
 class_name DeckViewOverlay
 
 const DECK_CARD_TILE_SCENE: PackedScene = preload("res://scenes/ui/deck_card_tile.tscn")
+const LARGE_FRAME_TEXTURE: Texture2D = preload("res://sprites/大框.png")
+const MEDIUM_FRAME_TEXTURE: Texture2D = preload("res://sprites/中框.png")
+const SMALL_FRAME_TEXTURE: Texture2D = preload("res://sprites/小框.png")
+const BACK_BUTTON_TEXTURE: Texture2D = preload("res://sprites/返回.png")
+const TAB_IDLE_TEXTURE: Texture2D = preload("res://sprites/分类框/平常分类.png")
+const TAB_ACTIVE_TEXTURE: Texture2D = preload("res://sprites/分类框/选中分类.png")
+
+const LARGE_FRAME_REGION := Rect2(38, 33, 1199, 656)
+const MEDIUM_FRAME_REGION := Rect2(62, 189, 1152, 480)
+const SMALL_FRAME_REGION := Rect2(81, 208, 1088, 302)
+const BACK_BUTTON_REGION := Rect2(1093, 56, 119, 72)
+const TAB_IDLE_REGION := Rect2(225, 138, 156, 45)
+const TAB_ACTIVE_REGION := Rect2(64, 137, 154, 45)
+
+const LARGE_FRAME_SLICE := 28.0
+const MEDIUM_FRAME_SLICE := 24.0
+const SMALL_FRAME_SLICE := 20.0
+const BACK_BUTTON_SLICE := 14.0
+const TAB_SLICE := 14.0
+
 const TAB_ALL: StringName = &"all"
 const TAB_DRAW: StringName = &"draw"
 const TAB_DISCARD: StringName = &"discard"
@@ -15,6 +35,7 @@ const TYPE_ORDER: Array[BattleTypes.CardType] = [
 const TILE_WIDTH := 168.0
 const GRID_SEPARATION := 14.0
 
+@onready var backdrop: ColorRect = $Backdrop
 @onready var panel: PanelContainer = $SafeArea/Panel
 @onready var title_label: Label = $SafeArea/Panel/PanelMargin/PanelColumn/HeaderRow/HeaderText/TitleLabel
 @onready var summary_label: Label = $SafeArea/Panel/PanelMargin/PanelColumn/HeaderRow/HeaderText/SummaryLabel
@@ -29,6 +50,7 @@ const GRID_SEPARATION := 14.0
 var _state: BattleState
 var _current_tab: StringName = TAB_ALL
 var _tab_buttons: Dictionary = {}
+var _pending_rebuild_after_open: bool = false
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -53,7 +75,7 @@ func open_with_state(state: BattleState, initial_tab: StringName) -> void:
 	visible = true
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	_rebuild_tabs()
-	_rebuild_content()
+	_request_open_layout_rebuild()
 	call_deferred("_focus_close_button")
 
 func refresh_with_state(state: BattleState) -> void:
@@ -85,7 +107,10 @@ func _switch_tab(tab_id: StringName) -> void:
 		return
 	_current_tab = tab_id
 	_rebuild_tabs()
-	_rebuild_content()
+	if _pending_rebuild_after_open:
+		_request_open_layout_rebuild()
+	else:
+		_rebuild_content()
 
 func _rebuild_tabs() -> void:
 	for tab_id in TAB_ORDER:
@@ -232,12 +257,18 @@ func _build_empty_state() -> PanelContainer:
 	return panel_container
 
 func _apply_shell_styles() -> void:
+	backdrop.color = Color(0.16, 0.12, 0.07, 0.58)
 	panel.add_theme_stylebox_override("panel", _build_outer_panel_style())
 	content_panel.add_theme_stylebox_override("panel", _build_inner_panel_style())
-	close_button.add_theme_stylebox_override("normal", _build_action_button_style(false))
-	close_button.add_theme_stylebox_override("hover", _build_action_button_style(true))
-	close_button.add_theme_stylebox_override("pressed", _build_action_button_style(true, true))
-	close_button.add_theme_color_override("font_color", Color(0.97, 0.95, 0.87, 1.0))
+	close_button.text = ""
+	close_button.custom_minimum_size = BACK_BUTTON_REGION.size
+	close_button.add_theme_stylebox_override("normal", _build_back_button_style(Color.WHITE))
+	close_button.add_theme_stylebox_override("hover", _build_back_button_style(Color(1.05, 1.05, 1.05, 1.0)))
+	close_button.add_theme_stylebox_override("pressed", _build_back_button_style(Color(0.90, 0.90, 0.90, 1.0)))
+	close_button.add_theme_stylebox_override("focus", _build_back_button_style(Color.WHITE))
+	for button in [all_tab_button, draw_tab_button, discard_tab_button]:
+		button.custom_minimum_size = TAB_IDLE_REGION.size
+		button.add_theme_font_size_override("font_size", 18)
 	title_label.add_theme_color_override("font_color", Color(0.21, 0.16, 0.10, 1.0))
 	summary_label.add_theme_color_override("font_color", Color(0.45, 0.34, 0.20, 1.0))
 
@@ -245,87 +276,50 @@ func _apply_tab_style(button: Button, active: bool) -> void:
 	button.add_theme_stylebox_override("normal", _build_tab_style(active, false))
 	button.add_theme_stylebox_override("hover", _build_tab_style(active, true))
 	button.add_theme_stylebox_override("pressed", _build_tab_style(true, true))
-	button.add_theme_color_override("font_color", Color(0.96, 0.94, 0.86, 1.0) if active else Color(0.38, 0.28, 0.17, 1.0))
+	button.add_theme_stylebox_override("focus", _build_tab_style(active, false))
+	var font_color := Color(0.95, 0.94, 0.89, 1.0) if active else Color(0.31, 0.23, 0.14, 1.0)
+	button.add_theme_color_override("font_color", font_color)
+	button.add_theme_color_override("font_hover_color", font_color)
+	button.add_theme_color_override("font_pressed_color", font_color)
+	button.add_theme_color_override("font_focus_color", font_color)
 
-func _build_outer_panel_style() -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.96, 0.91, 0.77, 0.98)
-	style.border_color = Color(0.24, 0.17, 0.09, 1.0)
-	style.border_width_left = 2
-	style.border_width_top = 2
-	style.border_width_right = 2
-	style.border_width_bottom = 2
-	style.corner_radius_top_left = 22
-	style.corner_radius_top_right = 22
-	style.corner_radius_bottom_left = 22
-	style.corner_radius_bottom_right = 22
-	style.shadow_color = Color(0, 0, 0, 0.18)
-	style.shadow_size = 10
+func _build_outer_panel_style() -> StyleBoxTexture:
+	return _build_texture_style(LARGE_FRAME_TEXTURE, LARGE_FRAME_REGION, LARGE_FRAME_SLICE)
+
+func _build_inner_panel_style() -> StyleBoxTexture:
+	return _build_texture_style(MEDIUM_FRAME_TEXTURE, MEDIUM_FRAME_REGION, MEDIUM_FRAME_SLICE)
+
+func _build_section_style() -> StyleBoxTexture:
+	return _build_texture_style(SMALL_FRAME_TEXTURE, SMALL_FRAME_REGION, SMALL_FRAME_SLICE)
+
+func _build_back_button_style(tint: Color) -> StyleBoxTexture:
+	return _build_texture_style(BACK_BUTTON_TEXTURE, BACK_BUTTON_REGION, BACK_BUTTON_SLICE, tint)
+
+func _build_tab_style(active: bool, hovered: bool) -> StyleBoxTexture:
+	var texture := TAB_ACTIVE_TEXTURE if active else TAB_IDLE_TEXTURE
+	var region := TAB_ACTIVE_REGION if active else TAB_IDLE_REGION
+	var tint := Color(1.03, 1.03, 1.03, 1.0) if hovered else Color.WHITE
+	return _build_texture_style(texture, region, TAB_SLICE, tint)
+
+func _build_texture_style(texture: Texture2D, region: Rect2, slice: float, tint: Color = Color.WHITE) -> StyleBoxTexture:
+	var style := StyleBoxTexture.new()
+	style.texture = _make_region_texture(texture, region)
+	style.draw_center = true
+	style.axis_stretch_horizontal = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	style.axis_stretch_vertical = StyleBoxTexture.AXIS_STRETCH_MODE_STRETCH
+	style.set_texture_margin_all(slice)
+	style.content_margin_left = 0.0
+	style.content_margin_top = 0.0
+	style.content_margin_right = 0.0
+	style.content_margin_bottom = 0.0
+	style.modulate_color = tint
 	return style
 
-func _build_inner_panel_style() -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(1.0, 0.97, 0.89, 0.92)
-	style.border_color = Color(0.67, 0.54, 0.33, 0.65)
-	style.border_width_left = 1
-	style.border_width_top = 1
-	style.border_width_right = 1
-	style.border_width_bottom = 1
-	style.corner_radius_top_left = 18
-	style.corner_radius_top_right = 18
-	style.corner_radius_bottom_left = 18
-	style.corner_radius_bottom_right = 18
-	return style
-
-func _build_section_style() -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.98, 0.95, 0.86, 0.95)
-	style.border_color = Color(0.72, 0.61, 0.40, 0.58)
-	style.border_width_left = 1
-	style.border_width_top = 1
-	style.border_width_right = 1
-	style.border_width_bottom = 1
-	style.corner_radius_top_left = 16
-	style.corner_radius_top_right = 16
-	style.corner_radius_bottom_left = 16
-	style.corner_radius_bottom_right = 16
-	return style
-
-func _build_action_button_style(is_hovered: bool, is_pressed: bool = false) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.23, 0.17, 0.10, 1.0)
-	if is_hovered:
-		style.bg_color = Color(0.31, 0.22, 0.12, 1.0)
-	if is_pressed:
-		style.bg_color = Color(0.17, 0.12, 0.07, 1.0)
-	style.border_color = Color(0.87, 0.72, 0.34, 1.0)
-	style.border_width_left = 1
-	style.border_width_top = 1
-	style.border_width_right = 1
-	style.border_width_bottom = 1
-	style.corner_radius_top_left = 12
-	style.corner_radius_top_right = 12
-	style.corner_radius_bottom_left = 12
-	style.corner_radius_bottom_right = 12
-	return style
-
-func _build_tab_style(active: bool, hovered: bool) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	if active:
-		style.bg_color = Color(0.29, 0.45, 0.34, 1.0) if hovered else Color(0.25, 0.40, 0.30, 1.0)
-		style.border_color = Color(0.82, 0.90, 0.72, 1.0)
-	else:
-		style.bg_color = Color(0.90, 0.83, 0.67, 1.0) if hovered else Color(0.94, 0.88, 0.74, 1.0)
-		style.border_color = Color(0.66, 0.53, 0.31, 0.82)
-	style.border_width_left = 1
-	style.border_width_top = 1
-	style.border_width_right = 1
-	style.border_width_bottom = 1
-	style.corner_radius_top_left = 12
-	style.corner_radius_top_right = 12
-	style.corner_radius_bottom_left = 12
-	style.corner_radius_bottom_right = 12
-	return style
+func _make_region_texture(texture: Texture2D, region: Rect2) -> AtlasTexture:
+	var atlas := AtlasTexture.new()
+	atlas.atlas = texture
+	atlas.region = region
+	return atlas
 
 func _title_for_tab(tab_id: StringName) -> String:
 	match tab_id:
@@ -370,8 +364,22 @@ func _count_distinct_cards(grouped_entries: Array[Dictionary]) -> int:
 
 func _on_overlay_resized() -> void:
 	if visible:
-		call_deferred("_rebuild_content")
+		if _pending_rebuild_after_open:
+			_request_open_layout_rebuild()
+		else:
+			call_deferred("_rebuild_content")
 
 func _focus_close_button() -> void:
 	if close_button != null:
 		close_button.grab_focus()
+
+func _request_open_layout_rebuild() -> void:
+	_pending_rebuild_after_open = true
+	call_deferred("_finish_open_layout_rebuild")
+
+func _finish_open_layout_rebuild() -> void:
+	if not visible:
+		_pending_rebuild_after_open = false
+		return
+	_pending_rebuild_after_open = false
+	_rebuild_content()

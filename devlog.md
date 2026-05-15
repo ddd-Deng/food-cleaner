@@ -37,6 +37,16 @@
 
 ## 2026-05-15
 
+### 修复卡组预览首次打开时卡牌列表错误变成单列
+- 做了什么：调整 `DeckViewOverlay` 在 `open_with_state()` 里的内容重建时机。此前覆盖层从隐藏切到显示后，会立刻按 `content_scroll.size.x` 计算 `GridContainer.columns`，但首次打开这一帧滚动区宽度还没完成布局，导致列数回退成 `1`，卡牌竖着一张一行；现在改为先显示界面，再 `call_deferred()` 到下一帧完成一次延后重建，确保首次打开也能拿到正确宽度，同时兼容首次打开阶段如果又触发了 resize 或切 tab 的情况。
+- 影响文件：`scripts/ui/deck_view_overlay.gd`、`devlog.md`
+- 如何验证：已运行 `D:\Godot\Godot_v4.6.2-stable_win64.exe --headless --path . --scene res://scenes/ui/deck_view_overlay.tscn --quit` 与 `D:\Godot\Godot_v4.6.2-stable_win64.exe --headless --path . --quit`；进入战斗后第一次点击“查看卡组”，确认卡牌分组内直接按多列网格显示，不再先出现“一张卡占一行”，关闭后再次打开也应保持正常。
+
+### 卡组预览覆盖层改用手绘版外框与分类按钮素材
+- 做了什么：将 `DeckViewOverlay` 的外层面板、内部内容区、分类分组容器、顶部分类按钮和右上角返回按钮改为直接使用 `sprites/大框.png`、`sprites/中框.png`、`sprites/小框.png`、`sprites/分类框/平常分类.png`、`sprites/分类框/选中分类.png` 与 `sprites/返回.png` 中的有效区域；保留原有卡组数据分组、切页和关闭交互，只替换界面外壳与按钮表现，并补上了基于贴图的 hover / pressed 反馈。
+- 影响文件：`scripts/ui/deck_view_overlay.gd`、`devlog.md`
+- 如何验证：已运行 `D:\Godot\Godot_v4.6.2-stable_win64.exe --headless --path . --scene res://scenes/ui/deck_view_overlay.tscn --quit` 与 `D:\Godot\Godot_v4.6.2-stable_win64.exe --headless --path . --quit`，确认项目和该界面场景都能正常加载；进入战斗后打开“查看卡组”，确认整体外框、内部内容框、分类按钮选中态和右上角返回按钮都切换为新的手绘素材，并检查切换“整个卡组 / 抽牌堆 / 弃牌堆”以及按 `Esc` / 点击返回关闭仍然正常。
+
 ### 探索界面外层 HUD 精简为仅保留右上角 HP/金币
 - 做了什么：移除探索主界面外层的上方标题区、底部提示/状态区和包裹房间的外围面板，只保留全屏房间画面、游戏结束覆盖层以及右上角 `HP/金币` 文本；同时删除 `start`、`chest` 及四个怪物房场景中的 `Title` 标签，避免房间中央和左上角再出现文字标题。`explore_scene.gd` 同步改为不再依赖这些已删除节点。
 - 影响文件：`scripts/explore/explore_scene.gd`、`scenes/explore/explore_scene.tscn`、`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
