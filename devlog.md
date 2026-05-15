@@ -47,6 +47,31 @@
 
 ## 2026-05-15
 
+### 面包怪物旧采样结果删除后按新原图重新生成
+- 做了什么：由于面包怪物原始素材已替换，先按要求删除了旧的 `sprites/怪物_256x144/面包` 采样结果，再用现有最近邻下采样脚本从新的 `sprites/怪物/面包` 原图重新生成整套输出。面包新原图当前仍是 `1280x720`，因此继续按既有规则采样为 `256x144`，并保持 `MonsterCatalog` 里原有的 `res://sprites/怪物_256x144/面包` 路径不变，这样探索房间和战斗里会自动吃到新素材。
+- 影响文件：`sprites/怪物_256x144/面包/*`、`devlog.md`
+- 如何验证：检查 `sprites/怪物_256x144/面包/`，确认已重新生成 `50` 张 `256x144` 的 PNG；运行游戏进入 `bread_room` 或对应战斗，确认显示的面包怪物已经切换为新的动画素材。
+
+### 部分怪物房接入小镇地图与喷泉地图的前后景
+- 做了什么：将 `cake_room`、`bread_room`、`strawberry_room`、`fish_boss_room` 四个怪物房从单层森林底图改为使用 `小镇地图` / `喷泉地图` 的背景与前景组合，并在每个房间场景里新增全屏 `Foreground` 贴图节点。当前做法是让 `Backdrop` 使用 `z_index = -10` 作为角色和怪物之后的背景层，`Foreground` 使用 `z_index = 10` 作为角色和怪物之前的遮挡层，图片按 `1280x720` 直接全屏铺开，后续可再继续调整每个房间具体用哪套图。
+- 影响文件：`scenes/rooms/cake_room.tscn`、`scenes/rooms/bread_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：在编辑器中打开上述四个房间场景，确认都新增了 `Foreground` 节点，且 `Backdrop` / `Foreground` 分别引用 `sprites/map/小镇地图/` 或 `sprites/map/喷泉地图/` 下的图片；运行探索进入这些房间，确认背景显示在主角和怪物后面，前景显示在它们前面，交互与出入口仍正常。
+
+### 森林地图房间补齐前景层
+- 做了什么：把仍在使用 `森林地图` 的探索房间也统一补成“背景 + 前景”双层结构，不再只显示 `背景.png`。当前为 `start_room`、`chest_room`、`marshmallow_room`、`candy_bean_room` 新增了全屏 `Foreground` 贴图，并给森林背景也补上 `z_index = -10`，确保森林地图与小镇/喷泉地图一样，都会把角色和怪物夹在背景与前景之间显示。
+- 影响文件：`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`devlog.md`
+- 如何验证：在编辑器中打开上述四个房间，确认除了 `Backdrop` 外还多出一层 `Foreground`，并引用了 `sprites/map/森林地图/前景1.png` 或 `前景2.png`；运行探索进入这些房间，确认前景会显示在主角、怪物和交互物前方，而不是只剩单层森林背景。
+
+### 各套探索地图改为同时叠加全部前景层
+- 做了什么：调整探索房间的地图使用方式，不再是“每个房间只挑一张前景图”，而是让每个使用某套地图的房间都同时叠加该地图下的全部前景资源。现在森林地图房间会同时挂 `前景1/2/3`，小镇地图房间会同时挂 `前景1/2`，喷泉地图房间会同时挂 `前景1/2/3/4`，并按 `z_index = 10/11/12/...` 依次叠到角色和怪物前面；顺手也把旧的 `monster_room`、`boss_room` 模板补成同样结构，避免后续误用时表现不一致。
+- 影响文件：`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/cake_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/bread_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`scenes/rooms/monster_room.tscn`、`scenes/rooms/boss_room.tscn`、`devlog.md`
+- 如何验证：在编辑器中分别打开使用森林/小镇/喷泉地图的房间场景，确认每个房间节点树里都不止一层 `Foreground`，而是完整包含该地图下全部前景贴图；运行探索进入这些房间，确认所有前景都会一起叠加显示在主角、怪物和交互物前方。
+
+### 森林地图前景统一加黄绿色半透明染色
+- 做了什么：只对使用 `森林地图` 的前景层追加统一的 `self_modulate` 染色，不改小镇地图和喷泉地图。当前森林地图的所有 `Foreground1/2/3` 都设置为 `#F1EE6B`，不透明度 `29%`，对应 Godot 场景里的 `Color(0.945098, 0.933333, 0.419608, 0.29)`，用于给森林前景整体加一层偏黄的氛围色。
+- 影响文件：`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/monster_room.tscn`、`scenes/rooms/boss_room.tscn`、`devlog.md`
+- 如何验证：在编辑器中打开任一森林地图房间，确认 `Foreground1/2/3` 的 `self_modulate` 都变成 `Color(0.945098, 0.933333, 0.419608, 0.29)`；运行探索进入森林地图房间，确认前景整体带有轻微黄绿色调和 29% 透明度，而小镇地图、喷泉地图房间的前景颜色保持原样不变。
+
 ### 修复卡组预览首次打开时卡牌列表错误变成单列
 - 做了什么：继续修正 `DeckViewOverlay` 的网格重建时机。前一版只把首次打开延后到下一帧，但实际从“弃牌堆”等入口打开时，内容区宽度有时在下一帧仍未稳定，依旧可能按 `1` 列生成网格。现在改为统一监听 overlay、本体内容面板和滚动区的 `resized`，并在内容区宽度达到可容纳至少两列卡牌前持续延后重建，最多重试数帧；列数计算也统一改成从内容区实际宽度 helper 获取，避免某些入口仍读到 0 宽度。
 - 影响文件：`scripts/ui/deck_view_overlay.gd`、`devlog.md`

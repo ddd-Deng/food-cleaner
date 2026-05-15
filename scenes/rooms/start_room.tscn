@@ -4,6 +4,9 @@
 [ext_resource type="Script" uid="uid://bgvn7fnrkcagx" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 [ext_resource type="Texture2D" uid="uid://bdc001as4kr4" path="res://sprites/map/森林地图/背景.png" id="4"]
+[ext_resource type="Texture2D" path="res://sprites/map/森林地图/前景1.png" id="5"]
+[ext_resource type="Texture2D" path="res://sprites/map/森林地图/前景2.png" id="6"]
+[ext_resource type="Texture2D" path="res://sprites/map/森林地图/前景3.png" id="7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_86g8l"]
 size = Vector2(220, 64)
@@ -35,6 +38,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+z_index = -10
 texture = ExtResource("4")
 expand_mode = 1
 stretch_mode = 6
@@ -146,6 +150,48 @@ theme_override_font_sizes/font_size = 16
 text = "出口 -> 怪物房"
 autowrap_mode = 3
 max_lines_visible = 2
+
+[node name="Foreground1" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+z_index = 10
+self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
+mouse_filter = 2
+texture = ExtResource("5")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Foreground2" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+z_index = 11
+self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
+mouse_filter = 2
+texture = ExtResource("6")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Foreground3" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+z_index = 12
+self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
+mouse_filter = 2
+texture = ExtResource("7")
+expand_mode = 1
+stretch_mode = 6
 
 [editable path="GuideInteractable"]
 [editable path="ExitToMonsterA"]
