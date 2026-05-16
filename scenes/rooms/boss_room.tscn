@@ -4,9 +4,18 @@
 [ext_resource type="Script" uid="uid://bgvn7fnrkcagx" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 [ext_resource type="Texture2D" uid="uid://bdc001as4kr4" path="res://sprites/map/森林地图/背景.png" id="4"]
-[ext_resource type="Texture2D" path="res://sprites/map/森林地图/前景1.png" id="5"]
-[ext_resource type="Texture2D" path="res://sprites/map/森林地图/前景2.png" id="6"]
-[ext_resource type="Texture2D" path="res://sprites/map/森林地图/前景3.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://dptn6gaplv80o" path="res://sprites/map/森林地图/前景1.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://dqh6clcx085kv" path="res://sprites/map/森林地图/前景2.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://km3dvdxj6sbu" path="res://sprites/map/森林地图/前景3.png" id="7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bm5hw"]
+size = Vector2(1289, 270)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qfvvh"]
+size = Vector2(1324, 170.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2y12g"]
+radius = 43.416588
 
 [node name="BossRoom" type="Control" unique_id=241358595]
 custom_minimum_size = Vector2(960, 540)
@@ -20,13 +29,13 @@ script = ExtResource("1")
 fallback_room_tint = Color(0.93, 0.82, 0.82, 1)
 
 [node name="Backdrop" type="TextureRect" parent="." unique_id=288336639]
+z_index = -10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = -10
 texture = ExtResource("4")
 expand_mode = 1
 stretch_mode = 6
@@ -57,44 +66,62 @@ display_name = "出口 -> 怪物房"
 prompt_text = "前往 脏污餐台"
 interactable_kind = &"exit"
 
-[node name="Foreground1" type="TextureRect" parent="."]
+[node name="Foreground1" type="TextureRect" parent="." unique_id=1530916857]
+self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
+z_index = 10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 10
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
 mouse_filter = 2
 texture = ExtResource("5")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground2" type="TextureRect" parent="."]
+[node name="Foreground2" type="TextureRect" parent="." unique_id=662483466]
+self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
+z_index = 11
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 11
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
 mouse_filter = 2
 texture = ExtResource("6")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground3" type="TextureRect" parent="."]
+[node name="Foreground3" type="TextureRect" parent="." unique_id=1445806650]
+self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
+z_index = 12
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 12
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
 mouse_filter = 2
 texture = ExtResource("7")
 expand_mode = 1
 stretch_mode = 6
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1624688154]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=720149223]
+position = Vector2(634.5, 125)
+shape = SubResource("RectangleShape2D_bm5hw")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=249058298]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=686145082]
+position = Vector2(647, 642.25)
+shape = SubResource("RectangleShape2D_qfvvh")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=1474584746]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=1026126346]
+position = Vector2(962, 470)
+shape = SubResource("CircleShape2D_2y12g")
