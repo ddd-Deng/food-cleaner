@@ -62,7 +62,7 @@
 [ext_resource type="Texture2D" uid="uid://dmxpxug4nin4a" path="res://sprites/怪物_256x144/面包/bread_048.png" id="54_oyk63"]
 [ext_resource type="Texture2D" uid="uid://bypyprbx6ju7i" path="res://sprites/怪物_256x144/面包/bread_049.png" id="55_6ph5a"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_m5kh1"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pejmt"]
 shader = ExtResource("5_pejmt")
 shader_parameter/outline_color = Color(1, 0.95, 0.72, 1)
 shader_parameter/outline_thickness = 4.0
@@ -231,14 +231,38 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_myjqa"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gdr51"]
 size = Vector2(220, 180)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ryvo5"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1iobh"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_s0swk"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ljvj"]
 size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ocvl"]
+size = Vector2(608.32886, 364.3454)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7euqx"]
+size = Vector2(763, 157)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yxvcp"]
+size = Vector2(571, 249)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7e2b0"]
+size = Vector2(612, 273)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h73kr"]
+size = Vector2(386, 206)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_himoe"]
+radius = 125.004
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ol4ht"]
+size = Vector2(249, 83)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0e75c"]
+size = Vector2(511, 264)
 
 [node name="BreadRoom" type="Control" unique_id=773596446]
 custom_minimum_size = Vector2(960, 540)
@@ -266,10 +290,10 @@ stretch_mode = 6
 [node name="PlayerSpawn" type="ColorRect" parent="." unique_id=1142796652]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 0
-offset_left = 661.0
-offset_top = 505.0
-offset_right = 709.0
-offset_bottom = 553.0
+offset_left = 708.0
+offset_top = 598.0
+offset_right = 756.0
+offset_bottom = 646.0
 mouse_filter = 2
 color = Color(0.41, 0.84, 0.56, 0.55)
 script = ExtResource("2")
@@ -289,13 +313,13 @@ payload = {
 }
 
 [node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
-material = SubResource("ShaderMaterial_m5kh1")
+material = SubResource("ShaderMaterial_pejmt")
 sprite_frames = SubResource("SpriteFrames_pm2f8")
 animation = &"idle"
-frame_progress = 0.3751065
+frame_progress = 0.22754012
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_myjqa")
+shape = SubResource("RectangleShape2D_gdr51")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -321,7 +345,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToCandyBean/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_ryvo5")
+shape = SubResource("RectangleShape2D_1iobh")
 
 [node name="Label" parent="ExitToCandyBean" index="1"]
 offset_left = -110.0
@@ -335,7 +359,7 @@ autowrap_mode = 3
 max_lines_visible = 2
 
 [node name="ExitToStrawberry" parent="." unique_id=369134622 instance=ExtResource("3")]
-position = Vector2(1098, 395)
+position = Vector2(1150, 310)
 interactable_id = &"exit_strawberry"
 display_name = "出口 -> 怪物房"
 prompt_text = "前往 怪物房"
@@ -345,7 +369,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_s0swk")
+shape = SubResource("RectangleShape2D_7ljvj")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0
@@ -422,6 +446,59 @@ mouse_filter = 2
 texture = ExtResource("10")
 expand_mode = 1
 stretch_mode = 6
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=526723102]
+position = Vector2(213, 409)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1798993307]
+position = Vector2(71.49997, 156.5)
+scale = Vector2(0.9320617, 0.8535856)
+shape = SubResource("RectangleShape2D_1ocvl")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=1430512058]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=67267136]
+position = Vector2(378.5, 68.5)
+shape = SubResource("RectangleShape2D_7euqx")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=855008592]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=155399837]
+position = Vector2(288.5, 143.5)
+shape = SubResource("RectangleShape2D_yxvcp")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="." unique_id=1609774992]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4" unique_id=637964812]
+position = Vector2(348, 610.5)
+shape = SubResource("RectangleShape2D_7e2b0")
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="." unique_id=109092421]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D5" unique_id=1129360085]
+position = Vector2(1106, 104)
+shape = SubResource("RectangleShape2D_h73kr")
+
+[node name="StaticBody2D8" type="StaticBody2D" parent="." unique_id=1081189187]
+position = Vector2(880, 329)
+scale = Vector2(1, 0.92)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D8" unique_id=1540810938]
+position = Vector2(-117, -11)
+shape = SubResource("CircleShape2D_himoe")
+
+[node name="StaticBody2D7" type="StaticBody2D" parent="." unique_id=102639566]
+position = Vector2(1050.5, 606)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D7" unique_id=2080492966]
+position = Vector2(145, -143.5)
+shape = SubResource("RectangleShape2D_ol4ht")
+
+[node name="StaticBody2D6" type="StaticBody2D" parent="." unique_id=438720128]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D6" unique_id=1320028832]
+position = Vector2(1050.5, 606)
+shape = SubResource("RectangleShape2D_0e75c")
 
 [editable path="MonsterEncounter"]
 [editable path="ExitToCandyBean"]

@@ -1,5 +1,15 @@
 # 开发日志
 
+### 游乐场地图前景取消沿用森林地图的染色半透明
+- 做了什么：把 `start_room` 和 `chest_room` 切到 `游乐场地图` 后，这两间房的前景层仍沿用了森林地图时期的 `self_modulate` 淡黄色半透明设置，会把游乐场素材整体压暗、染色。现在已移除这两个场景里 `Foreground1~Foreground4` 的 `self_modulate`，让游乐场前景按原图颜色直接显示。
+- 影响文件：`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`devlog.md`
+- 如何验证：在 Godot 编辑器中打开 `res://scenes/rooms/start_room.tscn` 与 `res://scenes/rooms/chest_room.tscn`，确认 `Foreground1~Foreground4` 不再带 `self_modulate`；运行项目进入入口前厅和补给角落，确认游乐场前景不再偏黄、半透明度恢复为素材原始表现。
+
+### 新增游乐场地图，并将两个森林系功能房替换为该套素材
+- 做了什么：接入新加的 `游乐场地图` 探索背景素材，并将 `start_room` 与 `chest_room` 两个原本使用 `森林地图` 的功能房切换到新套装。由于游乐场素材包含 `背景 + 前景1~4`，这两个房间也同步补上了第四层前景节点。调整后，当前实际接入 run 的四套探索地图都正好各使用两次：森林用于 `marshmallow_room/candy_bean_room`，小镇用于 `cake_room/strawberry_room`，喷泉用于 `bread_room/fish_boss_room`，游乐场用于 `start_room/chest_room`。
+- 影响文件：`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`devlog.md`
+- 如何验证：在 Godot 编辑器中打开 `res://scenes/rooms/start_room.tscn` 与 `res://scenes/rooms/chest_room.tscn`，确认背景与前景贴图已改为 `res://sprites/map/游乐场地图/` 下素材，且比森林地图多一层 `Foreground4`；运行项目进入入口前厅和补给角落，确认两间房都显示游乐场地图，其余房间的地图套装保持不变。
+
 ### 探索场景玩家移动改为直接碰撞边界
 - 做了什么：放弃了探索层原本按代码硬 `clamp` 坐标的做法，改为更直接的 Godot 碰撞方案。现在 `PlayerActor` 从 `Node2D` 改为 `CharacterBody2D`，自身带一个可在编辑器中直接看到和修改的 `CollisionShape2D` 作为玩家碰撞箱；探索主场景 `explore_scene.tscn` 的 `RoomCanvas` 下新增 `BoundaryWalls`，里面放了上、下、左、右四个 `StaticBody2D` 边界墙。玩家移动时改用 `move_and_slide()`，会被四周碰撞墙直接挡住，不再依赖脚本里按房间尺寸夹坐标，也不再引入额外的房间级行走区域系统。
 - 影响文件：`scripts/explore/player_actor.gd`、`scripts/explore/explore_scene.gd`、`scenes/explore/explore_scene.tscn`、`devlog.md`
