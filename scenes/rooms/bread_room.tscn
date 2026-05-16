@@ -68,7 +68,7 @@ shader_parameter/outline_color = Color(1, 0.95, 0.72, 1)
 shader_parameter/outline_thickness = 4.0
 shader_parameter/outline_enabled = false
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_pm2f8"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_gdr51"]
 animations = [{
 "frames": [],
 "loop": true,
@@ -231,38 +231,38 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_gdr51"]
-size = Vector2(220, 180)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1iobh"]
-size = Vector2(220, 64)
+size = Vector2(220, 180)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7ljvj"]
 size = Vector2(220, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1ocvl"]
-size = Vector2(608.32886, 364.3454)
+size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7euqx"]
-size = Vector2(763, 157)
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_7euqx"]
+points = PackedVector2Array(307.38315, -184.51575, -306.31015, -192.71643, -305.23727, 179.82971, 395.36014, 179.82971, 394.28726, -103.68024)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_yxvcp"]
-size = Vector2(571, 249)
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_yxvcp"]
+points = PackedVector2Array(381.5, -70.5, -379.5, -69.5, -378.5, 196.5, -159.5, 199.5, -159.5, 225.5, -105.5, 225.5, -105.5, 199.5, 192.5, 200.5, 238.5, 128.5, 314.5, 85.5, 376.5, 75.5)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7e2b0"]
-size = Vector2(612, 273)
+[sub_resource type="CircleShape2D" id="CircleShape2D_pejmt"]
+radius = 80.00625
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_h73kr"]
-size = Vector2(386, 206)
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_7e2b0"]
+points = PackedVector2Array(-87.5, -46.25, 67.5, -89.25, 175.5, -25.25, 184.5, 104.75, -190.5, 103.75)
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_h73kr"]
+points = PackedVector2Array(-172, 65, -99, 7, 148, 87, 92, 157, -118, 82, -118, 157, -175, 157)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_himoe"]
 radius = 125.004
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ol4ht"]
-size = Vector2(249, 83)
+size = Vector2(206, 70)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0e75c"]
-size = Vector2(511, 264)
+size = Vector2(61, 233)
 
 [node name="BreadRoom" type="Control" unique_id=773596446]
 custom_minimum_size = Vector2(960, 540)
@@ -314,12 +314,12 @@ payload = {
 
 [node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
 material = SubResource("ShaderMaterial_pejmt")
-sprite_frames = SubResource("SpriteFrames_pm2f8")
+sprite_frames = SubResource("SpriteFrames_gdr51")
 animation = &"idle"
-frame_progress = 0.22754012
+frame_progress = 0.29536
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_gdr51")
+shape = SubResource("RectangleShape2D_1iobh")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -345,7 +345,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToCandyBean/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_1iobh")
+shape = SubResource("RectangleShape2D_7ljvj")
 
 [node name="Label" parent="ExitToCandyBean" index="1"]
 offset_left = -110.0
@@ -369,7 +369,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_7ljvj")
+shape = SubResource("RectangleShape2D_1ocvl")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0
@@ -453,31 +453,31 @@ position = Vector2(213, 409)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1798993307]
 position = Vector2(71.49997, 156.5)
 scale = Vector2(0.9320617, 0.8535856)
-shape = SubResource("RectangleShape2D_1ocvl")
+shape = SubResource("ConvexPolygonShape2D_7euqx")
 
 [node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=1430512058]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=67267136]
 position = Vector2(378.5, 68.5)
-shape = SubResource("RectangleShape2D_7euqx")
+shape = SubResource("ConvexPolygonShape2D_yxvcp")
 
 [node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=855008592]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=155399837]
-position = Vector2(288.5, 143.5)
-shape = SubResource("RectangleShape2D_yxvcp")
+position = Vector2(1244, 95)
+shape = SubResource("CircleShape2D_pejmt")
 
 [node name="StaticBody2D4" type="StaticBody2D" parent="." unique_id=1609774992]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4" unique_id=637964812]
-position = Vector2(348, 610.5)
-shape = SubResource("RectangleShape2D_7e2b0")
+position = Vector2(1093.5, 615.25)
+shape = SubResource("ConvexPolygonShape2D_7e2b0")
 
 [node name="StaticBody2D5" type="StaticBody2D" parent="." unique_id=109092421]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D5" unique_id=1129360085]
 position = Vector2(1106, 104)
-shape = SubResource("RectangleShape2D_h73kr")
+shape = SubResource("ConvexPolygonShape2D_h73kr")
 
 [node name="StaticBody2D8" type="StaticBody2D" parent="." unique_id=1081189187]
 position = Vector2(880, 329)
@@ -488,16 +488,16 @@ position = Vector2(-117, -11)
 shape = SubResource("CircleShape2D_himoe")
 
 [node name="StaticBody2D7" type="StaticBody2D" parent="." unique_id=102639566]
-position = Vector2(1050.5, 606)
+position = Vector2(1047, 608)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D7" unique_id=2080492966]
-position = Vector2(145, -143.5)
+position = Vector2(127.5, -150)
 shape = SubResource("RectangleShape2D_ol4ht")
 
 [node name="StaticBody2D6" type="StaticBody2D" parent="." unique_id=438720128]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D6" unique_id=1320028832]
-position = Vector2(1050.5, 606)
+position = Vector2(825.5, 586.5)
 shape = SubResource("RectangleShape2D_0e75c")
 
 [editable path="MonsterEncounter"]
