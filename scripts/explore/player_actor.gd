@@ -1,4 +1,4 @@
-extends Node2D
+extends CharacterBody2D
 class_name PlayerActor
 
 const ANIMATION_ROOT := "res://sprites/主角动画_256x144"
@@ -19,6 +19,7 @@ enum FacingMode {
 @export var move_speed: float = 260.0
 @export var animation_fps: float = 12.0
 @export var interaction_radius: float = 90.0
+@export var body_collision_size: Vector2 = Vector2(40, 28)
 @export var outline_color: Color = Color(1.0, 1.0, 1.0, 1.0):
 	set(value):
 		_outline_color = value
@@ -28,7 +29,6 @@ enum FacingMode {
 		_outline_thickness = value
 		_update_outline_material()
 
-var room_bounds: Rect2 = Rect2(0, 0, 960, 540)
 var is_active: bool = true
 var collision_size: Vector2 = Vector2(48, 48)
 var _animation_sets: Dictionary = {}
@@ -39,11 +39,13 @@ var _outline_color: Color = Color(1.0, 1.0, 1.0, 1.0)
 var _outline_thickness: float = 2.0
 
 @onready var _animated_sprite: AnimatedSprite2D = AnimatedSprite2D.new()
+@onready var body_shape: CollisionShape2D = CollisionShape2D.new()
 @onready var interaction_area: Area2D = Area2D.new()
 @onready var interaction_shape: CollisionShape2D = CollisionShape2D.new()
 
 func _ready() -> void:
 	_configure_animated_sprite()
+	_configure_body_collision()
 	_configure_interaction_area()
 	_load_animation_sets()
 	_apply_default_size()
@@ -52,27 +54,20 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if not is_active:
+		velocity = Vector2.ZERO
 		_update_animation_state(false)
 		return
 	var direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var is_moving := not direction.is_zero_approx()
-	if is_moving:
-		position += direction * move_speed * delta
-		_clamp_to_room()
+	velocity = direction * move_speed
+	move_and_slide()
 	_update_facing_from_direction(direction)
 	_update_animation_state(is_moving)
 
-func set_room_bounds(bounds: Rect2) -> void:
-	room_bounds = bounds
-	_clamp_to_room()
-
-func center_in_room(bounds: Rect2) -> void:
-	room_bounds = bounds
-	position = room_bounds.position + room_bounds.size * 0.5
-	_clamp_to_room()
-
 func set_active(active: bool) -> void:
 	is_active = active
+	if not is_active:
+		velocity = Vector2.ZERO
 
 func get_center_point() -> Vector2:
 	return position
@@ -86,6 +81,12 @@ func get_interaction_area() -> Area2D:
 func _configure_animated_sprite() -> void:
 	_animated_sprite.centered = true
 	add_child(_animated_sprite)
+
+func _configure_body_collision() -> void:
+	add_child(body_shape)
+	var rectangle := RectangleShape2D.new()
+	rectangle.size = body_collision_size
+	body_shape.shape = rectangle
 
 func _configure_outline_material() -> void:
 	_outline_material = ShaderMaterial.new()
@@ -204,8 +205,3 @@ func _update_outline_material() -> void:
 		return
 	_outline_material.set_shader_parameter("outline_color", _outline_color)
 	_outline_material.set_shader_parameter("outline_thickness", _outline_thickness)
-
-func _clamp_to_room() -> void:
-	var half_size := collision_size * 0.5
-	position.x = clampf(position.x, room_bounds.position.x + half_size.x, room_bounds.end.x - half_size.x)
-	position.y = clampf(position.y, room_bounds.position.y + half_size.y, room_bounds.end.y - half_size.y)

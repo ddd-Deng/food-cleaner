@@ -1,5 +1,10 @@
 # 开发日志
 
+### 探索场景玩家移动改为直接碰撞边界
+- 做了什么：放弃了探索层原本按代码硬 `clamp` 坐标的做法，改为更直接的 Godot 碰撞方案。现在 `PlayerActor` 从 `Node2D` 改为 `CharacterBody2D`，自身带一个可在编辑器中直接看到和修改的 `CollisionShape2D` 作为玩家碰撞箱；探索主场景 `explore_scene.tscn` 的 `RoomCanvas` 下新增 `BoundaryWalls`，里面放了上、下、左、右四个 `StaticBody2D` 边界墙。玩家移动时改用 `move_and_slide()`，会被四周碰撞墙直接挡住，不再依赖脚本里按房间尺寸夹坐标，也不再引入额外的房间级行走区域系统。
+- 影响文件：`scripts/explore/player_actor.gd`、`scripts/explore/explore_scene.gd`、`scenes/explore/explore_scene.tscn`、`devlog.md`
+- 如何验证：在 Godot 编辑器中打开 `res://scenes/explore/explore_scene.tscn`，确认 `RoomCanvas/PlayerActor` 现在是 `CharacterBody2D`，节点下存在玩家自己的 `CollisionShape2D`；同时确认 `RoomCanvas/BoundaryWalls` 下有四个边界 `StaticBody2D`。运行项目进入探索后，确认玩家移动到场景四周时会被边界碰撞墙挡住；若直接在编辑器里调整玩家碰撞箱尺寸或四面边界墙的位置/大小，游戏内可活动范围也应随之变化。
+
 ### 实现敌人让前排好食物块变质的 `CORRUPT_BLOCK`
 - 做了什么：补全了敌方动作 `CORRUPT_BLOCK` 的真实战斗逻辑，不再只是日志占位。现在敌人触发该动作时，会从自己的食物队列前往后扫描，把前 `2` 个当前仍可视为“好”的食物块变成“变质”状态；本轮先采用可演进的运行时规则：已经自带玩家伤害型消化效果、或已带 `corrupted/spoiled/rotten/sour/dirty` 等坏标签的食物块不再重复变质，其余食物块会被加上 `corrupted` 标记、名称前缀改为“变质”、消化时间额外延长 `1t`，并在原有效果基础上额外附带 `1` 点消化反噬伤害。这样先把“前两个好的食物块会变坏”的设定落到战斗里，后续你们再细化什么算“好”、以及坏块具体类型时，也可以沿着这个运行时状态继续扩展。顺手把演示战斗和草莓怪物都接入了实际的 `腐坏扩散` 动作，方便直接观察效果。
 - 影响文件：`scripts/runtime/food_block_instance.gd`、`scripts/runtime/battle_rules.gd`、`scripts/content/sample_battle_factory.gd`、`scripts/content/monster_catalog.gd`、`devlog.md`

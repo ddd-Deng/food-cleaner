@@ -66,15 +66,9 @@ func _refresh_view() -> void:
 	_request_room_layout_sync()
 
 func _reset_player_position() -> void:
-	var inner_margin := Vector2(8, 8)
-	var bounds := Rect2(
-		inner_margin,
-		room_canvas.size - inner_margin * 2.0
-	)
 	player_actor.set_active(not run_state.is_run_over)
 	var spawn_center := _get_room_player_spawn_position()
 	player_actor.position = spawn_center
-	player_actor.set_room_bounds(bounds)
 	_update_nearest_interactable()
 
 func _rebuild_room(room: RoomRuntimeData) -> void:
