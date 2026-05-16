@@ -3,23 +3,58 @@
 [ext_resource type="Script" uid="uid://c8cc8jx0ebp32" path="res://scripts/explore/room_scene.gd" id="1"]
 [ext_resource type="Script" uid="uid://bgvn7fnrkcagx" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
-[ext_resource type="Texture2D" path="res://sprites/map/游乐场地图/背景.png" id="4"]
-[ext_resource type="Texture2D" path="res://sprites/map/游乐场地图/前景1.png" id="5"]
-[ext_resource type="Texture2D" path="res://sprites/map/游乐场地图/前景2.png" id="6"]
-[ext_resource type="Texture2D" path="res://sprites/map/游乐场地图/前景3.png" id="7"]
-[ext_resource type="Texture2D" path="res://sprites/map/游乐场地图/前景4.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://cfqe3cl17q4ij" path="res://sprites/map/游乐场地图/背景.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://csxfoynlcdvgt" path="res://sprites/map/游乐场地图/前景1.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://dy4jgrbx1fuu1" path="res://sprites/map/游乐场地图/前景2.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://mmj1ecfmk85a" path="res://sprites/map/游乐场地图/前景3.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://bdjtmfv3b5tg2" path="res://sprites/map/游乐场地图/前景4.png" id="8"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_86g8l"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_owyb4"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_6afpx"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v5cll"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_c2s5r"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lcoeq"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_r74nl"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yw6jb"]
 size = Vector2(220, 64)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bc050"]
+radius = 97.04638
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jls7n"]
+radius = 70.45566
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d67pt"]
+radius = 29.068085
+height = 106.41446
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0pbxl"]
+radius = 55.04715
+height = 290.06165
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q5fkn"]
+radius = 102.08844
+height = 263.88284
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_17qhe"]
+radius = 210.02142
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_10hxn"]
+points = PackedVector2Array(-21.580566, 93.88977, 44.89807, 64.0638, 45.217896, -83.014084, -20.653564, -57.26625)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1jnew"]
+radius = 236.00212
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bfxio"]
+radius = 23.382416
+height = 126.0824
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xl1v8"]
+radius = 22.0
+height = 88.0
 
 [node name="StartRoom" type="Control" unique_id=1928279502]
 custom_minimum_size = Vector2(960, 540)
@@ -33,13 +68,13 @@ script = ExtResource("1")
 fallback_room_tint = Color(0.88, 0.94, 0.88, 1)
 
 [node name="Backdrop" type="TextureRect" parent="." unique_id=149815197]
+z_index = -10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = -10
 texture = ExtResource("4")
 expand_mode = 1
 stretch_mode = 6
@@ -67,7 +102,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="GuideInteractable/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_86g8l")
+shape = SubResource("RectangleShape2D_owyb4")
 
 [node name="Label" parent="GuideInteractable" index="1"]
 offset_left = -110.0
@@ -91,7 +126,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToMonsterA/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_6afpx")
+shape = SubResource("RectangleShape2D_v5cll")
 
 [node name="Label" parent="ExitToMonsterA" index="1"]
 offset_left = -110.0
@@ -115,7 +150,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToChest/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_c2s5r")
+shape = SubResource("RectangleShape2D_lcoeq")
 
 [node name="Label" parent="ExitToChest" index="1"]
 offset_left = -110.0
@@ -139,7 +174,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToMonsterB/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_r74nl")
+shape = SubResource("RectangleShape2D_yw6jb")
 
 [node name="Label" parent="ExitToMonsterB" index="1"]
 offset_left = -110.0
@@ -152,57 +187,140 @@ text = "出口 -> 怪物房"
 autowrap_mode = 3
 max_lines_visible = 2
 
-[node name="Foreground1" type="TextureRect" parent="."]
+[node name="Foreground1" type="TextureRect" parent="." unique_id=1682070456]
+z_index = 10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 10
 mouse_filter = 2
 texture = ExtResource("5")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground2" type="TextureRect" parent="."]
+[node name="Foreground2" type="TextureRect" parent="." unique_id=524310752]
+z_index = 11
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 11
 mouse_filter = 2
 texture = ExtResource("6")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground3" type="TextureRect" parent="."]
+[node name="Foreground3" type="TextureRect" parent="." unique_id=1278760031]
+z_index = 12
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 12
 mouse_filter = 2
 texture = ExtResource("7")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground4" type="TextureRect" parent="."]
+[node name="Foreground4" type="TextureRect" parent="." unique_id=308505159]
+z_index = 13
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 13
 mouse_filter = 2
 texture = ExtResource("8")
 expand_mode = 1
 stretch_mode = 6
+
+[node name="StaticBody2D6" type="StaticBody2D" parent="." unique_id=2043150400]
+position = Vector2(620, 628)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D6" unique_id=162354516]
+position = Vector2(-476, -314)
+shape = SubResource("CircleShape2D_bc050")
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="." unique_id=2043215525]
+position = Vector2(311, 310)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D5" unique_id=1176590279]
+position = Vector2(-3, -6)
+shape = SubResource("CircleShape2D_jls7n")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="." unique_id=1640483]
+position = Vector2(431, 182)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4" unique_id=2119509947]
+position = Vector2(3.9999695, 8)
+rotation = 0.45636174
+shape = SubResource("CapsuleShape2D_d67pt")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=308420683]
+position = Vector2(809, 74)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=1428479706]
+position = Vector2(19, 6.0000076)
+rotation = 1.5517454
+shape = SubResource("CapsuleShape2D_0pbxl")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=326963493]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=392384944]
+position = Vector2(37, 352)
+rotation = 1.5939611
+shape = SubResource("CapsuleShape2D_q5fkn")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=785200095]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=639775097]
+position = Vector2(1042, 433)
+shape = SubResource("CircleShape2D_17qhe")
+
+[node name="StaticBody2D10" type="StaticBody2D" parent="." unique_id=23766917]
+position = Vector2(1030, 1190)
+rotation = -3.1415925
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D10" unique_id=553583130]
+position = Vector2(342.00006, 703)
+rotation = 1.1325583
+shape = SubResource("ConvexPolygonShape2D_10hxn")
+
+[node name="StaticBody2D9" type="StaticBody2D" parent="." unique_id=629131904]
+position = Vector2(1110, 80)
+rotation = 1.5707964
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D9" unique_id=134694662]
+position = Vector2(476.00006, 653.99994)
+rotation = -0.39278135
+shape = SubResource("ConvexPolygonShape2D_10hxn")
+
+[node name="StaticBody2D8" type="StaticBody2D" parent="." unique_id=791830432]
+position = Vector2(1110, 80)
+rotation = 1.5707964
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D8" unique_id=501359828]
+position = Vector2(8.000046, 970)
+shape = SubResource("CircleShape2D_1jnew")
+
+[node name="StaticBody2D11" type="StaticBody2D" parent="." unique_id=1736082781]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D11" unique_id=100842019]
+position = Vector2(853, 574)
+rotation = -0.8118046
+shape = SubResource("CapsuleShape2D_bfxio")
+
+[node name="StaticBody2D7" type="StaticBody2D" parent="." unique_id=2053681266]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D7" unique_id=1395718032]
+position = Vector2(1110, 80)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_xl1v8")
 
 [editable path="GuideInteractable"]
 [editable path="ExitToMonsterA"]

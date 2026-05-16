@@ -1,15 +1,217 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene format=3 uid="uid://b42qvdyvg5mn4"]
 
-[ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/explore/room_anchor.gd" id="2"]
+[ext_resource type="Script" uid="uid://c8cc8jx0ebp32" path="res://scripts/explore/room_scene.gd" id="1"]
+[ext_resource type="Script" uid="uid://bgvn7fnrkcagx" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/explore/monster_encounter.tscn" id="4"]
-[ext_resource type="Texture2D" path="res://sprites/map/森林地图/背景.png" id="5"]
-[ext_resource type="Texture2D" path="res://sprites/map/森林地图/前景1.png" id="6"]
-[ext_resource type="Texture2D" path="res://sprites/map/森林地图/前景2.png" id="7"]
-[ext_resource type="Texture2D" path="res://sprites/map/森林地图/前景3.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://bdc001as4kr4" path="res://sprites/map/森林地图/背景.png" id="5"]
+[ext_resource type="Shader" uid="uid://1kajis20fdfn" path="res://shaders/sprite_outline.gdshader" id="5_4uc4h"]
+[ext_resource type="Texture2D" uid="uid://dptn6gaplv80o" path="res://sprites/map/森林地图/前景1.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://boqu3qvhwod" path="res://sprites/怪物_256x144/糖豆人/Scene1_000.png" id="6_efyel"]
+[ext_resource type="Texture2D" uid="uid://dqh6clcx085kv" path="res://sprites/map/森林地图/前景2.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://d35t45vw16lnf" path="res://sprites/怪物_256x144/糖豆人/Scene1_001.png" id="7_6vjbs"]
+[ext_resource type="Texture2D" uid="uid://km3dvdxj6sbu" path="res://sprites/map/森林地图/前景3.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://bw1gi1gbfmlvd" path="res://sprites/怪物_256x144/糖豆人/Scene1_002.png" id="8_rvga1"]
+[ext_resource type="Texture2D" uid="uid://covr45r6t317r" path="res://sprites/怪物_256x144/糖豆人/Scene1_003.png" id="9_ekobi"]
+[ext_resource type="Texture2D" uid="uid://c850aos7db1gk" path="res://sprites/怪物_256x144/糖豆人/Scene1_004.png" id="10_fgiti"]
+[ext_resource type="Texture2D" uid="uid://cbg4ewxb1y2o7" path="res://sprites/怪物_256x144/糖豆人/Scene1_005.png" id="11_lynss"]
+[ext_resource type="Texture2D" uid="uid://b5kk62jd1f4fw" path="res://sprites/怪物_256x144/糖豆人/Scene1_006.png" id="12_ruk8j"]
+[ext_resource type="Texture2D" uid="uid://bswujags6tmyj" path="res://sprites/怪物_256x144/糖豆人/Scene1_007.png" id="13_hfqjm"]
+[ext_resource type="Texture2D" uid="uid://w7xnngcomaoq" path="res://sprites/怪物_256x144/糖豆人/Scene1_008.png" id="14_6q3yw"]
+[ext_resource type="Texture2D" uid="uid://bap0t4c4fcmqk" path="res://sprites/怪物_256x144/糖豆人/Scene1_009.png" id="15_kt2w0"]
+[ext_resource type="Texture2D" uid="uid://1162p7wwhxmj" path="res://sprites/怪物_256x144/糖豆人/Scene1_010.png" id="16_rnc16"]
+[ext_resource type="Texture2D" uid="uid://dly7rddub4ob4" path="res://sprites/怪物_256x144/糖豆人/Scene1_011.png" id="17_srx5y"]
+[ext_resource type="Texture2D" uid="uid://cpgb46dlj7825" path="res://sprites/怪物_256x144/糖豆人/Scene1_012.png" id="18_pyyj8"]
+[ext_resource type="Texture2D" uid="uid://ch855odevk2mc" path="res://sprites/怪物_256x144/糖豆人/Scene1_013.png" id="19_asrto"]
+[ext_resource type="Texture2D" uid="uid://cimaveya26r0k" path="res://sprites/怪物_256x144/糖豆人/Scene1_014.png" id="20_p6vh0"]
+[ext_resource type="Texture2D" uid="uid://25pxrda5gvg8" path="res://sprites/怪物_256x144/糖豆人/Scene1_015.png" id="21_wact2"]
+[ext_resource type="Texture2D" uid="uid://ccnjjoq00pu70" path="res://sprites/怪物_256x144/糖豆人/Scene1_016.png" id="22_rh0fg"]
+[ext_resource type="Texture2D" uid="uid://ogl8n8k1vqft" path="res://sprites/怪物_256x144/糖豆人/Scene1_017.png" id="23_a0sme"]
+[ext_resource type="Texture2D" uid="uid://xqjng8sv34ra" path="res://sprites/怪物_256x144/糖豆人/Scene1_018.png" id="24_3bl1n"]
+[ext_resource type="Texture2D" uid="uid://qkfxqpuunfjj" path="res://sprites/怪物_256x144/糖豆人/Scene1_019.png" id="25_14a8p"]
+[ext_resource type="Texture2D" uid="uid://k1sbbk41555o" path="res://sprites/怪物_256x144/糖豆人/Scene1_020.png" id="26_1o7s2"]
+[ext_resource type="Texture2D" uid="uid://blxs8x3o3pu1o" path="res://sprites/怪物_256x144/糖豆人/Scene1_021.png" id="27_coret"]
+[ext_resource type="Texture2D" uid="uid://b0cetioexr7we" path="res://sprites/怪物_256x144/糖豆人/Scene1_022.png" id="28_q67sh"]
+[ext_resource type="Texture2D" uid="uid://bdxq6codw0wqc" path="res://sprites/怪物_256x144/糖豆人/Scene1_023.png" id="29_3uc1e"]
+[ext_resource type="Texture2D" uid="uid://7g8qk8yn3n6c" path="res://sprites/怪物_256x144/糖豆人/Scene1_024.png" id="30_uf5wr"]
+[ext_resource type="Texture2D" uid="uid://bpthfp4vfg0xb" path="res://sprites/怪物_256x144/糖豆人/Scene1_025.png" id="31_7346a"]
+[ext_resource type="Texture2D" uid="uid://bctgfcnsvbuob" path="res://sprites/怪物_256x144/糖豆人/Scene1_026.png" id="32_r1bkq"]
+[ext_resource type="Texture2D" uid="uid://ctiy7ivt2qap5" path="res://sprites/怪物_256x144/糖豆人/Scene1_027.png" id="33_87b2p"]
+[ext_resource type="Texture2D" uid="uid://dm8vycjghlf0b" path="res://sprites/怪物_256x144/糖豆人/Scene1_028.png" id="34_1k3xb"]
+[ext_resource type="Texture2D" uid="uid://dhhhih26pgdte" path="res://sprites/怪物_256x144/糖豆人/Scene1_029.png" id="35_4wg0v"]
+[ext_resource type="Texture2D" uid="uid://c66v2f3kmrc6g" path="res://sprites/怪物_256x144/糖豆人/Scene1_030.png" id="36_0pc6n"]
+[ext_resource type="Texture2D" uid="uid://bv54fvghuow8w" path="res://sprites/怪物_256x144/糖豆人/Scene1_031.png" id="37_4cpah"]
+[ext_resource type="Texture2D" uid="uid://blv1iy8b84fw2" path="res://sprites/怪物_256x144/糖豆人/Scene1_032.png" id="38_qpnx1"]
+[ext_resource type="Texture2D" uid="uid://bytiysra8jklu" path="res://sprites/怪物_256x144/糖豆人/Scene1_033.png" id="39_pkxi2"]
+[ext_resource type="Texture2D" uid="uid://cimx30ykvtjo" path="res://sprites/怪物_256x144/糖豆人/Scene1_034.png" id="40_0gh18"]
+[ext_resource type="Texture2D" uid="uid://bbt8bqoko62sx" path="res://sprites/怪物_256x144/糖豆人/Scene1_035.png" id="41_dvjj5"]
+[ext_resource type="Texture2D" uid="uid://c0v7uo4p2xs8w" path="res://sprites/怪物_256x144/糖豆人/Scene1_036.png" id="42_qckyt"]
+[ext_resource type="Texture2D" uid="uid://dqwuwc0b7yx1j" path="res://sprites/怪物_256x144/糖豆人/Scene1_037.png" id="43_qexkh"]
+[ext_resource type="Texture2D" uid="uid://c126g47ebd886" path="res://sprites/怪物_256x144/糖豆人/Scene1_038.png" id="44_ppdqk"]
+[ext_resource type="Texture2D" uid="uid://dv2w8g60h038u" path="res://sprites/怪物_256x144/糖豆人/Scene1_039.png" id="45_j2duf"]
+[ext_resource type="Texture2D" uid="uid://dw0rxdlf5p15a" path="res://sprites/怪物_256x144/糖豆人/Scene1_040.png" id="46_s2thq"]
 
-[node name="CandyBeanRoom" type="Control"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tks33"]
+shader = ExtResource("5_4uc4h")
+shader_parameter/outline_color = Color(1, 0.95, 0.72, 1)
+shader_parameter/outline_thickness = 4.0
+shader_parameter/outline_enabled = false
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wgvr8"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_efyel")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_6vjbs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_rvga1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_ekobi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_fgiti")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_lynss")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_ruk8j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_hfqjm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_6q3yw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_kt2w0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_rnc16")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_srx5y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_pyyj8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_asrto")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_p6vh0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_wact2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_rh0fg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_a0sme")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_3bl1n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_14a8p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_1o7s2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_coret")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_q67sh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_3uc1e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_uf5wr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_7346a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_r1bkq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_87b2p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_1k3xb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_4wg0v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_0pc6n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_4cpah")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_qpnx1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_pkxi2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_0gh18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_dvjj5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_qckyt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_qexkh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_ppdqk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_j2duf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_s2thq")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2jymf"]
+size = Vector2(220, 180)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oblj7"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eqvbt"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p4w4b"]
+size = Vector2(1289, 270)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2lx8j"]
+size = Vector2(1324, 170.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_em06p"]
+radius = 43.416588
+
+[node name="CandyBeanRoom" type="Control" unique_id=597083533]
 custom_minimum_size = Vector2(960, 540)
 layout_mode = 3
 anchors_preset = 15
@@ -18,21 +220,21 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
-fallback_room_tint = Color(0.92, 0.90, 0.78, 1)
+fallback_room_tint = Color(0.92, 0.9, 0.78, 1)
 
-[node name="Backdrop" type="TextureRect" parent="."]
+[node name="Backdrop" type="TextureRect" parent="." unique_id=849384298]
+z_index = -10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = -10
 texture = ExtResource("5")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="PlayerSpawn" type="ColorRect" parent="."]
+[node name="PlayerSpawn" type="ColorRect" parent="." unique_id=1363203737]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 0
 offset_left = 591.0
@@ -51,9 +253,33 @@ interactable_id = &"enemy"
 display_name = "污染怪物"
 prompt_text = "发起战斗"
 interactable_kind = &"encounter"
+area_size = Vector2(220, 180)
 payload = {
+"monster_id": &"candy_bean",
 "room_id": &"candy_bean_room"
 }
+
+[node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
+material = SubResource("ShaderMaterial_tks33")
+sprite_frames = SubResource("SpriteFrames_wgvr8")
+animation = &"idle"
+frame_progress = 0.9613466
+
+[node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_2jymf")
+
+[node name="Label" parent="MonsterEncounter" index="2"]
+offset_left = -110.0
+offset_top = -90.0
+offset_right = 110.0
+offset_bottom = 90.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "污染怪物"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+max_lines_visible = 2
 
 [node name="ExitToStart" parent="." unique_id=1602820533 instance=ExtResource("3")]
 position = Vector2(188, 432)
@@ -65,6 +291,20 @@ payload = {
 "target_room_id": &"start"
 }
 
+[node name="CollisionShape2D" parent="ExitToStart/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_oblj7")
+
+[node name="Label" parent="ExitToStart" index="1"]
+offset_left = -110.0
+offset_top = -32.0
+offset_right = 110.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "出口 -> 起点"
+autowrap_mode = 3
+max_lines_visible = 2
+
 [node name="ExitToStrawberry" parent="." unique_id=319213096 instance=ExtResource("3")]
 position = Vector2(1125, 403)
 interactable_id = &"exit_bread"
@@ -75,47 +315,79 @@ payload = {
 "target_room_id": &"bread_room"
 }
 
-[node name="Foreground1" type="TextureRect" parent="."]
+[node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_eqvbt")
+
+[node name="Label" parent="ExitToStrawberry" index="1"]
+offset_left = -110.0
+offset_top = -32.0
+offset_right = 110.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "出口 -> 怪物房"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="Foreground1" type="TextureRect" parent="." unique_id=1269678022]
+self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
+z_index = 10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 10
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
 mouse_filter = 2
 texture = ExtResource("6")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground2" type="TextureRect" parent="."]
+[node name="Foreground2" type="TextureRect" parent="." unique_id=1291562080]
+self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
+z_index = 11
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 11
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
 mouse_filter = 2
 texture = ExtResource("7")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground3" type="TextureRect" parent="."]
+[node name="Foreground3" type="TextureRect" parent="." unique_id=16139059]
+self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
+z_index = 12
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 12
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
 mouse_filter = 2
 texture = ExtResource("8")
 expand_mode = 1
 stretch_mode = 6
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1504190246]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=670155157]
+position = Vector2(634.5, 125)
+shape = SubResource("RectangleShape2D_p4w4b")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=2112828069]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=441163273]
+position = Vector2(647, 642.25)
+shape = SubResource("RectangleShape2D_2lx8j")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=661479224]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=1921838496]
+position = Vector2(962, 470)
+shape = SubResource("CircleShape2D_em06p")
 
 [editable path="MonsterEncounter"]
 [editable path="ExitToStart"]

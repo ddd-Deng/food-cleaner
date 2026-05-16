@@ -1,17 +1,711 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene format=3 uid="uid://cksykbcxnjg3w"]
 
-[ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/explore/room_anchor.gd" id="2"]
+[ext_resource type="Script" uid="uid://c8cc8jx0ebp32" path="res://scripts/explore/room_scene.gd" id="1"]
+[ext_resource type="Script" uid="uid://bgvn7fnrkcagx" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/explore/monster_encounter.tscn" id="4"]
-[ext_resource type="Texture2D" path="res://sprites/map/喷泉地图/背景.png" id="5"]
-[ext_resource type="Texture2D" path="res://sprites/map/喷泉地图/前景1.png" id="6"]
-[ext_resource type="Texture2D" path="res://sprites/map/喷泉地图/前景2.png" id="7"]
-[ext_resource type="Texture2D" path="res://sprites/map/喷泉地图/前景3.png" id="8"]
-[ext_resource type="Texture2D" path="res://sprites/map/喷泉地图/前景4.png" id="9"]
-[ext_resource type="Texture2D" path="res://sprites/map/喷泉地图/前景5.png" id="10"]
+[ext_resource type="Texture2D" uid="uid://df62dfyohaby" path="res://sprites/map/喷泉地图/背景.png" id="5"]
+[ext_resource type="Shader" uid="uid://1kajis20fdfn" path="res://shaders/sprite_outline.gdshader" id="5_8h0qj"]
+[ext_resource type="Texture2D" uid="uid://bt6qf06khot2j" path="res://sprites/map/喷泉地图/前景1.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://owqbhynfd746" path="res://sprites/怪物_256x144/鱼/Scene1_000.png" id="6_yiwo5"]
+[ext_resource type="Texture2D" uid="uid://bare7fpq8scrw" path="res://sprites/map/喷泉地图/前景2.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://b43bdf1h1r1fh" path="res://sprites/怪物_256x144/鱼/Scene1_001.png" id="7_jyuvj"]
+[ext_resource type="Texture2D" uid="uid://burcrc08y55no" path="res://sprites/map/喷泉地图/前景3.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://d1ye50oy6q8k6" path="res://sprites/怪物_256x144/鱼/Scene1_002.png" id="8_dt65n"]
+[ext_resource type="Texture2D" uid="uid://cnc1t8b4lgkcn" path="res://sprites/map/喷泉地图/前景4.png" id="9"]
+[ext_resource type="Texture2D" uid="uid://ckgprq4dr6xok" path="res://sprites/怪物_256x144/鱼/Scene1_003.png" id="9_pneyj"]
+[ext_resource type="Texture2D" uid="uid://ckfas456ciwr0" path="res://sprites/map/喷泉地图/前景5.png" id="10"]
+[ext_resource type="Texture2D" uid="uid://dyp2x2ssrty82" path="res://sprites/怪物_256x144/鱼/Scene1_004.png" id="10_gb04x"]
+[ext_resource type="Texture2D" uid="uid://cq7d4y5qr1t1s" path="res://sprites/怪物_256x144/鱼/Scene1_005.png" id="11_is67y"]
+[ext_resource type="Texture2D" uid="uid://blqoldfi4328m" path="res://sprites/怪物_256x144/鱼/Scene1_006.png" id="12_ic0vn"]
+[ext_resource type="Texture2D" uid="uid://dpr5728tp3g6u" path="res://sprites/怪物_256x144/鱼/Scene1_007.png" id="13_ej1k5"]
+[ext_resource type="Texture2D" uid="uid://b52dfk0g6tkkk" path="res://sprites/怪物_256x144/鱼/Scene1_008.png" id="14_m6as6"]
+[ext_resource type="Texture2D" uid="uid://ci1uyfw3v7tnc" path="res://sprites/怪物_256x144/鱼/Scene1_009.png" id="15_61yuw"]
+[ext_resource type="Texture2D" uid="uid://dbeh7rhtsi48u" path="res://sprites/怪物_256x144/鱼/Scene1_010.png" id="16_r0hn8"]
+[ext_resource type="Texture2D" uid="uid://t0is1q4imai1" path="res://sprites/怪物_256x144/鱼/Scene1_011.png" id="17_em88w"]
+[ext_resource type="Texture2D" uid="uid://r6t3b682qgi4" path="res://sprites/怪物_256x144/鱼/Scene1_012.png" id="18_47y25"]
+[ext_resource type="Texture2D" uid="uid://dyfvud8lut54m" path="res://sprites/怪物_256x144/鱼/Scene1_013.png" id="19_8mdi0"]
+[ext_resource type="Texture2D" uid="uid://cv62rjmse31ce" path="res://sprites/怪物_256x144/鱼/Scene1_014.png" id="20_axy48"]
+[ext_resource type="Texture2D" uid="uid://x55ywh8y7fdd" path="res://sprites/怪物_256x144/鱼/Scene1_015.png" id="21_3drow"]
+[ext_resource type="Texture2D" uid="uid://b1ill5vda76c5" path="res://sprites/怪物_256x144/鱼/Scene1_016.png" id="22_j7d1q"]
+[ext_resource type="Texture2D" uid="uid://bekj5qncu8b6c" path="res://sprites/怪物_256x144/鱼/Scene1_017.png" id="23_ubivn"]
+[ext_resource type="Texture2D" uid="uid://r1u6w5o7s1vv" path="res://sprites/怪物_256x144/鱼/Scene1_018.png" id="24_ngni7"]
+[ext_resource type="Texture2D" uid="uid://b7bw00uoc1o52" path="res://sprites/怪物_256x144/鱼/Scene1_019.png" id="25_7s720"]
+[ext_resource type="Texture2D" uid="uid://wo75gng5y6yw" path="res://sprites/怪物_256x144/鱼/Scene1_020.png" id="26_br3cw"]
+[ext_resource type="Texture2D" uid="uid://1qkelpq4ai1c" path="res://sprites/怪物_256x144/鱼/Scene1_021.png" id="27_5bldd"]
+[ext_resource type="Texture2D" uid="uid://cmbhxcr0dtu11" path="res://sprites/怪物_256x144/鱼/Scene1_022.png" id="28_sadq1"]
+[ext_resource type="Texture2D" uid="uid://68ehhp3h7wuc" path="res://sprites/怪物_256x144/鱼/Scene1_023.png" id="29_ny4se"]
+[ext_resource type="Texture2D" uid="uid://5vi7kipq111n" path="res://sprites/怪物_256x144/鱼/Scene1_024.png" id="30_2p05e"]
+[ext_resource type="Texture2D" uid="uid://cpuywqd43xos7" path="res://sprites/怪物_256x144/鱼/Scene1_025.png" id="31_rqjf0"]
+[ext_resource type="Texture2D" uid="uid://ok258lwa3e3y" path="res://sprites/怪物_256x144/鱼/Scene1_026.png" id="32_xkyhn"]
+[ext_resource type="Texture2D" uid="uid://reer3g3vyegr" path="res://sprites/怪物_256x144/鱼/Scene1_027.png" id="33_b17ou"]
+[ext_resource type="Texture2D" uid="uid://dwpxkgqx4yei4" path="res://sprites/怪物_256x144/鱼/Scene1_028.png" id="34_rs3k5"]
+[ext_resource type="Texture2D" uid="uid://fkensjpq6abi" path="res://sprites/怪物_256x144/鱼/Scene1_029.png" id="35_nybb2"]
+[ext_resource type="Texture2D" uid="uid://dc0g0vbyrhvwv" path="res://sprites/怪物_256x144/鱼/Scene1_030.png" id="36_hdqrd"]
+[ext_resource type="Texture2D" uid="uid://cm25pacvdi5r0" path="res://sprites/怪物_256x144/鱼/Scene1_031.png" id="37_qluad"]
+[ext_resource type="Texture2D" uid="uid://qkt2jx58hkg6" path="res://sprites/怪物_256x144/鱼/Scene1_032.png" id="38_nffc8"]
+[ext_resource type="Texture2D" uid="uid://dghxdjpkvm2ix" path="res://sprites/怪物_256x144/鱼/Scene1_033.png" id="39_d2yrs"]
+[ext_resource type="Texture2D" uid="uid://c4l1h02lpsucp" path="res://sprites/怪物_256x144/鱼/Scene1_034.png" id="40_4ei82"]
+[ext_resource type="Texture2D" uid="uid://drbfnntijdjps" path="res://sprites/怪物_256x144/鱼/Scene1_035.png" id="41_h3nwx"]
+[ext_resource type="Texture2D" uid="uid://cnfgf1hgk2xrp" path="res://sprites/怪物_256x144/鱼/Scene1_036.png" id="42_madw5"]
+[ext_resource type="Texture2D" uid="uid://djs8lgslaeb52" path="res://sprites/怪物_256x144/鱼/Scene1_037.png" id="43_5aqwr"]
+[ext_resource type="Texture2D" uid="uid://dgwvmbpa15xqm" path="res://sprites/怪物_256x144/鱼/Scene1_038.png" id="44_1dslf"]
+[ext_resource type="Texture2D" uid="uid://do3hqrm6g5q7x" path="res://sprites/怪物_256x144/鱼/Scene1_039.png" id="45_hlib1"]
+[ext_resource type="Texture2D" uid="uid://cyp4qyr4hloma" path="res://sprites/怪物_256x144/鱼/Scene1_040.png" id="46_2j2vf"]
+[ext_resource type="Texture2D" uid="uid://bixrfpwcpdlk3" path="res://sprites/怪物_256x144/鱼/Scene1_041.png" id="47_5naap"]
+[ext_resource type="Texture2D" uid="uid://cn5p2c22iekud" path="res://sprites/怪物_256x144/鱼/Scene1_042.png" id="48_bf804"]
+[ext_resource type="Texture2D" uid="uid://dy22ubysf7gji" path="res://sprites/怪物_256x144/鱼/Scene1_043.png" id="49_7s0l0"]
+[ext_resource type="Texture2D" uid="uid://bkkdn40sgmn72" path="res://sprites/怪物_256x144/鱼/Scene1_044.png" id="50_qcw65"]
+[ext_resource type="Texture2D" uid="uid://b4vij4d3bioi3" path="res://sprites/怪物_256x144/鱼/Scene1_045.png" id="51_0nu4f"]
+[ext_resource type="Texture2D" uid="uid://fr4i1bujhe8y" path="res://sprites/怪物_256x144/鱼/Scene1_046.png" id="52_o3u8h"]
+[ext_resource type="Texture2D" uid="uid://dcb36jpadyldy" path="res://sprites/怪物_256x144/鱼/Scene1_047.png" id="53_uyyg0"]
+[ext_resource type="Texture2D" uid="uid://cpxd8ffywaxst" path="res://sprites/怪物_256x144/鱼/Scene1_048.png" id="54_pypwm"]
+[ext_resource type="Texture2D" uid="uid://bmav53gjypj2" path="res://sprites/怪物_256x144/鱼/Scene1_049.png" id="55_nykfj"]
+[ext_resource type="Texture2D" uid="uid://c21jie4ebqu0b" path="res://sprites/怪物_256x144/鱼/Scene1_050.png" id="56_c6nca"]
+[ext_resource type="Texture2D" uid="uid://gge58seb2egb" path="res://sprites/怪物_256x144/鱼/Scene1_051.png" id="57_5p2xo"]
+[ext_resource type="Texture2D" uid="uid://cf8dp6iarf3af" path="res://sprites/怪物_256x144/鱼/Scene1_052.png" id="58_02ytm"]
+[ext_resource type="Texture2D" uid="uid://bhd6xyrc22a0n" path="res://sprites/怪物_256x144/鱼/Scene1_053.png" id="59_sjt4u"]
+[ext_resource type="Texture2D" uid="uid://dqsja5tjwp1pl" path="res://sprites/怪物_256x144/鱼/Scene1_054.png" id="60_4l3r5"]
+[ext_resource type="Texture2D" uid="uid://bbbxslslbohv7" path="res://sprites/怪物_256x144/鱼/Scene1_055.png" id="61_hwa8v"]
+[ext_resource type="Texture2D" uid="uid://c5n2gftkfrs4" path="res://sprites/怪物_256x144/鱼/Scene1_056.png" id="62_se251"]
+[ext_resource type="Texture2D" uid="uid://be4bpcopbqqje" path="res://sprites/怪物_256x144/鱼/Scene1_057.png" id="63_cmyj1"]
+[ext_resource type="Texture2D" uid="uid://deqc08umgs8j6" path="res://sprites/怪物_256x144/鱼/Scene1_058.png" id="64_o6bh7"]
+[ext_resource type="Texture2D" uid="uid://ch2sbk45mxdkf" path="res://sprites/怪物_256x144/鱼/Scene1_059.png" id="65_mpxlb"]
+[ext_resource type="Texture2D" uid="uid://q0epwa4txhim" path="res://sprites/怪物_256x144/鱼/Scene1_060.png" id="66_x2gnp"]
+[ext_resource type="Texture2D" uid="uid://qjg3fh6ixhav" path="res://sprites/怪物_256x144/鱼/Scene1_061.png" id="67_nvuc4"]
+[ext_resource type="Texture2D" uid="uid://c4c7m4otlmgr8" path="res://sprites/怪物_256x144/鱼/Scene1_062.png" id="68_l7tsw"]
+[ext_resource type="Texture2D" uid="uid://dtqqbnrhr2lj4" path="res://sprites/怪物_256x144/鱼/Scene1_063.png" id="69_5g2p5"]
+[ext_resource type="Texture2D" uid="uid://cl54m2cvesfb1" path="res://sprites/怪物_256x144/鱼/Scene1_064.png" id="70_p17kp"]
+[ext_resource type="Texture2D" uid="uid://bhajhh0hks366" path="res://sprites/怪物_256x144/鱼/Scene1_065.png" id="71_t057g"]
+[ext_resource type="Texture2D" uid="uid://deg658qbucme2" path="res://sprites/怪物_256x144/鱼/Scene1_066.png" id="72_mwp6m"]
+[ext_resource type="Texture2D" uid="uid://bka1y02rqxxde" path="res://sprites/怪物_256x144/鱼/Scene1_067.png" id="73_ta4c2"]
+[ext_resource type="Texture2D" uid="uid://b26vwnfs2d8hq" path="res://sprites/怪物_256x144/鱼/Scene1_068.png" id="74_1woa4"]
+[ext_resource type="Texture2D" uid="uid://dwg75fwkl8xek" path="res://sprites/怪物_256x144/鱼/Scene1_069.png" id="75_4w1hh"]
+[ext_resource type="Texture2D" uid="uid://dby52efpv0fdm" path="res://sprites/怪物_256x144/鱼/Scene1_070.png" id="76_yw3re"]
+[ext_resource type="Texture2D" uid="uid://bjl6g2wmocg2a" path="res://sprites/怪物_256x144/鱼/Scene1_071.png" id="77_ae3w7"]
+[ext_resource type="Texture2D" uid="uid://cnaxfugydbcno" path="res://sprites/怪物_256x144/鱼/Scene1_072.png" id="78_qglrr"]
+[ext_resource type="Texture2D" uid="uid://cdf5jnqgosc77" path="res://sprites/怪物_256x144/鱼/Scene1_073.png" id="79_sft2n"]
+[ext_resource type="Texture2D" uid="uid://b67isntycxux3" path="res://sprites/怪物_256x144/鱼/Scene1_074.png" id="80_ge8md"]
+[ext_resource type="Texture2D" uid="uid://byj5loy6n3fbv" path="res://sprites/怪物_256x144/鱼/Scene1_075.png" id="81_dhquv"]
+[ext_resource type="Texture2D" uid="uid://sj35dyb3l7s6" path="res://sprites/怪物_256x144/鱼/Scene1_076.png" id="82_0xmnk"]
+[ext_resource type="Texture2D" uid="uid://du0cgtb1y22wv" path="res://sprites/怪物_256x144/鱼/Scene1_077.png" id="83_suygt"]
+[ext_resource type="Texture2D" uid="uid://cruv7qasqw41g" path="res://sprites/怪物_256x144/鱼/Scene1_078.png" id="84_i7q4e"]
+[ext_resource type="Texture2D" uid="uid://u4pvhls2olsf" path="res://sprites/怪物_256x144/鱼/Scene1_079.png" id="85_6u1m6"]
+[ext_resource type="Texture2D" uid="uid://yvvfn83do5l1" path="res://sprites/怪物_256x144/鱼/Scene1_080.png" id="86_crhew"]
+[ext_resource type="Texture2D" uid="uid://bnyvklscl3css" path="res://sprites/怪物_256x144/鱼/Scene1_081.png" id="87_pcevd"]
+[ext_resource type="Texture2D" uid="uid://db8yv0tcim3qy" path="res://sprites/怪物_256x144/鱼/Scene1_082.png" id="88_l7bv7"]
+[ext_resource type="Texture2D" uid="uid://kxv2o2f7myrr" path="res://sprites/怪物_256x144/鱼/Scene1_083.png" id="89_rpj0l"]
+[ext_resource type="Texture2D" uid="uid://bnh1a1c78m6he" path="res://sprites/怪物_256x144/鱼/Scene1_084.png" id="90_2w32u"]
+[ext_resource type="Texture2D" uid="uid://dkgudoy6oqxq1" path="res://sprites/怪物_256x144/鱼/Scene1_085.png" id="91_kajym"]
+[ext_resource type="Texture2D" uid="uid://bih4h25wr2n4n" path="res://sprites/怪物_256x144/鱼/Scene1_086.png" id="92_jrogo"]
+[ext_resource type="Texture2D" uid="uid://cal3iap4jc4u7" path="res://sprites/怪物_256x144/鱼/Scene1_087.png" id="93_3b3me"]
+[ext_resource type="Texture2D" uid="uid://ct41qjjti2tj" path="res://sprites/怪物_256x144/鱼/Scene1_088.png" id="94_t364u"]
+[ext_resource type="Texture2D" uid="uid://wmgvqv2afxe" path="res://sprites/怪物_256x144/鱼/Scene1_089.png" id="95_dn1sg"]
+[ext_resource type="Texture2D" uid="uid://bpwaiq85duew2" path="res://sprites/怪物_256x144/鱼/Scene1_090.png" id="96_boyhn"]
+[ext_resource type="Texture2D" uid="uid://d4ngvxf1kr2vb" path="res://sprites/怪物_256x144/鱼/Scene1_091.png" id="97_vwani"]
+[ext_resource type="Texture2D" uid="uid://clly5tewv7i" path="res://sprites/怪物_256x144/鱼/Scene1_092.png" id="98_66csr"]
+[ext_resource type="Texture2D" uid="uid://fsfa4ygv2jhm" path="res://sprites/怪物_256x144/鱼/Scene1_093.png" id="99_qxmxj"]
+[ext_resource type="Texture2D" uid="uid://daot6lywq7pot" path="res://sprites/怪物_256x144/鱼/Scene1_094.png" id="100_80ndm"]
+[ext_resource type="Texture2D" uid="uid://c2y0ed6y1pqbs" path="res://sprites/怪物_256x144/鱼/Scene1_095.png" id="101_ktoiq"]
+[ext_resource type="Texture2D" uid="uid://we0etcf55jb8" path="res://sprites/怪物_256x144/鱼/Scene1_096.png" id="102_28u43"]
+[ext_resource type="Texture2D" uid="uid://cpxg4hhen8rr0" path="res://sprites/怪物_256x144/鱼/Scene1_097.png" id="103_rapfe"]
+[ext_resource type="Texture2D" uid="uid://854yr6bt3rdu" path="res://sprites/怪物_256x144/鱼/Scene1_098.png" id="104_l8trt"]
+[ext_resource type="Texture2D" uid="uid://cju65h6vip1st" path="res://sprites/怪物_256x144/鱼/Scene1_099.png" id="105_hgn2e"]
+[ext_resource type="Texture2D" uid="uid://1hd4qlk0koes" path="res://sprites/怪物_256x144/鱼/Scene1_100.png" id="106_6mlng"]
+[ext_resource type="Texture2D" uid="uid://ojieflebf5sw" path="res://sprites/怪物_256x144/鱼/Scene1_101.png" id="107_i8g8f"]
+[ext_resource type="Texture2D" uid="uid://b3psaeelacdl" path="res://sprites/怪物_256x144/鱼/Scene1_102.png" id="108_voxgj"]
+[ext_resource type="Texture2D" uid="uid://bloduo6ctdahv" path="res://sprites/怪物_256x144/鱼/Scene1_103.png" id="109_jycxi"]
+[ext_resource type="Texture2D" uid="uid://ckyhhv0gt0s6e" path="res://sprites/怪物_256x144/鱼/Scene1_104.png" id="110_5fih2"]
+[ext_resource type="Texture2D" uid="uid://bnkndxjws6e34" path="res://sprites/怪物_256x144/鱼/Scene1_105.png" id="111_gsoyc"]
+[ext_resource type="Texture2D" uid="uid://dsomuxfr41ksd" path="res://sprites/怪物_256x144/鱼/Scene1_106.png" id="112_h2tw8"]
+[ext_resource type="Texture2D" uid="uid://bbt7r7hgir6si" path="res://sprites/怪物_256x144/鱼/Scene1_107.png" id="113_vowf5"]
+[ext_resource type="Texture2D" uid="uid://c4cl48si2qnn3" path="res://sprites/怪物_256x144/鱼/Scene1_108.png" id="114_pwt02"]
+[ext_resource type="Texture2D" uid="uid://kpmb8tpwewjq" path="res://sprites/怪物_256x144/鱼/Scene1_109.png" id="115_t6dn6"]
+[ext_resource type="Texture2D" uid="uid://yde6lqdr8wqy" path="res://sprites/怪物_256x144/鱼/Scene1_110.png" id="116_ix3dt"]
+[ext_resource type="Texture2D" uid="uid://bvprrkfdhqw2n" path="res://sprites/怪物_256x144/鱼/Scene1_111.png" id="117_yyxik"]
+[ext_resource type="Texture2D" uid="uid://dpvnjnrrkh1tc" path="res://sprites/怪物_256x144/鱼/Scene1_112.png" id="118_l2tgk"]
+[ext_resource type="Texture2D" uid="uid://dselylpk6wlqk" path="res://sprites/怪物_256x144/鱼/Scene1_113.png" id="119_jib17"]
+[ext_resource type="Texture2D" uid="uid://brddm1jnso0ic" path="res://sprites/怪物_256x144/鱼/Scene1_114.png" id="120_2c0da"]
+[ext_resource type="Texture2D" uid="uid://dpd4ixmn6cwx3" path="res://sprites/怪物_256x144/鱼/Scene1_115.png" id="121_k3uey"]
+[ext_resource type="Texture2D" uid="uid://lc2afittewb1" path="res://sprites/怪物_256x144/鱼/Scene1_116.png" id="122_mln23"]
+[ext_resource type="Texture2D" uid="uid://clditsl66gy3o" path="res://sprites/怪物_256x144/鱼/Scene1_117.png" id="123_yo45c"]
+[ext_resource type="Texture2D" uid="uid://b3ng4e1h7tjbl" path="res://sprites/怪物_256x144/鱼/Scene1_118.png" id="124_tnw7k"]
+[ext_resource type="Texture2D" uid="uid://dnn1chcsfrtds" path="res://sprites/怪物_256x144/鱼/Scene1_119.png" id="125_somfs"]
+[ext_resource type="Texture2D" uid="uid://b11tpughny5if" path="res://sprites/怪物_256x144/鱼/Scene1_120.png" id="126_m670q"]
+[ext_resource type="Texture2D" uid="uid://ci06bac8851vr" path="res://sprites/怪物_256x144/鱼/Scene1_121.png" id="127_32t44"]
+[ext_resource type="Texture2D" uid="uid://bu4wbh42cd0j4" path="res://sprites/怪物_256x144/鱼/Scene1_122.png" id="128_jy2nj"]
+[ext_resource type="Texture2D" uid="uid://cyr4226vmnw1o" path="res://sprites/怪物_256x144/鱼/Scene1_123.png" id="129_mnxic"]
+[ext_resource type="Texture2D" uid="uid://di5piv56envj4" path="res://sprites/怪物_256x144/鱼/Scene1_124.png" id="130_68rs3"]
+[ext_resource type="Texture2D" uid="uid://c3hfa766qweum" path="res://sprites/怪物_256x144/鱼/Scene1_125.png" id="131_jr7jl"]
+[ext_resource type="Texture2D" uid="uid://b1160weahx673" path="res://sprites/怪物_256x144/鱼/Scene1_126.png" id="132_srpnq"]
+[ext_resource type="Texture2D" uid="uid://d2kdfwnm8fc3n" path="res://sprites/怪物_256x144/鱼/Scene1_127.png" id="133_6wv2i"]
+[ext_resource type="Texture2D" uid="uid://cvpr15kpop4h8" path="res://sprites/怪物_256x144/鱼/Scene1_128.png" id="134_11kvv"]
+[ext_resource type="Texture2D" uid="uid://c5wcx7q4b2lc6" path="res://sprites/怪物_256x144/鱼/Scene1_129.png" id="135_kpsxo"]
+[ext_resource type="Texture2D" uid="uid://dtjeobo3in2ca" path="res://sprites/怪物_256x144/鱼/Scene1_130.png" id="136_yknwq"]
+[ext_resource type="Texture2D" uid="uid://bop8yn0rx0y7k" path="res://sprites/怪物_256x144/鱼/Scene1_131.png" id="137_i1n4p"]
+[ext_resource type="Texture2D" uid="uid://b2y0wen2jmihs" path="res://sprites/怪物_256x144/鱼/Scene1_132.png" id="138_t3yt3"]
+[ext_resource type="Texture2D" uid="uid://dc1boqq5lgc3g" path="res://sprites/怪物_256x144/鱼/Scene1_133.png" id="139_nmb5w"]
+[ext_resource type="Texture2D" uid="uid://cpmbopcfcnnxj" path="res://sprites/怪物_256x144/鱼/Scene1_134.png" id="140_qxchx"]
+[ext_resource type="Texture2D" uid="uid://bc2fvs5lfvcmd" path="res://sprites/怪物_256x144/鱼/Scene1_135.png" id="141_24e34"]
+[ext_resource type="Texture2D" uid="uid://coswwqdvhtcsm" path="res://sprites/怪物_256x144/鱼/Scene1_136.png" id="142_tubl7"]
+[ext_resource type="Texture2D" uid="uid://mnjl3o4g2vl4" path="res://sprites/怪物_256x144/鱼/Scene1_137.png" id="143_ayhuh"]
+[ext_resource type="Texture2D" uid="uid://c026c6s7afnfk" path="res://sprites/怪物_256x144/鱼/Scene1_138.png" id="144_1f1a2"]
+[ext_resource type="Texture2D" uid="uid://cgtt36f52q6x4" path="res://sprites/怪物_256x144/鱼/Scene1_139.png" id="145_6uwjs"]
+[ext_resource type="Texture2D" uid="uid://bhw0h8ck80uaj" path="res://sprites/怪物_256x144/鱼/Scene1_140.png" id="146_d7qpx"]
+[ext_resource type="Texture2D" uid="uid://bpyt4q583xgp4" path="res://sprites/怪物_256x144/鱼/Scene1_141.png" id="147_ww86d"]
+[ext_resource type="Texture2D" uid="uid://dmqnpms2y7tcn" path="res://sprites/怪物_256x144/鱼/Scene1_142.png" id="148_01qa4"]
+[ext_resource type="Texture2D" uid="uid://h7rjrkcrdgy" path="res://sprites/怪物_256x144/鱼/Scene1_143.png" id="149_k0l6h"]
+[ext_resource type="Texture2D" uid="uid://m5jceartjj2v" path="res://sprites/怪物_256x144/鱼/Scene1_144.png" id="150_06x5g"]
+[ext_resource type="Texture2D" uid="uid://rxh7j8oq5j4u" path="res://sprites/怪物_256x144/鱼/Scene1_145.png" id="151_xdgjr"]
+[ext_resource type="Texture2D" uid="uid://d003t7j4xqlrq" path="res://sprites/怪物_256x144/鱼/Scene1_146.png" id="152_1740v"]
+[ext_resource type="Texture2D" uid="uid://da01oaagk6xej" path="res://sprites/怪物_256x144/鱼/Scene1_147.png" id="153_yvg4q"]
+[ext_resource type="Texture2D" uid="uid://dluafchlaa0ph" path="res://sprites/怪物_256x144/鱼/Scene1_148.png" id="154_hckmw"]
+[ext_resource type="Texture2D" uid="uid://drt3tllq87otd" path="res://sprites/怪物_256x144/鱼/Scene1_149.png" id="155_elql5"]
+[ext_resource type="Texture2D" uid="uid://cf88qoixwxv47" path="res://sprites/怪物_256x144/鱼/Scene1_150.png" id="156_e28wj"]
+[ext_resource type="Texture2D" uid="uid://kmag0k85pltd" path="res://sprites/怪物_256x144/鱼/Scene1_151.png" id="157_ddbno"]
+[ext_resource type="Texture2D" uid="uid://mvvhuqtm35c3" path="res://sprites/怪物_256x144/鱼/Scene1_152.png" id="158_kbgy6"]
+[ext_resource type="Texture2D" uid="uid://fip0nwtv734s" path="res://sprites/怪物_256x144/鱼/Scene1_153.png" id="159_x0evm"]
+[ext_resource type="Texture2D" uid="uid://lnrxm2uukoib" path="res://sprites/怪物_256x144/鱼/Scene1_154.png" id="160_3niuv"]
+[ext_resource type="Texture2D" uid="uid://uokpbcwjq2ms" path="res://sprites/怪物_256x144/鱼/Scene1_155.png" id="161_jiy0l"]
+[ext_resource type="Texture2D" uid="uid://o7e6783ffv1t" path="res://sprites/怪物_256x144/鱼/Scene1_156.png" id="162_lyuce"]
+[ext_resource type="Texture2D" uid="uid://b0h50tpcdovt1" path="res://sprites/怪物_256x144/鱼/Scene1_157.png" id="163_g5me7"]
+[ext_resource type="Texture2D" uid="uid://gll8noduc6u6" path="res://sprites/怪物_256x144/鱼/Scene1_158.png" id="164_rhhf1"]
+[ext_resource type="Texture2D" uid="uid://pgv0dckuum3c" path="res://sprites/怪物_256x144/鱼/Scene1_159.png" id="165_osjdy"]
+[ext_resource type="Texture2D" uid="uid://bp1fscnegnvhx" path="res://sprites/怪物_256x144/鱼/Scene1_160.png" id="166_x45xp"]
 
-[node name="FishBossRoom" type="Control"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_arfjf"]
+shader = ExtResource("5_8h0qj")
+shader_parameter/outline_color = Color(1, 0.95, 0.72, 1)
+shader_parameter/outline_thickness = 4.0
+shader_parameter/outline_enabled = false
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6xoms"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_yiwo5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_jyuvj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_dt65n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_pneyj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_gb04x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_is67y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_ic0vn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_ej1k5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_m6as6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_61yuw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_r0hn8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_em88w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_47y25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_8mdi0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_axy48")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_3drow")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_j7d1q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_ubivn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_ngni7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_7s720")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_br3cw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_5bldd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_sadq1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_ny4se")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_2p05e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_rqjf0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_xkyhn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_b17ou")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_rs3k5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_nybb2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_hdqrd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_qluad")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_nffc8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_d2yrs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_4ei82")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_h3nwx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_madw5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_5aqwr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_1dslf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_hlib1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_2j2vf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_5naap")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_bf804")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_7s0l0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_qcw65")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_0nu4f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_o3u8h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_uyyg0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_pypwm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_nykfj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_c6nca")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_5p2xo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_02ytm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_sjt4u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_4l3r5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_hwa8v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_se251")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_cmyj1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_o6bh7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_mpxlb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_x2gnp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_nvuc4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_l7tsw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_5g2p5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_p17kp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_t057g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_mwp6m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_ta4c2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_1woa4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_4w1hh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("76_yw3re")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_ae3w7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_qglrr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_sft2n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_ge8md")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_dhquv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("82_0xmnk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("83_suygt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_i7q4e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("85_6u1m6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("86_crhew")
+}, {
+"duration": 1.0,
+"texture": ExtResource("87_pcevd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("88_l7bv7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("89_rpj0l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("90_2w32u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("91_kajym")
+}, {
+"duration": 1.0,
+"texture": ExtResource("92_jrogo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("93_3b3me")
+}, {
+"duration": 1.0,
+"texture": ExtResource("94_t364u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("95_dn1sg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("96_boyhn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("97_vwani")
+}, {
+"duration": 1.0,
+"texture": ExtResource("98_66csr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("99_qxmxj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("100_80ndm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("101_ktoiq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("102_28u43")
+}, {
+"duration": 1.0,
+"texture": ExtResource("103_rapfe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("104_l8trt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("105_hgn2e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("106_6mlng")
+}, {
+"duration": 1.0,
+"texture": ExtResource("107_i8g8f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("108_voxgj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("109_jycxi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("110_5fih2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("111_gsoyc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("112_h2tw8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("113_vowf5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("114_pwt02")
+}, {
+"duration": 1.0,
+"texture": ExtResource("115_t6dn6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("116_ix3dt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("117_yyxik")
+}, {
+"duration": 1.0,
+"texture": ExtResource("118_l2tgk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("119_jib17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("120_2c0da")
+}, {
+"duration": 1.0,
+"texture": ExtResource("121_k3uey")
+}, {
+"duration": 1.0,
+"texture": ExtResource("122_mln23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("123_yo45c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("124_tnw7k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("125_somfs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("126_m670q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("127_32t44")
+}, {
+"duration": 1.0,
+"texture": ExtResource("128_jy2nj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("129_mnxic")
+}, {
+"duration": 1.0,
+"texture": ExtResource("130_68rs3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("131_jr7jl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("132_srpnq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("133_6wv2i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("134_11kvv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("135_kpsxo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("136_yknwq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("137_i1n4p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("138_t3yt3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("139_nmb5w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("140_qxchx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("141_24e34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("142_tubl7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("143_ayhuh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("144_1f1a2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("145_6uwjs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("146_d7qpx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("147_ww86d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("148_01qa4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("149_k0l6h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("150_06x5g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("151_xdgjr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("152_1740v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("153_yvg4q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("154_hckmw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("155_elql5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("156_e28wj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("157_ddbno")
+}, {
+"duration": 1.0,
+"texture": ExtResource("158_kbgy6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("159_x0evm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("160_3niuv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("161_jiy0l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("162_lyuce")
+}, {
+"duration": 1.0,
+"texture": ExtResource("163_g5me7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("164_rhhf1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("165_osjdy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("166_x45xp")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g88m8"]
+size = Vector2(220, 180)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_um1j1"]
+size = Vector2(220, 64)
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_2afaf"]
+points = PackedVector2Array(307.38315, -184.51575, -306.31015, -192.71643, -305.23727, 179.82971, 395.36014, 179.82971, 394.28726, -103.68024)
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_f8w2g"]
+points = PackedVector2Array(381.5, -70.5, -379.5, -69.5, -378.5, 196.5, -159.5, 199.5, -159.5, 225.5, -105.5, 225.5, -105.5, 199.5, 192.5, 200.5, 238.5, 128.5, 314.5, 85.5, 376.5, 75.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lwm6o"]
+radius = 80.00625
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_pe1ml"]
+points = PackedVector2Array(-87.5, -46.25, 67.5, -89.25, 175.5, -25.25, 184.5, 104.75, -190.5, 103.75)
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_gk5oi"]
+points = PackedVector2Array(-172, 65, -99, 7, 148, 87, 92, 157, -118, 82, -118, 157, -175, 157)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xiquf"]
+radius = 125.004
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vwakv"]
+size = Vector2(206, 70)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_16xad"]
+size = Vector2(61, 233)
+
+[node name="FishBossRoom" type="Control" unique_id=1156990556]
 custom_minimum_size = Vector2(960, 540)
 layout_mode = 3
 anchors_preset = 15
@@ -22,19 +716,19 @@ grow_vertical = 2
 script = ExtResource("1")
 fallback_room_tint = Color(0.93, 0.82, 0.82, 1)
 
-[node name="Backdrop" type="TextureRect" parent="."]
+[node name="Backdrop" type="TextureRect" parent="." unique_id=920896942]
+z_index = -10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = -10
 texture = ExtResource("5")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="PlayerSpawn" type="ColorRect" parent="."]
+[node name="PlayerSpawn" type="ColorRect" parent="." unique_id=828451639]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 0
 offset_left = 229.0
@@ -53,9 +747,33 @@ interactable_id = &"enemy"
 display_name = "Boss"
 prompt_text = "发起战斗"
 interactable_kind = &"encounter"
+area_size = Vector2(220, 180)
 payload = {
+"monster_id": &"fish_boss",
 "room_id": &"fish_boss_room"
 }
+
+[node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
+material = SubResource("ShaderMaterial_arfjf")
+sprite_frames = SubResource("SpriteFrames_6xoms")
+animation = &"idle"
+frame_progress = 0.17209071
+
+[node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_g88m8")
+
+[node name="Label" parent="MonsterEncounter" index="2"]
+offset_left = -110.0
+offset_top = -90.0
+offset_right = 110.0
+offset_bottom = 90.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "Boss"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+max_lines_visible = 2
 
 [node name="ExitToStrawberry" parent="." unique_id=16277452 instance=ExtResource("3")]
 position = Vector2(1114, 404)
@@ -67,70 +785,137 @@ payload = {
 "target_room_id": &"strawberry_room"
 }
 
-[node name="Foreground1" type="TextureRect" parent="."]
+[node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_um1j1")
+
+[node name="Label" parent="ExitToStrawberry" index="1"]
+offset_left = -110.0
+offset_top = -32.0
+offset_right = 110.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "出口 -> 怪物房"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="Foreground1" type="TextureRect" parent="." unique_id=2018637450]
+z_index = 10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 10
 mouse_filter = 2
 texture = ExtResource("6")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground2" type="TextureRect" parent="."]
+[node name="Foreground2" type="TextureRect" parent="." unique_id=1260925160]
+z_index = 11
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 11
 mouse_filter = 2
 texture = ExtResource("7")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground3" type="TextureRect" parent="."]
+[node name="Foreground3" type="TextureRect" parent="." unique_id=603238672]
+z_index = 12
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 12
 mouse_filter = 2
 texture = ExtResource("8")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground4" type="TextureRect" parent="."]
+[node name="Foreground4" type="TextureRect" parent="." unique_id=680796539]
+z_index = 13
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 13
 mouse_filter = 2
 texture = ExtResource("9")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground5" type="TextureRect" parent="."]
+[node name="Foreground5" type="TextureRect" parent="." unique_id=781762020]
+z_index = 14
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 14
 mouse_filter = 2
 texture = ExtResource("10")
 expand_mode = 1
 stretch_mode = 6
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1837888856]
+position = Vector2(213, 409)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=516726948]
+position = Vector2(71.49997, 156.5)
+scale = Vector2(0.9320617, 0.8535856)
+shape = SubResource("ConvexPolygonShape2D_2afaf")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=733794161]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=1098805578]
+position = Vector2(378.5, 68.5)
+shape = SubResource("ConvexPolygonShape2D_f8w2g")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=742818807]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=850618081]
+position = Vector2(1244, 95)
+shape = SubResource("CircleShape2D_lwm6o")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="." unique_id=984932295]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4" unique_id=298385485]
+position = Vector2(1093.5, 615.25)
+shape = SubResource("ConvexPolygonShape2D_pe1ml")
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="." unique_id=1272608329]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D5" unique_id=1402387026]
+position = Vector2(1106, 104)
+shape = SubResource("ConvexPolygonShape2D_gk5oi")
+
+[node name="StaticBody2D8" type="StaticBody2D" parent="." unique_id=992190759]
+position = Vector2(880, 329)
+scale = Vector2(1, 0.92)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D8" unique_id=1409803750]
+position = Vector2(-117, -11)
+shape = SubResource("CircleShape2D_xiquf")
+
+[node name="StaticBody2D7" type="StaticBody2D" parent="." unique_id=1020720682]
+position = Vector2(1047, 608)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D7" unique_id=1657402406]
+position = Vector2(127.5, -150)
+shape = SubResource("RectangleShape2D_vwakv")
+
+[node name="StaticBody2D6" type="StaticBody2D" parent="." unique_id=1548452808]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D6" unique_id=1378755416]
+position = Vector2(825.5, 586.5)
+shape = SubResource("RectangleShape2D_16xad")
 
 [editable path="MonsterEncounter"]
 [editable path="ExitToStrawberry"]

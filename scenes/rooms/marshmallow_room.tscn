@@ -1,15 +1,213 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene format=3 uid="uid://dk5al1nctfr60"]
 
-[ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/explore/room_anchor.gd" id="2"]
+[ext_resource type="Script" uid="uid://c8cc8jx0ebp32" path="res://scripts/explore/room_scene.gd" id="1"]
+[ext_resource type="Script" uid="uid://bgvn7fnrkcagx" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/explore/monster_encounter.tscn" id="4"]
-[ext_resource type="Texture2D" path="res://sprites/map/森林地图/背景.png" id="5"]
-[ext_resource type="Texture2D" path="res://sprites/map/森林地图/前景1.png" id="6"]
-[ext_resource type="Texture2D" path="res://sprites/map/森林地图/前景2.png" id="7"]
-[ext_resource type="Texture2D" path="res://sprites/map/森林地图/前景3.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://bdc001as4kr4" path="res://sprites/map/森林地图/背景.png" id="5"]
+[ext_resource type="Shader" uid="uid://1kajis20fdfn" path="res://shaders/sprite_outline.gdshader" id="5_pp0i3"]
+[ext_resource type="Texture2D" uid="uid://dptn6gaplv80o" path="res://sprites/map/森林地图/前景1.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://cnqkvibjqp6ta" path="res://sprites/怪物_256x144/棉花糖/Scene1_000.png" id="6_iboen"]
+[ext_resource type="Texture2D" uid="uid://dqh6clcx085kv" path="res://sprites/map/森林地图/前景2.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://hp4ovkde06od" path="res://sprites/怪物_256x144/棉花糖/Scene1_001.png" id="7_a8r2e"]
+[ext_resource type="Texture2D" uid="uid://km3dvdxj6sbu" path="res://sprites/map/森林地图/前景3.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://dq1cpuhn2geck" path="res://sprites/怪物_256x144/棉花糖/Scene1_002.png" id="8_fbnqn"]
+[ext_resource type="Texture2D" uid="uid://mah6ycljxsss" path="res://sprites/怪物_256x144/棉花糖/Scene1_003.png" id="9_8p8sm"]
+[ext_resource type="Texture2D" uid="uid://do2sx1qjbnaxl" path="res://sprites/怪物_256x144/棉花糖/Scene1_004.png" id="10_tpogf"]
+[ext_resource type="Texture2D" uid="uid://deyx1go2xxbqr" path="res://sprites/怪物_256x144/棉花糖/Scene1_005.png" id="11_16y4h"]
+[ext_resource type="Texture2D" uid="uid://pnkipmajndgy" path="res://sprites/怪物_256x144/棉花糖/Scene1_006.png" id="12_itpou"]
+[ext_resource type="Texture2D" uid="uid://bul4pone3pj3a" path="res://sprites/怪物_256x144/棉花糖/Scene1_007.png" id="13_jjlxl"]
+[ext_resource type="Texture2D" uid="uid://dlon62s30adqr" path="res://sprites/怪物_256x144/棉花糖/Scene1_008.png" id="14_2ova7"]
+[ext_resource type="Texture2D" uid="uid://k6w82urtaich" path="res://sprites/怪物_256x144/棉花糖/Scene1_009.png" id="15_xo6ym"]
+[ext_resource type="Texture2D" uid="uid://1va0w7eq3tk5" path="res://sprites/怪物_256x144/棉花糖/Scene1_010.png" id="16_hdnpy"]
+[ext_resource type="Texture2D" uid="uid://c4uncf476jkwk" path="res://sprites/怪物_256x144/棉花糖/Scene1_011.png" id="17_sqoih"]
+[ext_resource type="Texture2D" uid="uid://slfarmtec308" path="res://sprites/怪物_256x144/棉花糖/Scene1_012.png" id="18_5ablc"]
+[ext_resource type="Texture2D" uid="uid://brbj1764ed5kn" path="res://sprites/怪物_256x144/棉花糖/Scene1_013.png" id="19_stc06"]
+[ext_resource type="Texture2D" uid="uid://bwp7ucqyhhbbx" path="res://sprites/怪物_256x144/棉花糖/Scene1_014.png" id="20_3wmnw"]
+[ext_resource type="Texture2D" uid="uid://b1mi6bc78egmj" path="res://sprites/怪物_256x144/棉花糖/Scene1_015.png" id="21_7h4vn"]
+[ext_resource type="Texture2D" uid="uid://dxla4ephy62u7" path="res://sprites/怪物_256x144/棉花糖/Scene1_016.png" id="22_q7qtp"]
+[ext_resource type="Texture2D" uid="uid://bqd5746ihhevg" path="res://sprites/怪物_256x144/棉花糖/Scene1_017.png" id="23_l4x5r"]
+[ext_resource type="Texture2D" uid="uid://5vwd4ffuldv" path="res://sprites/怪物_256x144/棉花糖/Scene1_018.png" id="24_6r85c"]
+[ext_resource type="Texture2D" uid="uid://cujqvao3147qq" path="res://sprites/怪物_256x144/棉花糖/Scene1_019.png" id="25_pwbma"]
+[ext_resource type="Texture2D" uid="uid://cuy4niix7603u" path="res://sprites/怪物_256x144/棉花糖/Scene1_020.png" id="26_b6k2f"]
+[ext_resource type="Texture2D" uid="uid://dpy8ivrxemhdl" path="res://sprites/怪物_256x144/棉花糖/Scene1_021.png" id="27_3bgcl"]
+[ext_resource type="Texture2D" uid="uid://cjytglfvlj5o" path="res://sprites/怪物_256x144/棉花糖/Scene1_022.png" id="28_3uyfv"]
+[ext_resource type="Texture2D" uid="uid://cb8lcsjr7wt84" path="res://sprites/怪物_256x144/棉花糖/Scene1_023.png" id="29_3n75c"]
+[ext_resource type="Texture2D" uid="uid://cqmllmygmrpgm" path="res://sprites/怪物_256x144/棉花糖/Scene1_024.png" id="30_3gtjr"]
+[ext_resource type="Texture2D" uid="uid://b3432wcqcpxpt" path="res://sprites/怪物_256x144/棉花糖/Scene1_025.png" id="31_oj6r7"]
+[ext_resource type="Texture2D" uid="uid://bgbwauj8q0kib" path="res://sprites/怪物_256x144/棉花糖/Scene1_026.png" id="32_nvcov"]
+[ext_resource type="Texture2D" uid="uid://de4kk7akbm3hf" path="res://sprites/怪物_256x144/棉花糖/Scene1_027.png" id="33_8xw7w"]
+[ext_resource type="Texture2D" uid="uid://d2sxcv47l8nrw" path="res://sprites/怪物_256x144/棉花糖/Scene1_028.png" id="34_isupa"]
+[ext_resource type="Texture2D" uid="uid://db17ii7nu4m8q" path="res://sprites/怪物_256x144/棉花糖/Scene1_029.png" id="35_d7gtb"]
+[ext_resource type="Texture2D" uid="uid://cmdih1kytputw" path="res://sprites/怪物_256x144/棉花糖/Scene1_030.png" id="36_27gvf"]
+[ext_resource type="Texture2D" uid="uid://dbt7qilvttbqn" path="res://sprites/怪物_256x144/棉花糖/Scene1_031.png" id="37_1mo23"]
+[ext_resource type="Texture2D" uid="uid://dh56xjos6q72e" path="res://sprites/怪物_256x144/棉花糖/Scene1_032.png" id="38_xmrus"]
+[ext_resource type="Texture2D" uid="uid://b2vplrnpwsyjk" path="res://sprites/怪物_256x144/棉花糖/Scene1_033.png" id="39_ac04b"]
+[ext_resource type="Texture2D" uid="uid://cjms8vsbgglfs" path="res://sprites/怪物_256x144/棉花糖/Scene1_034.png" id="40_mc8ng"]
+[ext_resource type="Texture2D" uid="uid://bgjgf7bddphiw" path="res://sprites/怪物_256x144/棉花糖/Scene1_035.png" id="41_rs5ui"]
+[ext_resource type="Texture2D" uid="uid://jilb48irhtiq" path="res://sprites/怪物_256x144/棉花糖/Scene1_036.png" id="42_3qlpr"]
+[ext_resource type="Texture2D" uid="uid://bjgwgs2cpupvg" path="res://sprites/怪物_256x144/棉花糖/Scene1_037.png" id="43_iip2v"]
+[ext_resource type="Texture2D" uid="uid://6hhaehk7e8a4" path="res://sprites/怪物_256x144/棉花糖/Scene1_038.png" id="44_bxllm"]
+[ext_resource type="Texture2D" uid="uid://beyafecqak34x" path="res://sprites/怪物_256x144/棉花糖/Scene1_039.png" id="45_i7my1"]
 
-[node name="MarshmallowRoom" type="Control"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m0mnr"]
+shader = ExtResource("5_pp0i3")
+shader_parameter/outline_color = Color(1, 0.95, 0.72, 1)
+shader_parameter/outline_thickness = 4.0
+shader_parameter/outline_enabled = false
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vlo5c"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_iboen")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_a8r2e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_fbnqn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_8p8sm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_tpogf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_16y4h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_itpou")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_jjlxl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_2ova7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_xo6ym")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_hdnpy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_sqoih")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_5ablc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_stc06")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_3wmnw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_7h4vn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_q7qtp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_l4x5r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_6r85c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_pwbma")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_b6k2f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_3bgcl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_3uyfv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_3n75c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_3gtjr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_oj6r7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_nvcov")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_8xw7w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_isupa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_d7gtb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_27gvf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_1mo23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_xmrus")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_ac04b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_mc8ng")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_rs5ui")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_3qlpr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_iip2v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_bxllm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_i7my1")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sgitr"]
+size = Vector2(220, 180)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mvsas"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8xuiq"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4ayv8"]
+size = Vector2(1289, 270)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d1yfh"]
+size = Vector2(1324, 170.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2x13b"]
+radius = 43.416588
+
+[node name="MarshmallowRoom" type="Control" unique_id=104040902]
 custom_minimum_size = Vector2(960, 540)
 layout_mode = 3
 anchors_preset = 15
@@ -20,19 +218,19 @@ grow_vertical = 2
 script = ExtResource("1")
 fallback_room_tint = Color(0.98, 0.88, 0.82, 1)
 
-[node name="Backdrop" type="TextureRect" parent="."]
+[node name="Backdrop" type="TextureRect" parent="." unique_id=2066696353]
+z_index = -10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = -10
 texture = ExtResource("5")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="PlayerSpawn" type="ColorRect" parent="."]
+[node name="PlayerSpawn" type="ColorRect" parent="." unique_id=1267247]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 0
 offset_left = 594.0
@@ -51,9 +249,33 @@ interactable_id = &"enemy"
 display_name = "污染怪物"
 prompt_text = "发起战斗"
 interactable_kind = &"encounter"
+area_size = Vector2(220, 180)
 payload = {
+"monster_id": &"marshmallow",
 "room_id": &"marshmallow_room"
 }
+
+[node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
+material = SubResource("ShaderMaterial_m0mnr")
+sprite_frames = SubResource("SpriteFrames_vlo5c")
+animation = &"idle"
+frame_progress = 0.06502845
+
+[node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_sgitr")
+
+[node name="Label" parent="MonsterEncounter" index="2"]
+offset_left = -110.0
+offset_top = -90.0
+offset_right = 110.0
+offset_bottom = 90.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "污染怪物"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+max_lines_visible = 2
 
 [node name="ExitToStart" parent="." unique_id=127994574 instance=ExtResource("3")]
 position = Vector2(134, 346)
@@ -65,6 +287,20 @@ payload = {
 "target_room_id": &"start"
 }
 
+[node name="CollisionShape2D" parent="ExitToStart/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_mvsas")
+
+[node name="Label" parent="ExitToStart" index="1"]
+offset_left = -110.0
+offset_top = -32.0
+offset_right = 110.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "出口 -> 起点"
+autowrap_mode = 3
+max_lines_visible = 2
+
 [node name="ExitToStrawberry" parent="." unique_id=1722632289 instance=ExtResource("3")]
 position = Vector2(1163, 372)
 interactable_id = &"exit_cake"
@@ -75,47 +311,79 @@ payload = {
 "target_room_id": &"cake_room"
 }
 
-[node name="Foreground1" type="TextureRect" parent="."]
+[node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_8xuiq")
+
+[node name="Label" parent="ExitToStrawberry" index="1"]
+offset_left = -110.0
+offset_top = -32.0
+offset_right = 110.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "出口 -> 怪物房"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="Foreground1" type="TextureRect" parent="." unique_id=2010050386]
+self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
+z_index = 10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 10
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
 mouse_filter = 2
 texture = ExtResource("6")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground2" type="TextureRect" parent="."]
+[node name="Foreground2" type="TextureRect" parent="." unique_id=1571272113]
+self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
+z_index = 11
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 11
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
 mouse_filter = 2
 texture = ExtResource("7")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground3" type="TextureRect" parent="."]
+[node name="Foreground3" type="TextureRect" parent="." unique_id=678121278]
+self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
+z_index = 12
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 12
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
 mouse_filter = 2
 texture = ExtResource("8")
 expand_mode = 1
 stretch_mode = 6
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=249728099]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=2074296970]
+position = Vector2(634.5, 125)
+shape = SubResource("RectangleShape2D_4ayv8")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=395883476]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=1764005502]
+position = Vector2(647, 642.25)
+shape = SubResource("RectangleShape2D_d1yfh")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=1034061090]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=1907531053]
+position = Vector2(962, 470)
+shape = SubResource("CircleShape2D_2x13b")
 
 [editable path="MonsterEncounter"]
 [editable path="ExitToStart"]

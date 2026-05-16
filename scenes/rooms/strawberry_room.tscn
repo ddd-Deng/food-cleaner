@@ -1,19 +1,242 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene format=3 uid="uid://cts6y6x55t0vn"]
 
-[ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/explore/room_anchor.gd" id="2"]
+[ext_resource type="Script" uid="uid://c8cc8jx0ebp32" path="res://scripts/explore/room_scene.gd" id="1"]
+[ext_resource type="Script" uid="uid://bgvn7fnrkcagx" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/explore/monster_encounter.tscn" id="4"]
-[ext_resource type="Texture2D" path="res://sprites/map/小镇地图/背景.png" id="5"]
-[ext_resource type="Texture2D" path="res://sprites/map/小镇地图/前景1.png" id="6"]
-[ext_resource type="Texture2D" path="res://sprites/map/小镇地图/前景2.png" id="7"]
-[ext_resource type="Texture2D" path="res://sprites/map/小镇地图/前景3.png" id="8"]
-[ext_resource type="Texture2D" path="res://sprites/map/小镇地图/前景4.png" id="9"]
-[ext_resource type="Texture2D" path="res://sprites/map/小镇地图/前景5.png" id="10"]
-[ext_resource type="Texture2D" path="res://sprites/map/小镇地图/前景6.png" id="11"]
-[ext_resource type="Texture2D" path="res://sprites/map/小镇地图/前景7.png" id="12"]
+[ext_resource type="Texture2D" uid="uid://nnkw4t8of8ax" path="res://sprites/map/小镇地图/背景.png" id="5"]
+[ext_resource type="Shader" uid="uid://1kajis20fdfn" path="res://shaders/sprite_outline.gdshader" id="5_hxhp4"]
+[ext_resource type="Texture2D" uid="uid://cis2chreaa465" path="res://sprites/map/小镇地图/前景1.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://bulf1p226x17f" path="res://sprites/怪物_256x144/草莓/Scene1_000.png" id="6_abhmd"]
+[ext_resource type="Texture2D" uid="uid://dm0ug65vmw5rw" path="res://sprites/map/小镇地图/前景2.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://bsodjusdukem2" path="res://sprites/怪物_256x144/草莓/Scene1_001.png" id="7_c6lu8"]
+[ext_resource type="Texture2D" uid="uid://6ektxpp1egum" path="res://sprites/map/小镇地图/前景3.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://6rmu0xoo58hm" path="res://sprites/怪物_256x144/草莓/Scene1_002.png" id="8_fcg3q"]
+[ext_resource type="Texture2D" uid="uid://bg3dgb70fancg" path="res://sprites/map/小镇地图/前景4.png" id="9"]
+[ext_resource type="Texture2D" uid="uid://dcpj1mjctcxbk" path="res://sprites/怪物_256x144/草莓/Scene1_003.png" id="9_wi0sr"]
+[ext_resource type="Texture2D" uid="uid://dlpw1f1agi80v" path="res://sprites/map/小镇地图/前景5.png" id="10"]
+[ext_resource type="Texture2D" uid="uid://021fppal4ytt" path="res://sprites/怪物_256x144/草莓/Scene1_004.png" id="10_vrxn5"]
+[ext_resource type="Texture2D" uid="uid://5a2smk0okmib" path="res://sprites/map/小镇地图/前景6.png" id="11"]
+[ext_resource type="Texture2D" uid="uid://c15t67tnwgm0n" path="res://sprites/怪物_256x144/草莓/Scene1_005.png" id="11_bhioj"]
+[ext_resource type="Texture2D" uid="uid://b0xr8sxeq12k7" path="res://sprites/map/小镇地图/前景7.png" id="12"]
+[ext_resource type="Texture2D" uid="uid://ccific4k3nbf6" path="res://sprites/怪物_256x144/草莓/Scene1_006.png" id="12_o6qas"]
+[ext_resource type="Texture2D" uid="uid://wqlsdwxe022d" path="res://sprites/怪物_256x144/草莓/Scene1_007.png" id="13_4uyxf"]
+[ext_resource type="Texture2D" uid="uid://d0rqiwbmx4kdx" path="res://sprites/怪物_256x144/草莓/Scene1_008.png" id="14_olwjo"]
+[ext_resource type="Texture2D" uid="uid://dmwqs42mkweh5" path="res://sprites/怪物_256x144/草莓/Scene1_009.png" id="15_w742e"]
+[ext_resource type="Texture2D" uid="uid://jb46hxb1ykvb" path="res://sprites/怪物_256x144/草莓/Scene1_010.png" id="16_f7hbd"]
+[ext_resource type="Texture2D" uid="uid://cghvcev0g40fi" path="res://sprites/怪物_256x144/草莓/Scene1_011.png" id="17_obfy6"]
+[ext_resource type="Texture2D" uid="uid://bph7pahbwyskk" path="res://sprites/怪物_256x144/草莓/Scene1_012.png" id="18_k4o8m"]
+[ext_resource type="Texture2D" uid="uid://d1xx7y2oifpph" path="res://sprites/怪物_256x144/草莓/Scene1_013.png" id="19_bu7n1"]
+[ext_resource type="Texture2D" uid="uid://hfmmjayhyujq" path="res://sprites/怪物_256x144/草莓/Scene1_014.png" id="20_ofavm"]
+[ext_resource type="Texture2D" uid="uid://csim46xjm2sde" path="res://sprites/怪物_256x144/草莓/Scene1_015.png" id="21_hw3kx"]
+[ext_resource type="Texture2D" uid="uid://dvh10vkdrod4k" path="res://sprites/怪物_256x144/草莓/Scene1_016.png" id="22_inm2l"]
+[ext_resource type="Texture2D" uid="uid://belaqrwusrk5r" path="res://sprites/怪物_256x144/草莓/Scene1_017.png" id="23_ii6m8"]
+[ext_resource type="Texture2D" uid="uid://dg5wi3esd5kgs" path="res://sprites/怪物_256x144/草莓/Scene1_018.png" id="24_3u7tk"]
+[ext_resource type="Texture2D" uid="uid://chw6skaoagq2w" path="res://sprites/怪物_256x144/草莓/Scene1_019.png" id="25_nh16p"]
+[ext_resource type="Texture2D" uid="uid://ch7m6ef78hedw" path="res://sprites/怪物_256x144/草莓/Scene1_020.png" id="26_jgn7f"]
+[ext_resource type="Texture2D" uid="uid://dgsjwe7opxf3p" path="res://sprites/怪物_256x144/草莓/Scene1_021.png" id="27_0146i"]
+[ext_resource type="Texture2D" uid="uid://cywuqm4kge30n" path="res://sprites/怪物_256x144/草莓/Scene1_022.png" id="28_4styu"]
+[ext_resource type="Texture2D" uid="uid://bqmp3jd0g6u5p" path="res://sprites/怪物_256x144/草莓/Scene1_023.png" id="29_dp2me"]
+[ext_resource type="Texture2D" uid="uid://b0sumc0lauisy" path="res://sprites/怪物_256x144/草莓/Scene1_024.png" id="30_ksmva"]
+[ext_resource type="Texture2D" uid="uid://bcme1hn3g3s7u" path="res://sprites/怪物_256x144/草莓/Scene1_025.png" id="31_fgjqi"]
+[ext_resource type="Texture2D" uid="uid://cbml612e8ijwr" path="res://sprites/怪物_256x144/草莓/Scene1_026.png" id="32_l081l"]
+[ext_resource type="Texture2D" uid="uid://dpalb7omvnrym" path="res://sprites/怪物_256x144/草莓/Scene1_027.png" id="33_t4lnc"]
+[ext_resource type="Texture2D" uid="uid://mrjhhmum715c" path="res://sprites/怪物_256x144/草莓/Scene1_028.png" id="34_jioqe"]
+[ext_resource type="Texture2D" uid="uid://c1mwivuphekx4" path="res://sprites/怪物_256x144/草莓/Scene1_029.png" id="35_ptaa0"]
+[ext_resource type="Texture2D" uid="uid://dji6xgj7rwpon" path="res://sprites/怪物_256x144/草莓/Scene1_030.png" id="36_eepjg"]
+[ext_resource type="Texture2D" uid="uid://dpt4vf387jd25" path="res://sprites/怪物_256x144/草莓/Scene1_031.png" id="37_imipc"]
+[ext_resource type="Texture2D" uid="uid://doq45bje4l6qw" path="res://sprites/怪物_256x144/草莓/Scene1_032.png" id="38_fo1nj"]
+[ext_resource type="Texture2D" uid="uid://crrcck8lsvqbj" path="res://sprites/怪物_256x144/草莓/Scene1_033.png" id="39_bqof6"]
+[ext_resource type="Texture2D" uid="uid://do1nf8g8wymyb" path="res://sprites/怪物_256x144/草莓/Scene1_034.png" id="40_x3geb"]
+[ext_resource type="Texture2D" uid="uid://ch1h043gy5fus" path="res://sprites/怪物_256x144/草莓/Scene1_035.png" id="41_rxyws"]
+[ext_resource type="Texture2D" uid="uid://bmty3u0icfoyv" path="res://sprites/怪物_256x144/草莓/Scene1_036.png" id="42_2xfh0"]
+[ext_resource type="Texture2D" uid="uid://dja3gb0xivvbn" path="res://sprites/怪物_256x144/草莓/Scene1_037.png" id="43_lotvt"]
+[ext_resource type="Texture2D" uid="uid://dlmxq7wqkstwq" path="res://sprites/怪物_256x144/草莓/Scene1_038.png" id="44_36n6y"]
+[ext_resource type="Texture2D" uid="uid://dhthbrcpwpdh2" path="res://sprites/怪物_256x144/草莓/Scene1_039.png" id="45_hk6yo"]
+[ext_resource type="Texture2D" uid="uid://dfe3o7b3vj314" path="res://sprites/怪物_256x144/草莓/Scene1_040.png" id="46_yi7on"]
 
-[node name="StrawberryRoom" type="Control"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_805b5"]
+shader = ExtResource("5_hxhp4")
+shader_parameter/outline_color = Color(1, 0.95, 0.72, 1)
+shader_parameter/outline_thickness = 4.0
+shader_parameter/outline_enabled = false
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5tjhs"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_abhmd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_c6lu8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_fcg3q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_wi0sr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_vrxn5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_bhioj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_o6qas")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_4uyxf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_olwjo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_w742e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_f7hbd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_obfy6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_k4o8m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_bu7n1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_ofavm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_hw3kx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_inm2l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_ii6m8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_3u7tk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_nh16p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_jgn7f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_0146i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_4styu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_dp2me")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_ksmva")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_fgjqi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_l081l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_t4lnc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_jioqe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_ptaa0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_eepjg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_imipc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_fo1nj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_bqof6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_x3geb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_rxyws")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_2xfh0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_lotvt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_36n6y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_hk6yo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_yi7on")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wgy71"]
+size = Vector2(220, 180)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5uuub"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ekmut"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p83kj"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rqli0"]
+size = Vector2(324, 431)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e0nrf"]
+size = Vector2(99, 263)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k8kwy"]
+size = Vector2(99.5, 267.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sksbs"]
+size = Vector2(300, 161)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_11jmt"]
+size = Vector2(183, 222)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lu1g2"]
+size = Vector2(783.5, 220)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rng7m"]
+size = Vector2(295, 375)
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_mntd1"]
+points = PackedVector2Array(223, -33, 227, -114, -218, -116, -220, 122, -19, 122, 167, -31)
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_3hq28"]
+points = PackedVector2Array(46, -248, -1, -249, -235, -57, -77, -56, -77, -41, 47, -41)
+
+[node name="StrawberryRoom" type="Control" unique_id=1053923997]
 custom_minimum_size = Vector2(960, 540)
 layout_mode = 3
 anchors_preset = 15
@@ -24,36 +247,66 @@ grow_vertical = 2
 script = ExtResource("1")
 fallback_room_tint = Color(0.96, 0.82, 0.84, 1)
 
-[node name="Backdrop" type="TextureRect" parent="."]
+[node name="Backdrop" type="TextureRect" parent="." unique_id=1455223037]
+z_index = -10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = -10
 texture = ExtResource("5")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="PlayerSpawn" type="ColorRect" parent="."]
+[node name="PlayerSpawn" type="ColorRect" parent="." unique_id=713206366]
 custom_minimum_size = Vector2(48, 48)
+layout_mode = 0
 offset_left = 456.0
 offset_top = 356.0
 offset_right = 504.0
 offset_bottom = 404.0
+mouse_filter = 2
+color = Color(0.41, 0.84, 0.56, 0.55)
 script = ExtResource("2")
 anchor_kind = &"player_spawn"
 
-[node name="MonsterEncounter" parent="." instance=ExtResource("4")]
+[node name="MonsterEncounter" parent="." unique_id=1534990076 instance=ExtResource("4")]
 position = Vector2(480, 210)
 monster_id = &"strawberry"
 interactable_id = &"enemy"
+display_name = "污染怪物"
+prompt_text = "发起战斗"
+interactable_kind = &"encounter"
+area_size = Vector2(220, 180)
 payload = {
+"monster_id": &"strawberry",
 "room_id": &"strawberry_room"
 }
 
-[node name="ExitToMarshmallow" parent="." instance=ExtResource("3")]
+[node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
+material = SubResource("ShaderMaterial_805b5")
+sprite_frames = SubResource("SpriteFrames_5tjhs")
+animation = &"idle"
+frame_progress = 0.89076966
+
+[node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_wgy71")
+
+[node name="Label" parent="MonsterEncounter" index="2"]
+offset_left = -110.0
+offset_top = -90.0
+offset_right = 110.0
+offset_bottom = 90.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "污染怪物"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="ExitToMarshmallow" parent="." unique_id=352950498 instance=ExtResource("3")]
 position = Vector2(180, 432)
 interactable_id = &"exit_cake"
 display_name = "出口 -> 怪物房"
@@ -63,7 +316,21 @@ payload = {
 "target_room_id": &"cake_room"
 }
 
-[node name="ExitToCandyBean" parent="." instance=ExtResource("3")]
+[node name="CollisionShape2D" parent="ExitToMarshmallow/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_5uuub")
+
+[node name="Label" parent="ExitToMarshmallow" index="1"]
+offset_left = -110.0
+offset_top = -32.0
+offset_right = 110.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "出口 -> 怪物房"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="ExitToCandyBean" parent="." unique_id=204985600 instance=ExtResource("3")]
 position = Vector2(480, 432)
 interactable_id = &"exit_bread"
 display_name = "出口 -> 怪物房"
@@ -73,7 +340,21 @@ payload = {
 "target_room_id": &"bread_room"
 }
 
-[node name="ExitToBoss" parent="." instance=ExtResource("3")]
+[node name="CollisionShape2D" parent="ExitToCandyBean/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_ekmut")
+
+[node name="Label" parent="ExitToCandyBean" index="1"]
+offset_left = -110.0
+offset_top = -32.0
+offset_right = 110.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "出口 -> 怪物房"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="ExitToBoss" parent="." unique_id=1471057952 instance=ExtResource("3")]
 position = Vector2(780, 432)
 interactable_id = &"exit_boss"
 display_name = "出口 -> Boss房"
@@ -83,96 +364,164 @@ payload = {
 "target_room_id": &"fish_boss_room"
 }
 
-[node name="Foreground1" type="TextureRect" parent="."]
+[node name="CollisionShape2D" parent="ExitToBoss/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_p83kj")
+
+[node name="Label" parent="ExitToBoss" index="1"]
+offset_left = -110.0
+offset_top = -32.0
+offset_right = 110.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "出口 -> Boss房"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="Foreground1" type="TextureRect" parent="." unique_id=2126231089]
+z_index = 10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 10
 mouse_filter = 2
 texture = ExtResource("6")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground2" type="TextureRect" parent="."]
+[node name="Foreground2" type="TextureRect" parent="." unique_id=1768942148]
+z_index = 11
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 11
 mouse_filter = 2
 texture = ExtResource("7")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground3" type="TextureRect" parent="."]
+[node name="Foreground3" type="TextureRect" parent="." unique_id=1687822859]
+z_index = 12
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 12
 mouse_filter = 2
 texture = ExtResource("8")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground4" type="TextureRect" parent="."]
+[node name="Foreground4" type="TextureRect" parent="." unique_id=1879787552]
+z_index = 13
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 13
 mouse_filter = 2
 texture = ExtResource("9")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground5" type="TextureRect" parent="."]
+[node name="Foreground5" type="TextureRect" parent="." unique_id=1407258574]
+z_index = 14
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 14
 mouse_filter = 2
 texture = ExtResource("10")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground6" type="TextureRect" parent="."]
+[node name="Foreground6" type="TextureRect" parent="." unique_id=1767739654]
+z_index = 15
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 15
 mouse_filter = 2
 texture = ExtResource("11")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Foreground7" type="TextureRect" parent="."]
+[node name="Foreground7" type="TextureRect" parent="." unique_id=1582872042]
+z_index = 16
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-z_index = 16
 mouse_filter = 2
 texture = ExtResource("12")
 expand_mode = 1
 stretch_mode = 6
+
+[node name="StaticBody2D5" type="StaticBody2D" parent="." unique_id=1088616155]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D5" unique_id=2006495070]
+position = Vector2(152, 205.5)
+shape = SubResource("RectangleShape2D_rqli0")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="." unique_id=952846929]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4" unique_id=454641378]
+position = Vector2(1037.5, 645.5)
+shape = SubResource("RectangleShape2D_e0nrf")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=945189991]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=1135810509]
+position = Vector2(730, 642)
+shape = SubResource("RectangleShape2D_k8kwy")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=952238881]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1949170499]
+position = Vector2(1146, 655.5)
+shape = SubResource("RectangleShape2D_sksbs")
+
+[node name="StaticBody2D7" type="StaticBody2D" parent="." unique_id=1995946745]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D7" unique_id=606745439]
+position = Vector2(341.5, 104)
+shape = SubResource("RectangleShape2D_11jmt")
+
+[node name="StaticBody2D6" type="StaticBody2D" parent="." unique_id=1634260119]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D6" unique_id=125268726]
+position = Vector2(385.25, 669)
+shape = SubResource("RectangleShape2D_lu1g2")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=389617526]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=1919879105]
+position = Vector2(692.5, 120.5)
+shape = SubResource("RectangleShape2D_rng7m")
+
+[node name="StaticBody2D8" type="StaticBody2D" parent="." unique_id=1463985281]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D8" unique_id=1478040259]
+position = Vector2(1060, 99)
+shape = SubResource("ConvexPolygonShape2D_mntd1")
+
+[node name="StaticBody2D9" type="StaticBody2D" parent="." unique_id=641350515]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D9" unique_id=780071473]
+position = Vector2(1235, 419)
+shape = SubResource("ConvexPolygonShape2D_3hq28")
 
 [editable path="MonsterEncounter"]
 [editable path="ExitToMarshmallow"]
