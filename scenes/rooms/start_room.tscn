@@ -7,19 +7,20 @@
 [ext_resource type="Texture2D" uid="uid://csxfoynlcdvgt" path="res://sprites/map/游乐场地图/前景1.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://dy4jgrbx1fuu1" path="res://sprites/map/游乐场地图/前景2.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://mmj1ecfmk85a" path="res://sprites/map/游乐场地图/前景3.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://bdjtmfv3b5tg2" path="res://sprites/map/游乐场地图/前景4.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://cfgig0wjci6lo" path="res://sprites/map/游乐场地图/前景4-1.png" id="7_lcoeq"]
+[ext_resource type="Texture2D" uid="uid://dvsqh3cl6d57k" path="res://sprites/map/游乐场地图/前景4-2.png" id="8_yw6jb"]
 [ext_resource type="Texture2D" uid="uid://cujjbrarx1bet" path="res://sprites/map/游乐场地图/前景5.png" id="9_v5cll"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_v5cll"]
-size = Vector2(220, 64)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lcoeq"]
-size = Vector2(220, 64)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_yw6jb"]
-size = Vector2(220, 64)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bc050"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jls7n"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d67pt"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0pbxl"]
 size = Vector2(220, 64)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bc050"]
@@ -108,7 +109,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="GuideInteractable/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_v5cll")
+shape = SubResource("RectangleShape2D_bc050")
 
 [node name="Label" parent="GuideInteractable" index="1"]
 offset_left = -110.0
@@ -132,7 +133,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToMonsterA/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_lcoeq")
+shape = SubResource("RectangleShape2D_jls7n")
 
 [node name="Label" parent="ExitToMonsterA" index="1"]
 offset_left = -110.0
@@ -156,7 +157,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToChest/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_yw6jb")
+shape = SubResource("RectangleShape2D_d67pt")
 
 [node name="Label" parent="ExitToChest" index="1"]
 offset_left = -110.0
@@ -180,7 +181,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToMonsterB/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_bc050")
+shape = SubResource("RectangleShape2D_0pbxl")
 
 [node name="Label" parent="ExitToMonsterB" index="1"]
 offset_left = -110.0
@@ -211,8 +212,14 @@ offset = Vector2(-177, -196)
 
 [node name="Sprite2D3" type="Sprite2D" parent="Y-sort" unique_id=867583645]
 y_sort_enabled = true
+position = Vector2(366, 576)
+texture = ExtResource("7_lcoeq")
+offset = Vector2(274, -216)
 
 [node name="Sprite2D4" type="Sprite2D" parent="Y-sort" unique_id=322801081]
+position = Vector2(602, 481)
+texture = ExtResource("8_yw6jb")
+offset = Vector2(38, -121)
 
 [node name="Foreground2" type="TextureRect" parent="." unique_id=524310752]
 z_index = 11
@@ -237,19 +244,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("7")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Foreground4" type="TextureRect" parent="." unique_id=308505159]
-z_index = 13
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("8")
 expand_mode = 1
 stretch_mode = 6
 

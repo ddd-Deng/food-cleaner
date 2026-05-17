@@ -7,16 +7,14 @@
 [ext_resource type="Texture2D" uid="uid://csxfoynlcdvgt" path="res://sprites/map/游乐场地图/前景1.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://dy4jgrbx1fuu1" path="res://sprites/map/游乐场地图/前景2.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://mmj1ecfmk85a" path="res://sprites/map/游乐场地图/前景3.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://bdjtmfv3b5tg2" path="res://sprites/map/游乐场地图/前景4.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://cfgig0wjci6lo" path="res://sprites/map/游乐场地图/前景4-1.png" id="7_ais5t"]
+[ext_resource type="Texture2D" uid="uid://dvsqh3cl6d57k" path="res://sprites/map/游乐场地图/前景4-2.png" id="8_851y8"]
 [ext_resource type="Texture2D" uid="uid://cujjbrarx1bet" path="res://sprites/map/游乐场地图/前景5.png" id="9_ftyuh"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ftyuh"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pgmkn"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ais5t"]
-size = Vector2(220, 64)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_shop0"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0g8dt"]
 size = Vector2(220, 64)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_851y8"]
@@ -103,7 +101,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ChestInteractable/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_ftyuh")
+shape = SubResource("RectangleShape2D_pgmkn")
 
 [node name="Label" parent="ChestInteractable" index="1"]
 offset_left = -110.0
@@ -127,7 +125,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStart/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_ais5t")
+shape = SubResource("RectangleShape2D_0g8dt")
 
 [node name="Label" parent="ExitToStart" index="1"]
 offset_left = -110.0
@@ -150,32 +148,32 @@ payload = {
 "target_room_id": &"shop_room"
 }
 
-[node name="CollisionShape2D" parent="ExitToShop/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_shop0")
-
-[node name="Label" parent="ExitToShop" index="1"]
-offset_left = -110.0
-offset_top = -32.0
-offset_right = 110.0
-offset_bottom = 32.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 16
-text = "出口 -> 商店"
-autowrap_mode = 3
-max_lines_visible = 2
-
-[node name="Foreground1" type="TextureRect" parent="." unique_id=1414030968]
+[node name="Y-sort" type="Node2D" parent="." unique_id=1754556361]
 z_index = 10
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=14426692]
+y_sort_enabled = true
+position = Vector2(1035, 535)
 texture = ExtResource("5")
-expand_mode = 1
-stretch_mode = 6
+offset = Vector2(-395, -175)
+
+[node name="Sprite2D2" type="Sprite2D" parent="Y-sort" unique_id=1200521842]
+y_sort_enabled = true
+position = Vector2(817, 556)
+texture = ExtResource("9_ftyuh")
+offset = Vector2(-177, -196)
+
+[node name="Sprite2D3" type="Sprite2D" parent="Y-sort" unique_id=456656912]
+y_sort_enabled = true
+position = Vector2(366, 576)
+texture = ExtResource("7_ais5t")
+offset = Vector2(274, -216)
+
+[node name="Sprite2D4" type="Sprite2D" parent="Y-sort" unique_id=1740523718]
+position = Vector2(602, 481)
+texture = ExtResource("8_851y8")
+offset = Vector2(38, -121)
 
 [node name="Foreground2" type="TextureRect" parent="." unique_id=2089097482]
 z_index = 11
@@ -200,32 +198,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("7")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Foreground4" type="TextureRect" parent="." unique_id=1772157264]
-z_index = 13
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("8")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Foreground5" type="TextureRect" parent="." unique_id=2108133049]
-z_index = 13
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("9_ftyuh")
 expand_mode = 1
 stretch_mode = 6
 
