@@ -10,16 +10,16 @@
 [ext_resource type="Texture2D" uid="uid://bdjtmfv3b5tg2" path="res://sprites/map/游乐场地图/前景4.png" id="8"]
 [ext_resource type="Texture2D" uid="uid://cujjbrarx1bet" path="res://sprites/map/游乐场地图/前景5.png" id="9_v5cll"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_v5cll"]
-size = Vector2(220, 64)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lcoeq"]
-size = Vector2(220, 64)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yw6jb"]
 size = Vector2(220, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bc050"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jls7n"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d67pt"]
 size = Vector2(220, 64)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bc050"]
@@ -61,6 +61,7 @@ radius = 22.0
 height = 88.0
 
 [node name="StartRoom" type="Control" unique_id=1928279502]
+y_sort_enabled = true
 custom_minimum_size = Vector2(960, 540)
 layout_mode = 3
 anchors_preset = 15
@@ -107,7 +108,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="GuideInteractable/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_v5cll")
+shape = SubResource("RectangleShape2D_yw6jb")
 
 [node name="Label" parent="GuideInteractable" index="1"]
 offset_left = -110.0
@@ -131,7 +132,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToMonsterA/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_lcoeq")
+shape = SubResource("RectangleShape2D_bc050")
 
 [node name="Label" parent="ExitToMonsterA" index="1"]
 offset_left = -110.0
@@ -155,7 +156,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToChest/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_yw6jb")
+shape = SubResource("RectangleShape2D_jls7n")
 
 [node name="Label" parent="ExitToChest" index="1"]
 offset_left = -110.0
@@ -179,7 +180,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToMonsterB/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_bc050")
+shape = SubResource("RectangleShape2D_d67pt")
 
 [node name="Label" parent="ExitToMonsterB" index="1"]
 offset_left = -110.0
@@ -193,6 +194,7 @@ autowrap_mode = 3
 max_lines_visible = 2
 
 [node name="Y-sort" type="Node2D" parent="." unique_id=115252874]
+y_sort_enabled = true
 
 [node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=665189393]
 z_index = 10
@@ -202,13 +204,14 @@ texture = ExtResource("5")
 offset = Vector2(-395, -175)
 
 [node name="Sprite2D2" type="Sprite2D" parent="Y-sort" unique_id=828163186]
-z_index = 13
+z_index = 10
 y_sort_enabled = true
 position = Vector2(817, 556)
 texture = ExtResource("9_v5cll")
 offset = Vector2(-177, -196)
 
 [node name="Sprite2D3" type="Sprite2D" parent="Y-sort" unique_id=867583645]
+y_sort_enabled = true
 
 [node name="Sprite2D4" type="Sprite2D" parent="Y-sort" unique_id=322801081]
 
