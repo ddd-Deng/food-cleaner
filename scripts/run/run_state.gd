@@ -12,6 +12,7 @@ var deck_entries: Array[CardPileEntryData] = []
 var player_items: Array[PlayerItemInstance] = []
 var rooms: Dictionary = {}
 var current_room_id: StringName = &""
+var shop_return_room_id: StringName = &""
 var last_event_message: String = ""
 var is_run_over: bool = false
 var is_run_won: bool = false

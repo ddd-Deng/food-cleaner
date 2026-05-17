@@ -2,6 +2,8 @@
 extends Control
 class_name ShopScreen
 
+signal exit_requested
+
 const CONFIRM_NORMAL: Texture2D = preload("res://sprites/map/商店界面/confirm.png")
 const CONFIRM_ACTIVE: Texture2D = preload("res://sprites/map/商店界面/confirm2.png")
 const CANCEL_NORMAL: Texture2D = preload("res://sprites/map/商店界面/cancel.png")
@@ -30,6 +32,9 @@ var _preview_visible := false
 
 
 func _ready() -> void:
+	_confirm_button.pressed.connect(_on_confirm_pressed)
+	_cancel_button.pressed.connect(_on_cancel_pressed)
+	_exit_button.pressed.connect(_on_exit_pressed)
 	_apply_preview_visibility(Engine.is_editor_hint())
 	_refresh_button_layers()
 
@@ -59,3 +64,15 @@ func _pick_button_texture(button: BaseButton, normal_texture: Texture2D, active_
 	if draw_mode == BaseButton.DRAW_HOVER or draw_mode == BaseButton.DRAW_PRESSED or draw_mode == BaseButton.DRAW_HOVER_PRESSED:
 		return active_texture
 	return normal_texture
+
+
+func _on_confirm_pressed() -> void:
+	pass
+
+
+func _on_cancel_pressed() -> void:
+	pass
+
+
+func _on_exit_pressed() -> void:
+	exit_requested.emit()

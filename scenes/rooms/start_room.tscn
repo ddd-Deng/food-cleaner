@@ -140,7 +140,7 @@ autowrap_mode = 3
 max_lines_visible = 2
 
 [node name="ExitToChest" parent="." unique_id=1986580814 instance=ExtResource("3")]
-position = Vector2(1134, 382)
+position = Vector2(905, 286)
 interactable_id = &"exit_chest_room"
 display_name = "出口 -> 宝箱房"
 prompt_text = "前往 补给角落"

@@ -15,6 +15,9 @@ size = Vector2(220, 64)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ftyuh"]
 size = Vector2(220, 64)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_shop0"]
+size = Vector2(220, 64)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_ais5t"]
 radius = 97.04638
 
@@ -110,7 +113,7 @@ autowrap_mode = 3
 max_lines_visible = 2
 
 [node name="ExitToStart" parent="." unique_id=1941446797 instance=ExtResource("3")]
-position = Vector2(1137, 393)
+position = Vector2(424, 451)
 interactable_id = &"exit_start"
 display_name = "出口 -> 起点"
 prompt_text = "前往 入口前厅"
@@ -130,6 +133,30 @@ offset_bottom = 32.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 16
 text = "出口 -> 起点"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="ExitToShop" parent="." unique_id=581099203 instance=ExtResource("3")]
+position = Vector2(659, 386)
+interactable_id = &"exit_shop"
+display_name = "出口 -> 商店"
+prompt_text = "前往 商店"
+interactable_kind = &"exit"
+payload = {
+"target_room_id": &"shop_room"
+}
+
+[node name="CollisionShape2D" parent="ExitToShop/Area2D" index="0"]
+shape = SubResource("RectangleShape2D_shop0")
+
+[node name="Label" parent="ExitToShop" index="1"]
+offset_left = -110.0
+offset_top = -32.0
+offset_right = 110.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "出口 -> 商店"
 autowrap_mode = 3
 max_lines_visible = 2
 

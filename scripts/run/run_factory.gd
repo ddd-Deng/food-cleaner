@@ -32,6 +32,7 @@ static func _print_room_connections(run_state: RunState) -> void:
 		&"monster_slot_a",
 		&"monster_slot_b",
 		&"chest_room",
+		&"shop_room",
 		&"monster_slot_c",
 		&"monster_slot_d",
 		&"monster_slot_hub",

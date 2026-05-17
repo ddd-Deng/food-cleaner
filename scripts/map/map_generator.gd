@@ -78,12 +78,20 @@ static func build_demo_rooms() -> Dictionary:
 	chest_room.display_name = "补给角落"
 	chest_room.room_type = MapTypes.RoomType.CHEST
 	chest_room.scene_path = "res://scenes/rooms/chest_room.tscn"
-	chest_room.linked_room_ids = [&"start"]
+	chest_room.linked_room_ids = [&"start", &"shop_room"]
 	chest_room.payload = {
 		"opened": false,
 		"gold_reward": 12,
 	}
 	rooms[chest_room.id] = chest_room
+
+	var shop_room := RoomRuntimeData.new()
+	shop_room.id = &"shop_room"
+	shop_room.display_name = "商店"
+	shop_room.room_type = MapTypes.RoomType.SHOP
+	shop_room.scene_path = "res://scenes/ui/shop_screen.tscn"
+	shop_room.linked_room_ids = []
+	rooms[shop_room.id] = shop_room
 
 	var boss_room := _build_monster_room(
 		&"fish_boss_room",

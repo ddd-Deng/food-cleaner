@@ -256,6 +256,16 @@
 - 影响文件：`scenes/battle/battle_scene.tscn`、`devlog.md`
 - 如何验证：打开战斗场景或进入一场战斗，确认背景已替换为 `sprites/map/战斗场景/背景.png`，并且 `光.png` 会作为一层整体覆盖显示；确认现有战斗 UI、卡牌、时间轴、按钮和数值文本仍然显示在这两层之上。
 
+### 调整入口前厅与补给角落出口摆位，避免被碰撞区卡住
+- 做了什么：把 `start_room.tscn` 中通往 `补给角落` 的出口，以及 `chest_room.tscn` 中返回 `入口前厅` 的出口都从右侧大碰撞区附近挪到更容易接近的位置。此前这两个出口虽然逻辑上已连通，但因为热区摆在障碍附近，实际游玩时容易表现为“看不见出口”或“进得去回不来”。
+- 影响文件：`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请运行游戏后从 `入口前厅` 进入 `补给角落`，确认现在能明显看到并接近通往 `补给角落` 的出口；进入 `补给角落` 后，确认返回 `入口前厅` 的出口可正常靠近并按 `E` 返回。
+
+### 商店接入为独立界面场景并复用探索转场
+- 做了什么：把商店正式接入到当前 run 流程中，作为 `SHOP` 类型房间加入运行时地图；目前先把商店入口接在 `chest_room`，因此玩家可从宝箱房通过一个固定出口进入商店。商店不再作为可走动探索房处理，而是像战斗一样切到独立的 `shop_screen.tscn`；进入商店和点击 `exit` 返回上一个探索房间时，都会复用现有 `SceneTransitionOverlay` 转场动画。为此在 `RunState` 中增加了商店返回房间记录，并在 `ShopScreen` 上增加了 `exit_requested` 信号，当前仅 `exit` 有实际行为，`confirm/cancel` 仍留空。
+- 影响文件：`scripts/run/run_state.gd`、`scripts/run/run_controller.gd`、`scripts/run/run_factory.gd`、`scripts/map/map_generator.gd`、`scripts/ui/shop_screen.gd`、`scenes/rooms/chest_room.tscn`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请运行游戏后进入 `补给角落`，确认新增的“商店”出口可进入商店界面，并且进入时会播放现有转场动画；在商店界面点击 `exit`，确认再次播放转场并返回进入商店前的宝箱房；`confirm/cancel` 目前仍不执行任何逻辑。
+
 ### 探索地图改为固定拓扑下的随机房间分配
 - 做了什么：保留现有探索地图的整体拓扑、各房间 scene 和出口交互物位置不变，但把中间 5 个怪物房改成“结构槽位”。现在每次新开一局时，会把 `棉花糖 / 糖豆 / 蛋糕 / 面包 / 草莓` 这 5 种怪物房内容随机分配到这 5 个固定槽位上，因此起点到 Boss 的主路线结构不变，但每个出口本局实际通向哪种房间会变化。与此同时，探索场景在加载房间后会根据运行时连通结果动态刷新出口交互物的显示文字和提示文案，并在切房前校验目标是否属于当前房间的有效连接，避免 scene 配置和运行时图数据不一致时错误跳房。
 - 影响文件：`scripts/map/map_generator.gd`、`scripts/explore/explore_scene.gd`、`scripts/content/monster_catalog.gd`、`scenes/rooms/start_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/cake_room.tscn`、`scenes/rooms/bread_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
