@@ -3,6 +3,7 @@ class_name RunController
 
 const EXPLORE_SCENE: PackedScene = preload("res://scenes/explore/explore_scene.tscn")
 const BATTLE_SCENE: PackedScene = preload("res://scenes/battle/battle_scene.tscn")
+const SHOP_SCENE: PackedScene = preload("res://scenes/ui/shop_screen.tscn")
 
 var run_state: RunState
 var _active_node: Node
@@ -66,11 +67,30 @@ func _on_battle_resolved(room_id: StringName, result: Dictionary) -> void:
 func _on_room_change_requested(target_room_id: StringName) -> void:
 	if _is_transitioning:
 		return
+	var current_room := run_state.get_current_room()
 	var target_room := run_state.get_room(target_room_id)
 	if target_room == null:
 		return
+	if target_room.room_type == MapTypes.RoomType.SHOP:
+		run_state.shop_return_room_id = current_room.id if current_room != null else &""
+		run_state.move_to_room(target_room_id)
+		run_state.set_message("进入了 %s。" % target_room.display_name)
+		await _run_scene_transition(Callable(self, "_show_shop"))
+		return
 	run_state.move_to_room(target_room_id)
 	run_state.set_message("进入了 %s。" % target_room.display_name)
+	await _run_scene_transition(Callable(self, "_show_explore"))
+
+func _on_shop_exit_requested() -> void:
+	if _is_transitioning or run_state == null:
+		return
+	var return_room_id := run_state.shop_return_room_id
+	var return_room := run_state.get_room(return_room_id)
+	if return_room == null:
+		return
+	run_state.move_to_room(return_room_id)
+	run_state.shop_return_room_id = &""
+	run_state.set_message("离开商店，返回了 %s。" % return_room.display_name)
 	await _run_scene_transition(Callable(self, "_show_explore"))
 
 func _replace_active_node() -> void:
@@ -112,6 +132,15 @@ func _show_battle(room_id: StringName, room: RoomRuntimeData, battle_definition:
 	if battle_scene is Control:
 		(battle_scene as Control).set_anchors_preset(Control.PRESET_FULL_RECT)
 	_replace_active_node_with(battle_scene, _is_transitioning)
+
+func _show_shop() -> void:
+	var shop_scene := SHOP_SCENE.instantiate() as ShopScreen
+	if shop_scene == null:
+		return
+	shop_scene.exit_requested.connect(_on_shop_exit_requested)
+	if shop_scene is Control:
+		(shop_scene as Control).set_anchors_preset(Control.PRESET_FULL_RECT)
+	_replace_active_node_with(shop_scene, _is_transitioning)
 
 func _run_scene_transition(switch_callable: Callable) -> void:
 	if _is_transitioning:

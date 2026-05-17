@@ -256,6 +256,51 @@
 - 影响文件：`scenes/battle/battle_scene.tscn`、`devlog.md`
 - 如何验证：打开战斗场景或进入一场战斗，确认背景已替换为 `sprites/map/战斗场景/背景.png`，并且 `光.png` 会作为一层整体覆盖显示；确认现有战斗 UI、卡牌、时间轴、按钮和数值文本仍然显示在这两层之上。
 
+### 探索主角拆分为独立 `tscn`
+- 做了什么：将探索主角从 `explore_scene.tscn` 里的直接脚本节点拆分为独立场景 `scenes/explore/player_actor.tscn`。现在主角的 `CharacterBody2D`、动画节点、身体碰撞和交互范围都能在编辑器里直接看到和调整，探索场景只是在 `RoomCanvas` 下实例化这个主角场景，原有移动、动画、碰撞与交互逻辑仍由 `scripts/explore/player_actor.gd` 负责。
+- 影响文件：`scenes/explore/player_actor.tscn`、`scenes/explore/explore_scene.tscn`、`scripts/explore/player_actor.gd`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请在编辑器中打开 `res://scenes/explore/player_actor.tscn`，确认能直接看到主角节点树、碰撞形状和交互区域；再运行探索场景，确认主角的移动、动画和交互范围与之前一致。
+
+### 标题界面开场动画改为两段顺播并在结尾统一隐藏
+- 做了什么：调整标题场景开场表现。现在 `before_start` 序列不再在播放完成后立刻隐藏，而是停在最后一帧保持显示；随后会在更上层播放项目现有的 `sprites/transitionAnimation/` 过场动画，同样按 `30 FPS` 播放一次。第二段过场播放完毕后，`before_start` 与过场两层都会一起隐藏，只保留正式标题封面层。
+- 影响文件：`scenes/ui/title_screen.tscn`、`scripts/ui/title_screen.gd`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请运行或预览 `res://scenes/ui/title_screen.tscn`，确认进入场景时先播放 `before_start`，播完后停在最后一帧；接着在其上层播放一次过场动画；过场结束后，两层动画一起消失，最终只剩下标题封面与眼球跟随效果。
+
+### 标题界面新增开场一次性动画层
+- 做了什么：在标题场景顶部新增 `BeforeStartLayer`，运行时会读取 `sprites/标题界面/before_start/` 下的 PNG 序列并以 `30 FPS` 播放一次开场动画；动画不循环，播放完成后会自动隐藏，因此只会在首次进入该标题场景时出现一次当前实例内的开场覆盖层。
+- 影响文件：`scenes/ui/title_screen.tscn`、`scripts/ui/title_screen.gd`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请运行或预览 `res://scenes/ui/title_screen.tscn`，确认进入场景时会先播放 `before_start` 序列动画，且动画结束后自动消失，不会循环常驻。
+
+### 标题界面眼球图层新增鼠标跟随偏移
+- 做了什么：为 `title_screen.tscn` 新增 `scripts/ui/title_screen.gd`，让 `eye1.png` 和 `eye2.png` 在运行时根据鼠标位置产生同向偏移。当前偏移限制为以原始位置为圆心、半径最多 `50px` 的圆形范围；鼠标越靠近屏幕边缘，眼球图层偏移越接近上限。
+- 影响文件：`scenes/ui/title_screen.tscn`、`scripts/ui/title_screen.gd`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请运行或预览 `res://scenes/ui/title_screen.tscn`，移动鼠标，确认 `eye1` 与 `eye2` 会围绕原位小范围跟随鼠标移动，并且最大偏移不会超过约 `50px`。
+
+### 新增独立标题界面场景并按封面图层叠放
+- 做了什么：新增 `res://scenes/ui/title_screen.tscn` 作为独立标题界面场景。按要求将 `sprites/标题界面/封面图层/background.png` 放在最底层，`background2.png` 放在其上，其余贴图再继续叠在上层；当前按现有文件名顺序依次加入 `ball / bean / bean2 / bean3 / coockie / eye1 / eye2 / mouth / orange / snack / strawberry / title`。所有图层都按 `1280x720` 整屏铺满，打开场景即可在编辑器中直接预览。
+- 影响文件：`scenes/ui/title_screen.tscn`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请在编辑器中打开 `res://scenes/ui/title_screen.tscn`，确认 `background.png` 在最底层、`background2.png` 在其上，其他贴图都继续覆盖在上方，且整体铺满当前 `1280x720` 视口。
+
+### 调整入口前厅与补给角落出口摆位，避免被碰撞区卡住
+- 做了什么：把 `start_room.tscn` 中通往 `补给角落` 的出口，以及 `chest_room.tscn` 中返回 `入口前厅` 的出口都从右侧大碰撞区附近挪到更容易接近的位置。此前这两个出口虽然逻辑上已连通，但因为热区摆在障碍附近，实际游玩时容易表现为“看不见出口”或“进得去回不来”。
+- 影响文件：`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请运行游戏后从 `入口前厅` 进入 `补给角落`，确认现在能明显看到并接近通往 `补给角落` 的出口；进入 `补给角落` 后，确认返回 `入口前厅` 的出口可正常靠近并按 `E` 返回。
+
+### 商店接入为独立界面场景并复用探索转场
+- 做了什么：把商店正式接入到当前 run 流程中，作为 `SHOP` 类型房间加入运行时地图；目前先把商店入口接在 `chest_room`，因此玩家可从宝箱房通过一个固定出口进入商店。商店不再作为可走动探索房处理，而是像战斗一样切到独立的 `shop_screen.tscn`；进入商店和点击 `exit` 返回上一个探索房间时，都会复用现有 `SceneTransitionOverlay` 转场动画。为此在 `RunState` 中增加了商店返回房间记录，并在 `ShopScreen` 上增加了 `exit_requested` 信号，当前仅 `exit` 有实际行为，`confirm/cancel` 仍留空。
+- 影响文件：`scripts/run/run_state.gd`、`scripts/run/run_controller.gd`、`scripts/run/run_factory.gd`、`scripts/map/map_generator.gd`、`scripts/ui/shop_screen.gd`、`scenes/rooms/chest_room.tscn`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请运行游戏后进入 `补给角落`，确认新增的“商店”出口可进入商店界面，并且进入时会播放现有转场动画；在商店界面点击 `exit`，确认再次播放转场并返回进入商店前的宝箱房；`confirm/cancel` 目前仍不执行任何逻辑。
+
+### 探索地图改为固定拓扑下的随机房间分配
+- 做了什么：保留现有探索地图的整体拓扑、各房间 scene 和出口交互物位置不变，但把中间 5 个怪物房改成“结构槽位”。现在每次新开一局时，会把 `棉花糖 / 糖豆 / 蛋糕 / 面包 / 草莓` 这 5 种怪物房内容随机分配到这 5 个固定槽位上，因此起点到 Boss 的主路线结构不变，但每个出口本局实际通向哪种房间会变化。与此同时，探索场景在加载房间后会根据运行时连通结果动态刷新出口交互物的显示文字和提示文案，并在切房前校验目标是否属于当前房间的有效连接，避免 scene 配置和运行时图数据不一致时错误跳房。
+- 影响文件：`scripts/map/map_generator.gd`、`scripts/explore/explore_scene.gd`、`scripts/content/monster_catalog.gd`、`scenes/rooms/start_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/cake_room.tscn`、`scenes/rooms/bread_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请重新启动游戏多次进入探索，确认起始房左右两个怪物出口、后续分支房和汇合房显示的目标房间名称会在不同开局间变化，但出口位置和数量不变；进入怪物房后，房内怪物形象、战斗对象和房间名应与当前出口文字一致；从汇合房仍应始终能前往 `巨鱼Boss房`。
+
+### 新增商店界面独立场景与按钮热区预览
+- 做了什么：新增 `res://scenes/ui/shop_screen.tscn`，把 `sprites/map/商店界面/` 下的 `0.png` 到 `4.png` 按从下到上的顺序整屏叠放，作为单独的商店界面场景；同时叠加 `confirm/cancel/exit` 三组整屏按钮贴图，并通过三个透明 `Button` 热区控制对应按钮在普通态与高亮/按下态（当前都使用 `*2.png`）之间切换。为了便于后续在编辑器里直接拖拽修改点击范围，还加了仅在编辑器中显示的彩色热区预览框。
+- 影响文件：`scenes/ui/shop_screen.tscn`、`scripts/ui/shop_screen.gd`、`devlog.md`
+- 如何验证：当前环境未确认安装 Godot，未执行 headless 校验。请在编辑器中打开 `res://scenes/ui/shop_screen.tscn`，确认 `0~4.png` 已按顺序叠好、`confirm/cancel/exit` 默认态可见，并且能看到三个彩色热区框；运行场景后，把鼠标移入或按下对应热区，确认对应按钮会切到 `confirm2/cancel2/exit2` 贴图，且运行时这些彩色预览框不会显示。
+
 ### 探索房间背景统一替换为森林地图底图
 - 做了什么：将四个探索房间 scene 的背景节点从纯色 `Panel` 统一替换为直接铺满显示 `res://sprites/map/森林地图/背景.png` 的 `TextureRect`。这张背景图本身是 `1280x720`，与当前项目默认窗口尺寸一致，因此当前直接作为房间背景图使用，不额外做裁切拼接逻辑。
 - 影响文件：`scenes/rooms/start_room.tscn`、`scenes/rooms/monster_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/boss_room.tscn`、`devlog.md`

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://himvlj0twlh"]
 
 [ext_resource type="Script" uid="uid://cxdctt3xfq3qx" path="res://scripts/explore/explore_scene.gd" id="1"]
-[ext_resource type="Script" uid="uid://dhrmua72xkmcl" path="res://scripts/explore/player_actor.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/explore/player_actor.tscn" id="2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_top_wall"]
 size = Vector2(1400, 32)
@@ -58,10 +58,8 @@ position = Vector2(1296, 360)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoomCanvas/BoundaryWalls/RightWall"]
 shape = SubResource("RectangleShape2D_right_wall")
 
-[node name="PlayerActor" type="CharacterBody2D" parent="RoomCanvas" unique_id=982990532]
+[node name="PlayerActor" parent="RoomCanvas" instance=ExtResource("2") unique_id=982990532]
 position = Vector2(484, 274)
-script = ExtResource("2")
-outline_thickness = 3.0
 
 [node name="OverlayPanel" type="PanelContainer" parent="." unique_id=470096214]
 visible = false
