@@ -11,16 +11,16 @@
 [ext_resource type="Texture2D" uid="uid://dvsqh3cl6d57k" path="res://sprites/map/游乐场地图/前景4-2.png" id="8_yw6jb"]
 [ext_resource type="Texture2D" uid="uid://cujjbrarx1bet" path="res://sprites/map/游乐场地图/前景5.png" id="9_v5cll"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lcoeq"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yw6jb"]
+size = Vector2(220, 64)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bc050"]
 size = Vector2(220, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jls7n"]
-size = Vector2(220, 64)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_d67pt"]
-size = Vector2(220, 64)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0pbxl"]
 size = Vector2(220, 64)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bc050"]
@@ -109,7 +109,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="GuideInteractable/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_bc050")
+shape = SubResource("RectangleShape2D_lcoeq")
 
 [node name="Label" parent="GuideInteractable" index="1"]
 offset_left = -110.0
@@ -133,7 +133,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToMonsterA/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_jls7n")
+shape = SubResource("RectangleShape2D_yw6jb")
 
 [node name="Label" parent="ExitToMonsterA" index="1"]
 offset_left = -110.0
@@ -157,7 +157,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToChest/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_d67pt")
+shape = SubResource("RectangleShape2D_bc050")
 
 [node name="Label" parent="ExitToChest" index="1"]
 offset_left = -110.0
@@ -181,7 +181,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToMonsterB/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_0pbxl")
+shape = SubResource("RectangleShape2D_jls7n")
 
 [node name="Label" parent="ExitToMonsterB" index="1"]
 offset_left = -110.0
@@ -217,6 +217,7 @@ texture = ExtResource("7_lcoeq")
 offset = Vector2(274, -216)
 
 [node name="Sprite2D4" type="Sprite2D" parent="Y-sort" unique_id=322801081]
+y_sort_enabled = true
 position = Vector2(602, 481)
 texture = ExtResource("8_yw6jb")
 offset = Vector2(38, -121)

@@ -50,8 +50,9 @@
 [ext_resource type="Texture2D" uid="uid://c126g47ebd886" path="res://sprites/怪物_256x144/糖豆人/Scene1_038.png" id="44_ppdqk"]
 [ext_resource type="Texture2D" uid="uid://dv2w8g60h038u" path="res://sprites/怪物_256x144/糖豆人/Scene1_039.png" id="45_j2duf"]
 [ext_resource type="Texture2D" uid="uid://dw0rxdlf5p15a" path="res://sprites/怪物_256x144/糖豆人/Scene1_040.png" id="46_s2thq"]
+[ext_resource type="Texture2D" uid="uid://7n2tqbvywc0w" path="res://sprites/map/森林地图/前景4.png" id="51_efyel"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4uc4h"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_efyel"]
 shader = ExtResource("5_4uc4h")
 shader_parameter/outline_color = Color(1, 0.95, 0.72, 1)
 shader_parameter/outline_thickness = 4.0
@@ -193,7 +194,7 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_6vjbs"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_efyel"]
 size = Vector2(220, 180)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rvga1"]
@@ -260,13 +261,13 @@ payload = {
 }
 
 [node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
-material = SubResource("ShaderMaterial_4uc4h")
+material = SubResource("ShaderMaterial_efyel")
 sprite_frames = SubResource("SpriteFrames_efyel")
 animation = &"idle"
-frame_progress = 0.12554008
+frame_progress = 0.80858415
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_6vjbs")
+shape = SubResource("RectangleShape2D_efyel")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -388,6 +389,16 @@ shape = SubResource("RectangleShape2D_2lx8j")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=1921838496]
 position = Vector2(962, 470)
 shape = SubResource("CircleShape2D_em06p")
+
+[node name="Y-sort" type="Node2D" parent="." unique_id=1152630902]
+y_sort_enabled = true
+position = Vector2(962, 470)
+
+[node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=1360197882]
+y_sort_enabled = true
+position = Vector2(-24, -15)
+texture = ExtResource("51_efyel")
+offset = Vector2(-298, -95)
 
 [editable path="MonsterEncounter"]
 [editable path="ExitToStart"]

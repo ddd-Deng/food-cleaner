@@ -51,7 +51,7 @@
 [ext_resource type="Texture2D" uid="uid://beyafecqak34x" path="res://sprites/怪物_256x144/棉花糖/Scene1_039.png" id="45_i7my1"]
 [ext_resource type="Texture2D" uid="uid://7n2tqbvywc0w" path="res://sprites/map/森林地图/前景4.png" id="50_iboen"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_a8r2e"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iboen"]
 shader = ExtResource("5_pp0i3")
 shader_parameter/outline_color = Color(1, 0.95, 0.72, 1)
 shader_parameter/outline_thickness = 4.0
@@ -190,13 +190,13 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8p8sm"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iboen"]
 size = Vector2(220, 180)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tpogf"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fbnqn"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_16y4h"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8p8sm"]
 size = Vector2(220, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ayv8"]
@@ -257,13 +257,13 @@ payload = {
 }
 
 [node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
-material = SubResource("ShaderMaterial_a8r2e")
+material = SubResource("ShaderMaterial_iboen")
 sprite_frames = SubResource("SpriteFrames_fbnqn")
 animation = &"idle"
-frame_progress = 0.7394013
+frame_progress = 0.16733404
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_8p8sm")
+shape = SubResource("RectangleShape2D_iboen")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -289,7 +289,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStart/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_tpogf")
+shape = SubResource("RectangleShape2D_fbnqn")
 
 [node name="Label" parent="ExitToStart" index="1"]
 offset_left = -110.0
@@ -313,7 +313,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_16y4h")
+shape = SubResource("RectangleShape2D_8p8sm")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0
@@ -391,10 +391,10 @@ y_sort_enabled = true
 position = Vector2(962, 470)
 
 [node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=676163820]
-z_index = 10
 y_sort_enabled = true
-position = Vector2(-322, -110)
+position = Vector2(-27, -19)
 texture = ExtResource("50_iboen")
+offset = Vector2(-295, -91)
 
 [editable path="MonsterEncounter"]
 [editable path="ExitToStart"]

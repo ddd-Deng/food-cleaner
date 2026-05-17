@@ -198,13 +198,13 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ni6g6"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5t5wn"]
 size = Vector2(220, 180)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_i24wc"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w1wo4"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_s8h32"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i24wc"]
 size = Vector2(220, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_av1uy"]
@@ -215,6 +215,9 @@ size = Vector2(99, 263)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mkq3q"]
 size = Vector2(99.5, 267.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s8h32"]
+size = Vector2(149, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tdtvd"]
 size = Vector2(300, 161)
@@ -286,10 +289,10 @@ payload = {
 material = SubResource("ShaderMaterial_ni6g6")
 sprite_frames = SubResource("SpriteFrames_5t5wn")
 animation = &"idle"
-frame_progress = 0.47103584
+frame_progress = 0.6513987
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_ni6g6")
+shape = SubResource("RectangleShape2D_5t5wn")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -315,7 +318,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToMarshmallow/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_i24wc")
+shape = SubResource("RectangleShape2D_w1wo4")
 
 [node name="Label" parent="ExitToMarshmallow" index="1"]
 offset_left = -110.0
@@ -339,7 +342,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_s8h32")
+shape = SubResource("RectangleShape2D_i24wc")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0
@@ -461,6 +464,12 @@ shape = SubResource("RectangleShape2D_1yeq1")
 position = Vector2(730, 642)
 shape = SubResource("RectangleShape2D_mkq3q")
 
+[node name="StaticBody2D10" type="StaticBody2D" parent="." unique_id=1566581099]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D10" unique_id=52536240]
+position = Vector2(581.5, 336)
+shape = SubResource("RectangleShape2D_s8h32")
+
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=2039694547]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=716768544]
@@ -503,8 +512,9 @@ y_sort_enabled = true
 [node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=37548721]
 z_index = 15
 y_sort_enabled = true
-position = Vector2(640, 360)
+position = Vector2(502, 312)
 texture = ExtResource("7")
+offset = Vector2(138, 48)
 
 [editable path="MonsterEncounter"]
 [editable path="ExitToMarshmallow"]

@@ -675,10 +675,10 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8h0qj"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yiwo5"]
 size = Vector2(220, 180)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_dt65n"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jyuvj"]
 size = Vector2(220, 64)
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_2afaf"]
@@ -757,10 +757,10 @@ payload = {
 material = SubResource("ShaderMaterial_8h0qj")
 sprite_frames = SubResource("SpriteFrames_yiwo5")
 animation = &"idle"
-frame_progress = 0.30690238
+frame_progress = 0.7839674
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_8h0qj")
+shape = SubResource("RectangleShape2D_yiwo5")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -786,7 +786,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_dt65n")
+shape = SubResource("RectangleShape2D_jyuvj")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0

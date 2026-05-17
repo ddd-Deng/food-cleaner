@@ -11,10 +11,10 @@
 [ext_resource type="Texture2D" uid="uid://dvsqh3cl6d57k" path="res://sprites/map/游乐场地图/前景4-2.png" id="8_851y8"]
 [ext_resource type="Texture2D" uid="uid://cujjbrarx1bet" path="res://sprites/map/游乐场地图/前景5.png" id="9_ftyuh"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_pgmkn"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ais5t"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0g8dt"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_851y8"]
 size = Vector2(220, 64)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_851y8"]
@@ -101,7 +101,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ChestInteractable/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_pgmkn")
+shape = SubResource("RectangleShape2D_ais5t")
 
 [node name="Label" parent="ChestInteractable" index="1"]
 offset_left = -110.0
@@ -125,7 +125,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStart/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_0g8dt")
+shape = SubResource("RectangleShape2D_851y8")
 
 [node name="Label" parent="ExitToStart" index="1"]
 offset_left = -110.0
@@ -171,6 +171,7 @@ texture = ExtResource("7_ais5t")
 offset = Vector2(274, -216)
 
 [node name="Sprite2D4" type="Sprite2D" parent="Y-sort" unique_id=1740523718]
+y_sort_enabled = true
 position = Vector2(602, 481)
 texture = ExtResource("8_851y8")
 offset = Vector2(38, -121)

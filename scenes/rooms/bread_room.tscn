@@ -231,13 +231,13 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_pejmt"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gdr51"]
 size = Vector2(220, 180)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ljvj"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1iobh"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ocvl"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ljvj"]
 size = Vector2(220, 64)
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_7euqx"]
@@ -316,10 +316,10 @@ payload = {
 material = SubResource("ShaderMaterial_pejmt")
 sprite_frames = SubResource("SpriteFrames_gdr51")
 animation = &"idle"
-frame_progress = 0.50714266
+frame_progress = 0.2740672
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_pejmt")
+shape = SubResource("RectangleShape2D_gdr51")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -345,7 +345,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToCandyBean/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_7ljvj")
+shape = SubResource("RectangleShape2D_1iobh")
 
 [node name="Label" parent="ExitToCandyBean" index="1"]
 offset_left = -110.0
@@ -369,7 +369,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_1ocvl")
+shape = SubResource("RectangleShape2D_7ljvj")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0
@@ -388,9 +388,9 @@ y_sort_enabled = true
 
 [node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=187270882]
 y_sort_enabled = true
-position = Vector2(759, 211)
+position = Vector2(759, 208)
 texture = ExtResource("6")
-offset = Vector2(-119, 149)
+offset = Vector2(-119, 152)
 
 [node name="Foreground2" type="TextureRect" parent="." unique_id=992105848]
 z_index = 12

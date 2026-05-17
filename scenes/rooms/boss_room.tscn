@@ -72,10 +72,10 @@ y_sort_enabled = true
 position = Vector2(962, 470)
 
 [node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=1335750595]
-z_index = 10
 y_sort_enabled = true
-position = Vector2(-322, -110)
+position = Vector2(-26, -19)
 texture = ExtResource("5_qfvvh")
+offset = Vector2(-296, -91)
 
 [node name="Foreground1" type="TextureRect" parent="." unique_id=1530916857]
 self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
