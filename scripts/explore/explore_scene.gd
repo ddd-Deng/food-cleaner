@@ -138,6 +138,9 @@ func _try_change_room(interactable: ExploreInteractable) -> void:
 		run_state.set_message("这个房间还没有处理完，出口暂时关闭。")
 		return
 	var target_room_id: Variant = interactable.payload.get("target_room_id", &"")
+	if target_room_id is not StringName or not current_room.linked_room_ids.has(target_room_id):
+		run_state.set_message("这个出口当前没有连通到有效房间。")
+		return
 	room_change_requested.emit(target_room_id)
 
 func _room_color(room_type: MapTypes.RoomType) -> Color:
@@ -195,6 +198,10 @@ func _sync_interactable_runtime_state(interactable: ExploreInteractable, room: R
 				var monster_definition := MonsterCatalog.get_monster_definition(monster_id)
 				if monster_definition != null:
 					monster_name = monster_definition.display_name
+			interactable.payload["room_id"] = room.id if room != null else &""
+			interactable.payload["monster_id"] = monster_id
+			if interactable is MonsterEncounter:
+				(interactable as MonsterEncounter).configure_monster(monster_id)
 			if room != null and room.cleared:
 				interactable.display_name = "已净化房间"
 				interactable.prompt_text = "查看房间状态"
@@ -203,8 +210,15 @@ func _sync_interactable_runtime_state(interactable: ExploreInteractable, room: R
 				interactable.prompt_text = "发起战斗"
 		&"chest":
 			var opened: bool = room != null and bool(room.payload.get("opened", false))
+			interactable.payload["room_id"] = room.id if room != null else &""
 			interactable.display_name = "已开宝箱" if opened else "补给宝箱"
 			interactable.prompt_text = "开启宝箱"
+		&"exit":
+			var target_room_id: Variant = interactable.payload.get("target_room_id", &"")
+			var target_room: RoomRuntimeData = run_state.get_room(target_room_id) if target_room_id is StringName else null
+			var target_room_name := target_room.display_name if target_room != null else "未知房间"
+			interactable.display_name = "出口 -> %s" % target_room_name
+			interactable.prompt_text = "前往 %s" % target_room_name
 	interactable.refresh_runtime_visual()
 
 func _clear_room_scene() -> void:

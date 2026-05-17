@@ -256,6 +256,11 @@
 - 影响文件：`scenes/battle/battle_scene.tscn`、`devlog.md`
 - 如何验证：打开战斗场景或进入一场战斗，确认背景已替换为 `sprites/map/战斗场景/背景.png`，并且 `光.png` 会作为一层整体覆盖显示；确认现有战斗 UI、卡牌、时间轴、按钮和数值文本仍然显示在这两层之上。
 
+### 探索地图改为固定拓扑下的随机房间分配
+- 做了什么：保留现有探索地图的整体拓扑、各房间 scene 和出口交互物位置不变，但把中间 5 个怪物房改成“结构槽位”。现在每次新开一局时，会把 `棉花糖 / 糖豆 / 蛋糕 / 面包 / 草莓` 这 5 种怪物房内容随机分配到这 5 个固定槽位上，因此起点到 Boss 的主路线结构不变，但每个出口本局实际通向哪种房间会变化。与此同时，探索场景在加载房间后会根据运行时连通结果动态刷新出口交互物的显示文字和提示文案，并在切房前校验目标是否属于当前房间的有效连接，避免 scene 配置和运行时图数据不一致时错误跳房。
+- 影响文件：`scripts/map/map_generator.gd`、`scripts/explore/explore_scene.gd`、`scripts/content/monster_catalog.gd`、`scenes/rooms/start_room.tscn`、`scenes/rooms/marshmallow_room.tscn`、`scenes/rooms/candy_bean_room.tscn`、`scenes/rooms/cake_room.tscn`、`scenes/rooms/bread_room.tscn`、`scenes/rooms/strawberry_room.tscn`、`scenes/rooms/fish_boss_room.tscn`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请重新启动游戏多次进入探索，确认起始房左右两个怪物出口、后续分支房和汇合房显示的目标房间名称会在不同开局间变化，但出口位置和数量不变；进入怪物房后，房内怪物形象、战斗对象和房间名应与当前出口文字一致；从汇合房仍应始终能前往 `巨鱼Boss房`。
+
 ### 新增商店界面独立场景与按钮热区预览
 - 做了什么：新增 `res://scenes/ui/shop_screen.tscn`，把 `sprites/map/商店界面/` 下的 `0.png` 到 `4.png` 按从下到上的顺序整屏叠放，作为单独的商店界面场景；同时叠加 `confirm/cancel/exit` 三组整屏按钮贴图，并通过三个透明 `Button` 热区控制对应按钮在普通态与高亮/按下态（当前都使用 `*2.png`）之间切换。为了便于后续在编辑器里直接拖拽修改点击范围，还加了仅在编辑器中显示的彩色热区预览框。
 - 影响文件：`scenes/ui/shop_screen.tscn`、`scripts/ui/shop_screen.gd`、`devlog.md`

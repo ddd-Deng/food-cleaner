@@ -59,49 +59,49 @@ static func _build_definitions() -> Dictionary:
 
 	definitions[&"marshmallow"] = _build_monster(
 		&"marshmallow",
-		"污染怪物",
-		"怪物房",
-		"res://scenes/rooms/marshmallow_room.tscn",
+		"污染棉花糖",
+		"棉花糖房",
+		"",
 		MONSTER_ANIMATION_ROOT + "/棉花糖",
 		_build_marshmallow_enemy()
 	)
 	definitions[&"candy_bean"] = _build_monster(
 		&"candy_bean",
-		"污染怪物",
-		"怪物房",
-		"res://scenes/rooms/candy_bean_room.tscn",
+		"污染糖豆",
+		"糖豆房",
+		"",
 		MONSTER_ANIMATION_ROOT + "/糖豆人",
 		_build_candy_bean_enemy()
 	)
 	definitions[&"strawberry"] = _build_monster(
 		&"strawberry",
-		"污染怪物",
-		"怪物房",
-		"res://scenes/rooms/strawberry_room.tscn",
+		"污染草莓",
+		"草莓房",
+		"",
 		MONSTER_ANIMATION_ROOT + "/草莓",
 		_build_strawberry_enemy()
 	)
 	definitions[&"cake"] = _build_monster(
 		&"cake",
-		"污染怪物",
-		"怪物房",
-		"res://scenes/rooms/cake_room.tscn",
+		"污染蛋糕",
+		"蛋糕房",
+		"",
 		MONSTER_ANIMATION_ROOT + "/蛋糕",
 		_build_cake_enemy()
 	)
 	definitions[&"bread"] = _build_monster(
 		&"bread",
-		"污染怪物",
-		"怪物房",
-		"res://scenes/rooms/bread_room.tscn",
+		"污染面包",
+		"面包房",
+		"",
 		MONSTER_ANIMATION_ROOT + "/面包",
 		_build_bread_enemy()
 	)
 	definitions[&"fish_boss"] = _build_monster(
 		&"fish_boss",
-		"Boss",
-		"Boss房",
-		"res://scenes/rooms/fish_boss_room.tscn",
+		"腐化巨鱼",
+		"巨鱼Boss房",
+		"",
 		MONSTER_ANIMATION_ROOT + "/鱼",
 		_build_fish_enemy()
 	)
@@ -132,7 +132,7 @@ static func _build_monster(
 static func _build_marshmallow_enemy() -> EnemyData:
 	var enemy := EnemyData.new()
 	enemy.id = &"marshmallow"
-	enemy.display_name = "污染怪物"
+	enemy.display_name = "污染棉花糖"
 	enemy.food_blocks = [
 		_block(&"sugar_cube", "糖块", 1, 1, "轻飘飘的甜块。"),
 		_block(&"sticky_cream", "黏奶油", 1, 2, "会稍微拖慢节奏。"),
@@ -152,7 +152,7 @@ static func _build_marshmallow_enemy() -> EnemyData:
 static func _build_candy_bean_enemy() -> EnemyData:
 	var enemy := EnemyData.new()
 	enemy.id = &"candy_bean"
-	enemy.display_name = "污染怪物"
+	enemy.display_name = "污染糖豆"
 	enemy.food_blocks = [
 		_block(&"bean_shell", "豆壳片", 1, 2, "甜味很重。"),
 		_block(&"syrup_core", "糖浆芯", 1, 3, "太甜会反噬。", [_effect(BattleTypes.EffectKind.DEAL_PLAYER_DAMAGE, 1)]),
@@ -172,7 +172,7 @@ static func _build_candy_bean_enemy() -> EnemyData:
 static func _build_strawberry_enemy() -> EnemyData:
 	var enemy := EnemyData.new()
 	enemy.id = &"strawberry"
-	enemy.display_name = "污染怪物"
+	enemy.display_name = "污染草莓"
 	enemy.food_blocks = [
 		_block(&"berry_meat", "莓肉块", 1, 1, "多汁柔软。"),
 		_block(&"seed_cluster", "籽团", 1, 2, "细小但烦人。"),
@@ -194,7 +194,7 @@ static func _build_strawberry_enemy() -> EnemyData:
 static func _build_fish_enemy() -> EnemyData:
 	var enemy := EnemyData.new()
 	enemy.id = &"fish_boss"
-	enemy.display_name = "Boss"
+	enemy.display_name = "腐化巨鱼"
 	enemy.food_blocks = [
 		_block(&"scale", "污鳞", 1, 2, "腥味很重。"),
 		_block(&"fish_meat", "鱼肉块", 1, 2, "纤维明显。"),
@@ -217,7 +217,7 @@ static func _build_fish_enemy() -> EnemyData:
 static func _build_cake_enemy() -> EnemyData:
 	var enemy := EnemyData.new()
 	enemy.id = &"cake"
-	enemy.display_name = "污染怪物"
+	enemy.display_name = "污染蛋糕"
 	enemy.food_blocks = [
 		_block(&"cream_layer", "奶油层", 1, 2, "黏腻得不好处理。"),
 		_block(&"cake_base", "蛋糕胚", 1, 2, "松软但分量足。"),
@@ -237,7 +237,7 @@ static func _build_cake_enemy() -> EnemyData:
 static func _build_bread_enemy() -> EnemyData:
 	var enemy := EnemyData.new()
 	enemy.id = &"bread"
-	enemy.display_name = "污染怪物"
+	enemy.display_name = "污染面包"
 	enemy.food_blocks = [
 		_block(&"crust", "硬面包壳", 1, 3, "又硬又干。"),
 		_block(&"soft_crumb", "内芯团", 1, 2, "吸水后会膨胀。"),

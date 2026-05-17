@@ -309,7 +309,7 @@ interactable_kind = &"encounter"
 area_size = Vector2(220, 180)
 payload = {
 "monster_id": &"bread",
-"room_id": &"bread_room"
+"room_id": &"monster_slot_d"
 }
 
 [node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
@@ -341,7 +341,7 @@ display_name = "出口 -> 怪物房"
 prompt_text = "前往 怪物房"
 interactable_kind = &"exit"
 payload = {
-"target_room_id": &"candy_bean_room"
+"target_room_id": &"monster_slot_b"
 }
 
 [node name="CollisionShape2D" parent="ExitToCandyBean/Area2D" index="0"]
@@ -365,7 +365,7 @@ display_name = "出口 -> 怪物房"
 prompt_text = "前往 怪物房"
 interactable_kind = &"exit"
 payload = {
-"target_room_id": &"strawberry_room"
+"target_room_id": &"monster_slot_hub"
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]

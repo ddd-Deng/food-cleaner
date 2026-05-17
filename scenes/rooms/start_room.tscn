@@ -122,7 +122,7 @@ display_name = "出口 -> 怪物房"
 prompt_text = "前往 怪物房"
 interactable_kind = &"exit"
 payload = {
-"target_room_id": &"marshmallow_room"
+"target_room_id": &"monster_slot_a"
 }
 
 [node name="CollisionShape2D" parent="ExitToMonsterA/Area2D" index="0"]
@@ -170,7 +170,7 @@ display_name = "出口 -> 怪物房"
 prompt_text = "前往 怪物房"
 interactable_kind = &"exit"
 payload = {
-"target_room_id": &"candy_bean_room"
+"target_room_id": &"monster_slot_b"
 }
 
 [node name="CollisionShape2D" parent="ExitToMonsterB/Area2D" index="0"]
