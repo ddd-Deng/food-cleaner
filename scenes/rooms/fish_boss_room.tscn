@@ -675,10 +675,10 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_yiwo5"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8h0qj"]
 size = Vector2(220, 180)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jyuvj"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dt65n"]
 size = Vector2(220, 64)
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_2afaf"]
@@ -744,7 +744,7 @@ anchor_kind = &"player_spawn"
 position = Vector2(642, 344)
 monster_id = &"fish_boss"
 interactable_id = &"enemy"
-display_name = "Boss"
+display_name = "腐化巨鱼"
 prompt_text = "发起战斗"
 interactable_kind = &"encounter"
 area_size = Vector2(220, 180)
@@ -757,10 +757,10 @@ payload = {
 material = SubResource("ShaderMaterial_8h0qj")
 sprite_frames = SubResource("SpriteFrames_yiwo5")
 animation = &"idle"
-frame_progress = 0.87822783
+frame_progress = 0.30690238
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_yiwo5")
+shape = SubResource("RectangleShape2D_8h0qj")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -769,7 +769,7 @@ offset_right = 110.0
 offset_bottom = 90.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 16
-text = "Boss"
+text = "腐化巨鱼"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
@@ -786,7 +786,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_jyuvj")
+shape = SubResource("RectangleShape2D_dt65n")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0
@@ -799,18 +799,15 @@ text = "出口 -> 怪物房"
 autowrap_mode = 3
 max_lines_visible = 2
 
-[node name="Foreground1" type="TextureRect" parent="." unique_id=2018637450]
+[node name="Y-sort" type="Node2D" parent="." unique_id=695452523]
 z_index = 10
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=748367931]
+y_sort_enabled = true
+position = Vector2(759, 211)
 texture = ExtResource("6")
-expand_mode = 1
-stretch_mode = 6
+offset = Vector2(-119, 149)
 
 [node name="Foreground2" type="TextureRect" parent="." unique_id=1260925160]
 z_index = 11

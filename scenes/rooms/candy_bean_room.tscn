@@ -51,13 +51,13 @@
 [ext_resource type="Texture2D" uid="uid://dv2w8g60h038u" path="res://sprites/怪物_256x144/糖豆人/Scene1_039.png" id="45_j2duf"]
 [ext_resource type="Texture2D" uid="uid://dw0rxdlf5p15a" path="res://sprites/怪物_256x144/糖豆人/Scene1_040.png" id="46_s2thq"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tks33"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4uc4h"]
 shader = ExtResource("5_4uc4h")
 shader_parameter/outline_color = Color(1, 0.95, 0.72, 1)
 shader_parameter/outline_thickness = 4.0
 shader_parameter/outline_enabled = false
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_wgvr8"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_efyel"]
 animations = [{
 "frames": [],
 "loop": true,
@@ -193,13 +193,13 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2jymf"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6vjbs"]
 size = Vector2(220, 180)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_oblj7"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rvga1"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_eqvbt"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ekobi"]
 size = Vector2(220, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p4w4b"]
@@ -250,7 +250,7 @@ anchor_kind = &"player_spawn"
 position = Vector2(616, 274)
 monster_id = &"candy_bean"
 interactable_id = &"enemy"
-display_name = "污染怪物"
+display_name = "污染糖豆"
 prompt_text = "发起战斗"
 interactable_kind = &"encounter"
 area_size = Vector2(220, 180)
@@ -260,13 +260,13 @@ payload = {
 }
 
 [node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
-material = SubResource("ShaderMaterial_tks33")
-sprite_frames = SubResource("SpriteFrames_wgvr8")
+material = SubResource("ShaderMaterial_4uc4h")
+sprite_frames = SubResource("SpriteFrames_efyel")
 animation = &"idle"
-frame_progress = 0.9613466
+frame_progress = 0.12554008
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_2jymf")
+shape = SubResource("RectangleShape2D_6vjbs")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -275,7 +275,7 @@ offset_right = 110.0
 offset_bottom = 90.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 16
-text = "污染怪物"
+text = "污染糖豆"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
@@ -292,7 +292,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStart/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_oblj7")
+shape = SubResource("RectangleShape2D_rvga1")
 
 [node name="Label" parent="ExitToStart" index="1"]
 offset_left = -110.0
@@ -316,7 +316,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_eqvbt")
+shape = SubResource("RectangleShape2D_ekobi")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0

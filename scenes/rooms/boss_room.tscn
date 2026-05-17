@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 [ext_resource type="Texture2D" uid="uid://bdc001as4kr4" path="res://sprites/map/森林地图/背景.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://dptn6gaplv80o" path="res://sprites/map/森林地图/前景1.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://7n2tqbvywc0w" path="res://sprites/map/森林地图/前景4.png" id="5_qfvvh"]
 [ext_resource type="Texture2D" uid="uid://dqh6clcx085kv" path="res://sprites/map/森林地图/前景2.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://km3dvdxj6sbu" path="res://sprites/map/森林地图/前景3.png" id="7"]
 
@@ -65,6 +66,16 @@ interactable_id = &"exit_monster_room"
 display_name = "出口 -> 怪物房"
 prompt_text = "前往 脏污餐台"
 interactable_kind = &"exit"
+
+[node name="Y-sort" type="Node2D" parent="." unique_id=819325602]
+y_sort_enabled = true
+position = Vector2(962, 470)
+
+[node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=1335750595]
+z_index = 10
+y_sort_enabled = true
+position = Vector2(-322, -110)
+texture = ExtResource("5_qfvvh")
 
 [node name="Foreground1" type="TextureRect" parent="." unique_id=1530916857]
 self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)

@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dptn6gaplv80o" path="res://sprites/map/森林地图/前景1.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://dqh6clcx085kv" path="res://sprites/map/森林地图/前景2.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://km3dvdxj6sbu" path="res://sprites/map/森林地图/前景3.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://7n2tqbvywc0w" path="res://sprites/map/森林地图/前景4.png" id="8_0ic6m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b8v33"]
 size = Vector2(1289, 270)
@@ -159,3 +160,13 @@ shape = SubResource("RectangleShape2D_0ic6m")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=220442821]
 position = Vector2(962, 470)
 shape = SubResource("CircleShape2D_yb5im")
+
+[node name="Y-sort" type="Node2D" parent="." unique_id=364824362]
+y_sort_enabled = true
+position = Vector2(962, 470)
+
+[node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=2136010850]
+z_index = 10
+y_sort_enabled = true
+position = Vector2(-322, -110)
+texture = ExtResource("8_0ic6m")

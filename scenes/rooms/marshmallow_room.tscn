@@ -49,14 +49,15 @@
 [ext_resource type="Texture2D" uid="uid://bjgwgs2cpupvg" path="res://sprites/怪物_256x144/棉花糖/Scene1_037.png" id="43_iip2v"]
 [ext_resource type="Texture2D" uid="uid://6hhaehk7e8a4" path="res://sprites/怪物_256x144/棉花糖/Scene1_038.png" id="44_bxllm"]
 [ext_resource type="Texture2D" uid="uid://beyafecqak34x" path="res://sprites/怪物_256x144/棉花糖/Scene1_039.png" id="45_i7my1"]
+[ext_resource type="Texture2D" uid="uid://7n2tqbvywc0w" path="res://sprites/map/森林地图/前景4.png" id="50_iboen"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_m0mnr"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a8r2e"]
 shader = ExtResource("5_pp0i3")
 shader_parameter/outline_color = Color(1, 0.95, 0.72, 1)
 shader_parameter/outline_thickness = 4.0
 shader_parameter/outline_enabled = false
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_vlo5c"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_fbnqn"]
 animations = [{
 "frames": [],
 "loop": true,
@@ -189,13 +190,13 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_sgitr"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8p8sm"]
 size = Vector2(220, 180)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_mvsas"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tpogf"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8xuiq"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_16y4h"]
 size = Vector2(220, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ayv8"]
@@ -246,7 +247,7 @@ anchor_kind = &"player_spawn"
 position = Vector2(618, 312)
 monster_id = &"marshmallow"
 interactable_id = &"enemy"
-display_name = "污染怪物"
+display_name = "污染棉花糖"
 prompt_text = "发起战斗"
 interactable_kind = &"encounter"
 area_size = Vector2(220, 180)
@@ -256,13 +257,13 @@ payload = {
 }
 
 [node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
-material = SubResource("ShaderMaterial_m0mnr")
-sprite_frames = SubResource("SpriteFrames_vlo5c")
+material = SubResource("ShaderMaterial_a8r2e")
+sprite_frames = SubResource("SpriteFrames_fbnqn")
 animation = &"idle"
-frame_progress = 0.06502845
+frame_progress = 0.7394013
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_sgitr")
+shape = SubResource("RectangleShape2D_8p8sm")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -271,7 +272,7 @@ offset_right = 110.0
 offset_bottom = 90.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 16
-text = "污染怪物"
+text = "污染棉花糖"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
@@ -288,7 +289,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStart/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_mvsas")
+shape = SubResource("RectangleShape2D_tpogf")
 
 [node name="Label" parent="ExitToStart" index="1"]
 offset_left = -110.0
@@ -312,7 +313,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_8xuiq")
+shape = SubResource("RectangleShape2D_16y4h")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0
@@ -384,6 +385,16 @@ shape = SubResource("RectangleShape2D_d1yfh")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=1907531053]
 position = Vector2(962, 470)
 shape = SubResource("CircleShape2D_2x13b")
+
+[node name="Y-sort" type="Node2D" parent="." unique_id=1170988496]
+y_sort_enabled = true
+position = Vector2(962, 470)
+
+[node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=676163820]
+z_index = 10
+y_sort_enabled = true
+position = Vector2(-322, -110)
+texture = ExtResource("50_iboen")
 
 [editable path="MonsterEncounter"]
 [editable path="ExitToStart"]
