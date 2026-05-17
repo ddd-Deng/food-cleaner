@@ -68,16 +68,21 @@ func _refresh_view() -> void:
 func _reset_player_position() -> void:
 	player_actor.set_active(not run_state.is_run_over)
 	var spawn_center := _get_room_player_spawn_position()
-	player_actor.position = spawn_center
+	if _active_room_scene == null:
+		player_actor.position = spawn_center
+	else:
+		player_actor.global_position = _active_room_scene.get_global_transform() * spawn_center
 	_update_nearest_interactable()
 
 func _rebuild_room(room: RoomRuntimeData) -> void:
+	_move_player_to_room_canvas()
 	_clear_room_scene()
 	_spawned_interactables.clear()
 	_interactables_in_range.clear()
 	_nearest_interactable = null
 
 	_load_room_scene(room)
+	_move_player_to_room_layer()
 	_collect_room_interactables(room)
 
 func _update_nearest_interactable() -> void:
@@ -222,11 +227,35 @@ func _sync_interactable_runtime_state(interactable: ExploreInteractable, room: R
 	interactable.refresh_runtime_visual()
 
 func _clear_room_scene() -> void:
+	_move_player_to_room_canvas()
 	if _active_room_scene != null:
 		_active_room_scene.queue_free()
 		_active_room_scene = null
 	_interactables_in_range.clear()
 	_nearest_interactable = null
+
+func _move_player_to_room_canvas() -> void:
+	_reparent_player(room_canvas)
+
+func _move_player_to_room_layer() -> void:
+	var target_parent: Node = room_canvas
+	if _active_room_scene != null:
+		var y_sort_container := _active_room_scene.get_y_sort_container()
+		if y_sort_container != null:
+			target_parent = y_sort_container
+	_reparent_player(target_parent)
+
+func _reparent_player(new_parent: Node) -> void:
+	if new_parent == null or player_actor == null:
+		return
+	if player_actor.get_parent() == new_parent:
+		return
+	var preserved_global_position := player_actor.global_position
+	var current_parent := player_actor.get_parent()
+	if current_parent != null:
+		current_parent.remove_child(player_actor)
+	new_parent.add_child(player_actor)
+	player_actor.global_position = preserved_global_position
 
 func _get_room_player_spawn_position() -> Vector2:
 	if _active_room_scene == null:

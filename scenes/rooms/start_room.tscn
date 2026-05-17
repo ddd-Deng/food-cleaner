@@ -194,17 +194,16 @@ autowrap_mode = 3
 max_lines_visible = 2
 
 [node name="Y-sort" type="Node2D" parent="." unique_id=115252874]
+z_index = 10
 y_sort_enabled = true
 
 [node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=665189393]
-z_index = 10
 y_sort_enabled = true
 position = Vector2(1035, 535)
 texture = ExtResource("5")
 offset = Vector2(-395, -175)
 
 [node name="Sprite2D2" type="Sprite2D" parent="Y-sort" unique_id=828163186]
-z_index = 10
 y_sort_enabled = true
 position = Vector2(817, 556)
 texture = ExtResource("9_v5cll")

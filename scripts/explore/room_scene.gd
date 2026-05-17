@@ -10,6 +10,12 @@ func get_player_spawn_position(default_position: Vector2) -> Vector2:
 		return default_position
 	return _anchor_center(anchors[0])
 
+func get_y_sort_container() -> CanvasItem:
+	var container := get_node_or_null("Y-sort")
+	if container is CanvasItem and (container as CanvasItem).y_sort_enabled:
+		return container as CanvasItem
+	return null
+
 func _anchors_of_kind(kind: StringName) -> Array[RoomAnchor]:
 	var matching: Array[RoomAnchor] = []
 	for node in find_children("*", "RoomAnchor", true, false):

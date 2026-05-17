@@ -1,5 +1,17 @@
 # 开发日志
 
+## 2026-05-17
+
+### 探索玩家会自动接入当前房间的 `Y-sort` 层
+- 做了什么：调整探索场景的房间切换流程，不再让 `PlayerActor` 固定挂在 `RoomCanvas` 根下。现在每次加载房间后，都会优先查找房间场景里的 `Y-sort` 容器；如果存在，就把玩家重挂到该容器下，让玩家与房间内同层 sprite 一起参与 y-sorting；如果房间没有 `Y-sort`，则回退到 `RoomCanvas`，保证显示、移动和碰撞仍正常。为避免已有房间里 `Y-sort` 子节点各自抬 `z_index` 导致玩家无法真正参与同层排序，也同步把 `start_room` 和 `bread_room` 改为由 `Y-sort` 容器统一控制 `z_index`。
+- 影响文件：`scripts/explore/explore_scene.gd`、`scripts/explore/room_scene.gd`、`scenes/rooms/start_room.tscn`、`scenes/rooms/bread_room.tscn`、`devlog.md`
+- 如何验证：运行项目进入 `start_room`，确认主角经过 `Y-sort` 内摆件上下方时会发生前后遮挡变化；再从 `start_room` 进入 `bread_room`，确认切房间后主角仍会和该房间的 `Y-sort` 摆件参与同样的 y-sorting；最后进入一个没有 `Y-sort` 容器的房间，确认主角仍正常显示、移动、交互，不会因房间切换消失或跟随旧房间一起被释放。
+
+### 清理 `chest_room.tscn` 中误提交的 merge conflict 标记
+- 做了什么：移除了 `res://scenes/rooms/chest_room.tscn` 里残留的 `<<<<<<< / ======= / >>>>>>>` 冲突标记，并按场景中实际节点引用关系保留需要的 `RectangleShape2D` 子资源定义，删除未被任何节点使用、且夹在冲突中的冗余 `CircleShape2D` 定义，恢复场景文件为可正常解析的状态。
+- 影响文件：`scenes/rooms/chest_room.tscn`、`devlog.md`
+- 如何验证：使用文本搜索确认 `scenes/rooms/chest_room.tscn` 中已不存在 conflict marker；同时检查 `ExitToStart` 与 `ExitToShop` 的 `CollisionShape2D` 仍分别引用 `RectangleShape2D_ais5t` 和 `RectangleShape2D_shop0`，没有丢失场景内现有碰撞配置。
+
 ### 游乐场地图前景取消沿用森林地图的染色半透明
 - 做了什么：把 `start_room` 和 `chest_room` 切到 `游乐场地图` 后，这两间房的前景层仍沿用了森林地图时期的 `self_modulate` 淡黄色半透明设置，会把游乐场素材整体压暗、染色。现在已移除这两个场景里 `Foreground1~Foreground4` 的 `self_modulate`，让游乐场前景按原图颜色直接显示。
 - 影响文件：`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`devlog.md`

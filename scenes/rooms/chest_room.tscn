@@ -13,16 +13,11 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ftyuh"]
 size = Vector2(220, 64)
 
-<<<<<<< HEAD
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ais5t"]
 size = Vector2(220, 64)
-=======
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_shop0"]
 size = Vector2(220, 64)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_ais5t"]
-radius = 97.04638
->>>>>>> origin/maii-dev
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_851y8"]
 radius = 97.04638

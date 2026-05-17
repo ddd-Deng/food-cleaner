@@ -383,6 +383,7 @@ autowrap_mode = 3
 max_lines_visible = 2
 
 [node name="Y-sort" type="Node2D" parent="." unique_id=1990427677]
+z_index = 10
 y_sort_enabled = true
 
 [node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=187270882]
