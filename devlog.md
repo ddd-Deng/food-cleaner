@@ -256,6 +256,11 @@
 - 影响文件：`scenes/battle/battle_scene.tscn`、`devlog.md`
 - 如何验证：打开战斗场景或进入一场战斗，确认背景已替换为 `sprites/map/战斗场景/背景.png`，并且 `光.png` 会作为一层整体覆盖显示；确认现有战斗 UI、卡牌、时间轴、按钮和数值文本仍然显示在这两层之上。
 
+### 新增商店界面独立场景与按钮热区预览
+- 做了什么：新增 `res://scenes/ui/shop_screen.tscn`，把 `sprites/map/商店界面/` 下的 `0.png` 到 `4.png` 按从下到上的顺序整屏叠放，作为单独的商店界面场景；同时叠加 `confirm/cancel/exit` 三组整屏按钮贴图，并通过三个透明 `Button` 热区控制对应按钮在普通态与高亮/按下态（当前都使用 `*2.png`）之间切换。为了便于后续在编辑器里直接拖拽修改点击范围，还加了仅在编辑器中显示的彩色热区预览框。
+- 影响文件：`scenes/ui/shop_screen.tscn`、`scripts/ui/shop_screen.gd`、`devlog.md`
+- 如何验证：当前环境未确认安装 Godot，未执行 headless 校验。请在编辑器中打开 `res://scenes/ui/shop_screen.tscn`，确认 `0~4.png` 已按顺序叠好、`confirm/cancel/exit` 默认态可见，并且能看到三个彩色热区框；运行场景后，把鼠标移入或按下对应热区，确认对应按钮会切到 `confirm2/cancel2/exit2` 贴图，且运行时这些彩色预览框不会显示。
+
 ### 探索房间背景统一替换为森林地图底图
 - 做了什么：将四个探索房间 scene 的背景节点从纯色 `Panel` 统一替换为直接铺满显示 `res://sprites/map/森林地图/背景.png` 的 `TextureRect`。这张背景图本身是 `1280x720`，与当前项目默认窗口尺寸一致，因此当前直接作为房间背景图使用，不额外做裁切拼接逻辑。
 - 影响文件：`scenes/rooms/start_room.tscn`、`scenes/rooms/monster_room.tscn`、`scenes/rooms/chest_room.tscn`、`scenes/rooms/boss_room.tscn`、`devlog.md`
