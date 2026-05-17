@@ -256,6 +256,31 @@
 - 影响文件：`scenes/battle/battle_scene.tscn`、`devlog.md`
 - 如何验证：打开战斗场景或进入一场战斗，确认背景已替换为 `sprites/map/战斗场景/背景.png`，并且 `光.png` 会作为一层整体覆盖显示；确认现有战斗 UI、卡牌、时间轴、按钮和数值文本仍然显示在这两层之上。
 
+### 探索主角拆分为独立 `tscn`
+- 做了什么：将探索主角从 `explore_scene.tscn` 里的直接脚本节点拆分为独立场景 `scenes/explore/player_actor.tscn`。现在主角的 `CharacterBody2D`、动画节点、身体碰撞和交互范围都能在编辑器里直接看到和调整，探索场景只是在 `RoomCanvas` 下实例化这个主角场景，原有移动、动画、碰撞与交互逻辑仍由 `scripts/explore/player_actor.gd` 负责。
+- 影响文件：`scenes/explore/player_actor.tscn`、`scenes/explore/explore_scene.tscn`、`scripts/explore/player_actor.gd`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请在编辑器中打开 `res://scenes/explore/player_actor.tscn`，确认能直接看到主角节点树、碰撞形状和交互区域；再运行探索场景，确认主角的移动、动画和交互范围与之前一致。
+
+### 标题界面开场动画改为两段顺播并在结尾统一隐藏
+- 做了什么：调整标题场景开场表现。现在 `before_start` 序列不再在播放完成后立刻隐藏，而是停在最后一帧保持显示；随后会在更上层播放项目现有的 `sprites/transitionAnimation/` 过场动画，同样按 `30 FPS` 播放一次。第二段过场播放完毕后，`before_start` 与过场两层都会一起隐藏，只保留正式标题封面层。
+- 影响文件：`scenes/ui/title_screen.tscn`、`scripts/ui/title_screen.gd`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请运行或预览 `res://scenes/ui/title_screen.tscn`，确认进入场景时先播放 `before_start`，播完后停在最后一帧；接着在其上层播放一次过场动画；过场结束后，两层动画一起消失，最终只剩下标题封面与眼球跟随效果。
+
+### 标题界面新增开场一次性动画层
+- 做了什么：在标题场景顶部新增 `BeforeStartLayer`，运行时会读取 `sprites/标题界面/before_start/` 下的 PNG 序列并以 `30 FPS` 播放一次开场动画；动画不循环，播放完成后会自动隐藏，因此只会在首次进入该标题场景时出现一次当前实例内的开场覆盖层。
+- 影响文件：`scenes/ui/title_screen.tscn`、`scripts/ui/title_screen.gd`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请运行或预览 `res://scenes/ui/title_screen.tscn`，确认进入场景时会先播放 `before_start` 序列动画，且动画结束后自动消失，不会循环常驻。
+
+### 标题界面眼球图层新增鼠标跟随偏移
+- 做了什么：为 `title_screen.tscn` 新增 `scripts/ui/title_screen.gd`，让 `eye1.png` 和 `eye2.png` 在运行时根据鼠标位置产生同向偏移。当前偏移限制为以原始位置为圆心、半径最多 `50px` 的圆形范围；鼠标越靠近屏幕边缘，眼球图层偏移越接近上限。
+- 影响文件：`scenes/ui/title_screen.tscn`、`scripts/ui/title_screen.gd`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请运行或预览 `res://scenes/ui/title_screen.tscn`，移动鼠标，确认 `eye1` 与 `eye2` 会围绕原位小范围跟随鼠标移动，并且最大偏移不会超过约 `50px`。
+
+### 新增独立标题界面场景并按封面图层叠放
+- 做了什么：新增 `res://scenes/ui/title_screen.tscn` 作为独立标题界面场景。按要求将 `sprites/标题界面/封面图层/background.png` 放在最底层，`background2.png` 放在其上，其余贴图再继续叠在上层；当前按现有文件名顺序依次加入 `ball / bean / bean2 / bean3 / coockie / eye1 / eye2 / mouth / orange / snack / strawberry / title`。所有图层都按 `1280x720` 整屏铺满，打开场景即可在编辑器中直接预览。
+- 影响文件：`scenes/ui/title_screen.tscn`、`devlog.md`
+- 如何验证：当前环境未安装可用的 Godot 命令行，未执行 headless 校验。请在编辑器中打开 `res://scenes/ui/title_screen.tscn`，确认 `background.png` 在最底层、`background2.png` 在其上，其他贴图都继续覆盖在上方，且整体铺满当前 `1280x720` 视口。
+
 ### 调整入口前厅与补给角落出口摆位，避免被碰撞区卡住
 - 做了什么：把 `start_room.tscn` 中通往 `补给角落` 的出口，以及 `chest_room.tscn` 中返回 `入口前厅` 的出口都从右侧大碰撞区附近挪到更容易接近的位置。此前这两个出口虽然逻辑上已连通，但因为热区摆在障碍附近，实际游玩时容易表现为“看不见出口”或“进得去回不来”。
 - 影响文件：`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`devlog.md`

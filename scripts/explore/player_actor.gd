@@ -38,17 +38,16 @@ var _outline_material: ShaderMaterial
 var _outline_color: Color = Color(1.0, 1.0, 1.0, 1.0)
 var _outline_thickness: float = 2.0
 
-@onready var _animated_sprite: AnimatedSprite2D = AnimatedSprite2D.new()
-@onready var body_shape: CollisionShape2D = CollisionShape2D.new()
-@onready var interaction_area: Area2D = Area2D.new()
-@onready var interaction_shape: CollisionShape2D = CollisionShape2D.new()
+@onready var _animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var body_shape: CollisionShape2D = $BodyCollisionShape2D
+@onready var interaction_area: Area2D = $InteractionArea
+@onready var interaction_shape: CollisionShape2D = $InteractionArea/CollisionShape2D
 
 func _ready() -> void:
-	_configure_animated_sprite()
-	_configure_body_collision()
-	_configure_interaction_area()
 	_load_animation_sets()
 	_apply_default_size()
+	_configure_body_collision()
+	_configure_interaction_area()
 	_configure_outline_material()
 	_update_animation_state(false)
 
@@ -79,26 +78,30 @@ func get_interaction_area() -> Area2D:
 	return interaction_area
 
 func _configure_animated_sprite() -> void:
-	_animated_sprite.centered = true
-	add_child(_animated_sprite)
+	if _animated_sprite != null:
+		_animated_sprite.centered = true
 
 func _configure_body_collision() -> void:
-	add_child(body_shape)
+	if body_shape == null:
+		return
 	var rectangle := RectangleShape2D.new()
 	rectangle.size = body_collision_size
 	body_shape.shape = rectangle
 
 func _configure_outline_material() -> void:
+	if _animated_sprite == null:
+		return
 	_outline_material = ShaderMaterial.new()
 	_outline_material.shader = OUTLINE_SHADER
 	_animated_sprite.material = _outline_material
 	_update_outline_material()
 
 func _configure_interaction_area() -> void:
-	add_child(interaction_area)
+	if interaction_area == null or interaction_shape == null:
+		return
 	interaction_area.monitoring = true
 	interaction_area.monitorable = false
-	interaction_area.add_child(interaction_shape)
+	interaction_shape.position = Vector2.ZERO
 	var circle := CircleShape2D.new()
 	circle.radius = interaction_radius
 	interaction_shape.shape = circle
@@ -117,7 +120,12 @@ func _load_animation_sets() -> void:
 		sprite_frames.add_animation(String(animation_name))
 		sprite_frames.set_animation_loop(String(animation_name), true)
 		sprite_frames.set_animation_speed(String(animation_name), animation_fps)
-		var frames: Array[Texture2D] = _animation_sets.get(animation_name, [])
+		var frames: Array[Texture2D] = []
+		var raw_frames: Variant = _animation_sets.get(animation_name, [])
+		if raw_frames is Array:
+			for frame_variant in raw_frames:
+				if frame_variant is Texture2D:
+					frames.append(frame_variant)
 		for frame in frames:
 			if frame != null:
 				sprite_frames.add_frame(String(animation_name), frame)
@@ -157,7 +165,12 @@ func _load_texture_from_source_file(resource_path: String) -> Texture2D:
 	return ImageTexture.create_from_image(image)
 
 func _apply_default_size() -> void:
-	var frames: Array[Texture2D] = _animation_sets.get(&"idle_front", [])
+	var frames: Array[Texture2D] = []
+	var raw_frames: Variant = _animation_sets.get(&"idle_front", [])
+	if raw_frames is Array:
+		for frame_variant in raw_frames:
+			if frame_variant is Texture2D:
+				frames.append(frame_variant)
 	if frames.is_empty():
 		collision_size = Vector2(48, 48)
 		return

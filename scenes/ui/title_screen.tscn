@@ -1,0 +1,221 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/title_screen.gd" id="15"]
+[ext_resource type="Texture2D" path="res://sprites/标题界面/封面图层/background.png" id="1"]
+[ext_resource type="Texture2D" path="res://sprites/标题界面/封面图层/background2.png" id="2"]
+[ext_resource type="Texture2D" path="res://sprites/标题界面/封面图层/ball.png" id="3"]
+[ext_resource type="Texture2D" path="res://sprites/标题界面/封面图层/bean.png" id="4"]
+[ext_resource type="Texture2D" path="res://sprites/标题界面/封面图层/bean2.png" id="5"]
+[ext_resource type="Texture2D" path="res://sprites/标题界面/封面图层/bean3.png" id="6"]
+[ext_resource type="Texture2D" path="res://sprites/标题界面/封面图层/coockie.png" id="7"]
+[ext_resource type="Texture2D" path="res://sprites/标题界面/封面图层/eye1.png" id="8"]
+[ext_resource type="Texture2D" path="res://sprites/标题界面/封面图层/eye2.png" id="9"]
+[ext_resource type="Texture2D" path="res://sprites/标题界面/封面图层/mouth.png" id="10"]
+[ext_resource type="Texture2D" path="res://sprites/标题界面/封面图层/orange.png" id="11"]
+[ext_resource type="Texture2D" path="res://sprites/标题界面/封面图层/snack.png" id="12"]
+[ext_resource type="Texture2D" path="res://sprites/标题界面/封面图层/strawberry.png" id="13"]
+[ext_resource type="Texture2D" path="res://sprites/标题界面/封面图层/title.png" id="14"]
+
+[node name="TitleScreen" type="Control"]
+custom_minimum_size = Vector2(1280, 720)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("15")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Background2" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Ball" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Bean" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Bean2" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Bean3" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Coockie" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("7")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Eye1" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("8")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Eye2" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("9")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Mouth" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("10")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Orange" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("11")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Snack" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("12")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Strawberry" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("13")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Title" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("14")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="BeforeStartLayer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BeforeStartSprite" type="AnimatedSprite2D" parent="BeforeStartLayer"]
+position = Vector2(640, 360)
+centered = true
+
+[node name="TransitionLayer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TransitionSprite" type="AnimatedSprite2D" parent="TransitionLayer"]
+position = Vector2(640, 360)
+centered = true
