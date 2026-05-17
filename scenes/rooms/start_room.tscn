@@ -10,6 +10,9 @@
 [ext_resource type="Texture2D" uid="uid://bdjtmfv3b5tg2" path="res://sprites/map/游乐场地图/前景4.png" id="8"]
 [ext_resource type="Texture2D" uid="uid://cujjbrarx1bet" path="res://sprites/map/游乐场地图/前景5.png" id="9_v5cll"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v5cll"]
+size = Vector2(220, 64)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lcoeq"]
 size = Vector2(220, 64)
 
@@ -19,9 +22,6 @@ size = Vector2(220, 64)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bc050"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jls7n"]
-size = Vector2(220, 64)
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_bc050"]
 radius = 97.04638
 
@@ -29,12 +29,12 @@ radius = 97.04638
 radius = 70.45566
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d67pt"]
-radius = 29.068085
-height = 106.41446
+radius = 65.81375
+height = 140.45886
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0pbxl"]
-radius = 55.04715
-height = 290.06165
+radius = 86.88895
+height = 308.05835
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q5fkn"]
 radius = 102.08844
@@ -44,7 +44,10 @@ height = 263.88284
 radius = 210.02142
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_10hxn"]
-points = PackedVector2Array(-21.580566, 93.88977, 44.89807, 64.0638, 45.217896, -83.014084, -20.653564, -57.26625)
+points = PackedVector2Array(-25.286804, 96.37723, 55.66333, 60.32071, 56.327637, -89.56113, -25.584839, -56.164246)
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_jls7n"]
+points = PackedVector2Array(-33.630554, 107.29863, 56.974243, 63.654907, 54.430176, -92.18642, -38.497253, -55.99965)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1jnew"]
 radius = 236.00212
@@ -81,6 +84,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="PlayerSpawn" type="ColorRect" parent="." unique_id=1467688366]
+y_sort_enabled = true
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 0
 offset_left = 628.0
@@ -103,7 +107,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="GuideInteractable/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_lcoeq")
+shape = SubResource("RectangleShape2D_v5cll")
 
 [node name="Label" parent="GuideInteractable" index="1"]
 offset_left = -110.0
@@ -127,7 +131,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToMonsterA/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_yw6jb")
+shape = SubResource("RectangleShape2D_lcoeq")
 
 [node name="Label" parent="ExitToMonsterA" index="1"]
 offset_left = -110.0
@@ -151,7 +155,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToChest/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_bc050")
+shape = SubResource("RectangleShape2D_yw6jb")
 
 [node name="Label" parent="ExitToChest" index="1"]
 offset_left = -110.0
@@ -175,7 +179,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToMonsterB/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_jls7n")
+shape = SubResource("RectangleShape2D_bc050")
 
 [node name="Label" parent="ExitToMonsterB" index="1"]
 offset_left = -110.0
@@ -188,7 +192,28 @@ text = "出口 -> 怪物房"
 autowrap_mode = 3
 max_lines_visible = 2
 
+[node name="Y-sort" type="Node2D" parent="." unique_id=115252874]
+
+[node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=665189393]
+z_index = 10
+y_sort_enabled = true
+position = Vector2(1035, 535)
+texture = ExtResource("5")
+offset = Vector2(-395, -175)
+
+[node name="Sprite2D2" type="Sprite2D" parent="Y-sort" unique_id=828163186]
+z_index = 13
+y_sort_enabled = true
+position = Vector2(817, 556)
+texture = ExtResource("9_v5cll")
+offset = Vector2(-177, -196)
+
+[node name="Sprite2D3" type="Sprite2D" parent="Y-sort" unique_id=867583645]
+
+[node name="Sprite2D4" type="Sprite2D" parent="Y-sort" unique_id=322801081]
+
 [node name="Foreground1" type="TextureRect" parent="." unique_id=1682070456]
+visible = false
 z_index = 10
 layout_mode = 1
 anchors_preset = 15
@@ -241,6 +266,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Foreground5" type="TextureRect" parent="." unique_id=1107798958]
+visible = false
 z_index = 13
 layout_mode = 1
 anchors_preset = 15
@@ -271,15 +297,15 @@ shape = SubResource("CircleShape2D_jls7n")
 position = Vector2(431, 182)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4" unique_id=2119509947]
-position = Vector2(3.9999695, 8)
-rotation = 0.45636174
+position = Vector2(-26, -8)
+rotation = 2.0469863
 shape = SubResource("CapsuleShape2D_d67pt")
 
 [node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=308420683]
 position = Vector2(809, 74)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3" unique_id=1428479706]
-position = Vector2(19, 6.0000076)
+position = Vector2(17, -10.999998)
 rotation = 1.5517454
 shape = SubResource("CapsuleShape2D_0pbxl")
 
@@ -312,7 +338,7 @@ rotation = 1.5707964
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D9" unique_id=134694662]
 position = Vector2(476.00006, 653.99994)
 rotation = -0.39278135
-shape = SubResource("ConvexPolygonShape2D_10hxn")
+shape = SubResource("ConvexPolygonShape2D_jls7n")
 
 [node name="StaticBody2D8" type="StaticBody2D" parent="." unique_id=791830432]
 position = Vector2(1110, 80)

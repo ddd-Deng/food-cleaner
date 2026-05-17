@@ -231,13 +231,13 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1iobh"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pejmt"]
 size = Vector2(220, 180)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ljvj"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1iobh"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ocvl"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ljvj"]
 size = Vector2(220, 64)
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_7euqx"]
@@ -253,7 +253,7 @@ radius = 80.00625
 points = PackedVector2Array(-87.5, -46.25, 67.5, -89.25, 175.5, -25.25, 184.5, 104.75, -190.5, 103.75)
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_h73kr"]
-points = PackedVector2Array(-172, 65, -99, 7, 148, 87, 92, 157, -118, 82, -118, 157, -175, 157)
+points = PackedVector2Array(-126, -72, 121, 11, 144, 96, 92, 157, -118, 82, -118, 157, -175, 157, -176, 81)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_himoe"]
 radius = 125.004
@@ -316,10 +316,10 @@ payload = {
 material = SubResource("ShaderMaterial_pejmt")
 sprite_frames = SubResource("SpriteFrames_gdr51")
 animation = &"idle"
-frame_progress = 0.12712194
+frame_progress = 0.45723182
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_1iobh")
+shape = SubResource("RectangleShape2D_pejmt")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -345,7 +345,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToCandyBean/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_7ljvj")
+shape = SubResource("RectangleShape2D_1iobh")
 
 [node name="Label" parent="ExitToCandyBean" index="1"]
 offset_left = -110.0
@@ -369,7 +369,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_1ocvl")
+shape = SubResource("RectangleShape2D_7ljvj")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0
@@ -382,8 +382,18 @@ text = "出口 -> 怪物房"
 autowrap_mode = 3
 max_lines_visible = 2
 
+[node name="Y-sort" type="Node2D" parent="." unique_id=1990427677]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Y-sort" unique_id=187270882]
+position = Vector2(759, 211)
+texture = ExtResource("6")
+offset = Vector2(-119, 149)
+
 [node name="Foreground1" type="TextureRect" parent="." unique_id=1490591312]
+visible = false
 z_index = 10
+y_sort_enabled = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

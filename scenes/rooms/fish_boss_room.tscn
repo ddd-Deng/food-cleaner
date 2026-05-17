@@ -675,10 +675,10 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jyuvj"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yiwo5"]
 size = Vector2(220, 180)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_dt65n"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jyuvj"]
 size = Vector2(220, 64)
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_2afaf"]
@@ -693,8 +693,8 @@ radius = 80.00625
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_pe1ml"]
 points = PackedVector2Array(-87.5, -46.25, 67.5, -89.25, 175.5, -25.25, 184.5, 104.75, -190.5, 103.75)
 
-[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_gk5oi"]
-points = PackedVector2Array(-172, 65, -99, 7, 148, 87, 92, 157, -118, 82, -118, 157, -175, 157)
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_dt65n"]
+points = PackedVector2Array(-126, -72, 121, 11, 144, 96, 92, 157, -118, 82, -118, 157, -175, 157, -176, 81)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xiquf"]
 radius = 125.004
@@ -757,10 +757,10 @@ payload = {
 material = SubResource("ShaderMaterial_8h0qj")
 sprite_frames = SubResource("SpriteFrames_yiwo5")
 animation = &"idle"
-frame_progress = 0.8177826
+frame_progress = 0.87822783
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_jyuvj")
+shape = SubResource("RectangleShape2D_yiwo5")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -786,7 +786,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_dt65n")
+shape = SubResource("RectangleShape2D_jyuvj")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0
@@ -892,9 +892,9 @@ shape = SubResource("ConvexPolygonShape2D_pe1ml")
 
 [node name="StaticBody2D5" type="StaticBody2D" parent="." unique_id=1272608329]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D5" unique_id=1402387026]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D5" unique_id=1819575496]
 position = Vector2(1106, 104)
-shape = SubResource("ConvexPolygonShape2D_gk5oi")
+shape = SubResource("ConvexPolygonShape2D_dt65n")
 
 [node name="StaticBody2D8" type="StaticBody2D" parent="." unique_id=992190759]
 position = Vector2(880, 329)
