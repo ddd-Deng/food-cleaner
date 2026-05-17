@@ -173,13 +173,13 @@
 [ext_resource type="Texture2D" uid="uid://pgv0dckuum3c" path="res://sprites/怪物_256x144/鱼/Scene1_159.png" id="165_osjdy"]
 [ext_resource type="Texture2D" uid="uid://bp1fscnegnvhx" path="res://sprites/怪物_256x144/鱼/Scene1_160.png" id="166_x45xp"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_arfjf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8h0qj"]
 shader = ExtResource("5_8h0qj")
 shader_parameter/outline_color = Color(1, 0.95, 0.72, 1)
 shader_parameter/outline_thickness = 4.0
 shader_parameter/outline_enabled = false
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_6xoms"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_yiwo5"]
 animations = [{
 "frames": [],
 "loop": true,
@@ -675,10 +675,10 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_g88m8"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jyuvj"]
 size = Vector2(220, 180)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_um1j1"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dt65n"]
 size = Vector2(220, 64)
 
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_2afaf"]
@@ -754,13 +754,13 @@ payload = {
 }
 
 [node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
-material = SubResource("ShaderMaterial_arfjf")
-sprite_frames = SubResource("SpriteFrames_6xoms")
+material = SubResource("ShaderMaterial_8h0qj")
+sprite_frames = SubResource("SpriteFrames_yiwo5")
 animation = &"idle"
-frame_progress = 0.17209071
+frame_progress = 0.8177826
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_g88m8")
+shape = SubResource("RectangleShape2D_jyuvj")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -786,7 +786,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_um1j1")
+shape = SubResource("RectangleShape2D_dt65n")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0
@@ -826,7 +826,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Foreground3" type="TextureRect" parent="." unique_id=603238672]
-z_index = 12
+z_index = 10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

@@ -316,7 +316,7 @@ payload = {
 material = SubResource("ShaderMaterial_pejmt")
 sprite_frames = SubResource("SpriteFrames_gdr51")
 animation = &"idle"
-frame_progress = 0.29536
+frame_progress = 0.12712194
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
 shape = SubResource("RectangleShape2D_1iobh")
@@ -396,7 +396,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Foreground2" type="TextureRect" parent="." unique_id=992105848]
-z_index = 11
+z_index = 12
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -409,7 +409,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Foreground3" type="TextureRect" parent="." unique_id=1037451344]
-z_index = 12
+z_index = 11
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

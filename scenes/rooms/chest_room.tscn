@@ -8,11 +8,12 @@
 [ext_resource type="Texture2D" uid="uid://dy4jgrbx1fuu1" path="res://sprites/map/游乐场地图/前景2.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://mmj1ecfmk85a" path="res://sprites/map/游乐场地图/前景3.png" id="7"]
 [ext_resource type="Texture2D" uid="uid://bdjtmfv3b5tg2" path="res://sprites/map/游乐场地图/前景4.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://cujjbrarx1bet" path="res://sprites/map/游乐场地图/前景5.png" id="9_ftyuh"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2nwna"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ais5t"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ftyuh"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_851y8"]
 size = Vector2(220, 64)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ais5t"]
@@ -96,7 +97,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ChestInteractable/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_2nwna")
+shape = SubResource("RectangleShape2D_ais5t")
 
 [node name="Label" parent="ChestInteractable" index="1"]
 offset_left = -110.0
@@ -120,7 +121,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStart/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_ftyuh")
+shape = SubResource("RectangleShape2D_851y8")
 
 [node name="Label" parent="ExitToStart" index="1"]
 offset_left = -110.0
@@ -182,6 +183,19 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("8")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Foreground5" type="TextureRect" parent="." unique_id=2108133049]
+z_index = 13
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("9_ftyuh")
 expand_mode = 1
 stretch_mode = 6
 

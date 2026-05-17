@@ -54,14 +54,15 @@
 [ext_resource type="Texture2D" uid="uid://sp7qqo14uk52" path="res://sprites/怪物_256x144/蛋糕/cake_038.png" id="44_kija6"]
 [ext_resource type="Texture2D" uid="uid://b6hpg5vfvs2wa" path="res://sprites/怪物_256x144/蛋糕/cake_039.png" id="45_lwlof"]
 [ext_resource type="Texture2D" uid="uid://ut6mwm5uw1nh" path="res://sprites/怪物_256x144/蛋糕/cake_040.png" id="46_8gi4s"]
+[ext_resource type="Texture2D" uid="uid://c2behgjn540ft" path="res://sprites/map/小镇地图/前景8.png" id="55_ni6g6"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4bwew"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5t5wn"]
 shader = ExtResource("5_v7yr6")
 shader_parameter/outline_color = Color(1, 0.95, 0.72, 1)
 shader_parameter/outline_thickness = 4.0
 shader_parameter/outline_enabled = false
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_hr303"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_w1wo4"]
 animations = [{
 "frames": [],
 "loop": true,
@@ -197,13 +198,13 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_k2imx"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i24wc"]
 size = Vector2(220, 180)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_x1i57"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s8h32"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_a1htg"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_twsl6"]
 size = Vector2(220, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_av1uy"]
@@ -282,13 +283,13 @@ payload = {
 }
 
 [node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
-material = SubResource("ShaderMaterial_4bwew")
-sprite_frames = SubResource("SpriteFrames_hr303")
+material = SubResource("ShaderMaterial_5t5wn")
+sprite_frames = SubResource("SpriteFrames_w1wo4")
 animation = &"idle"
-frame_progress = 0.73525006
+frame_progress = 0.066413276
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_k2imx")
+shape = SubResource("RectangleShape2D_i24wc")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -314,7 +315,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToMarshmallow/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_x1i57")
+shape = SubResource("RectangleShape2D_s8h32")
 
 [node name="Label" parent="ExitToMarshmallow" index="1"]
 offset_left = -110.0
@@ -338,7 +339,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_a1htg")
+shape = SubResource("RectangleShape2D_twsl6")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0
@@ -365,7 +366,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="Foreground2" type="TextureRect" parent="." unique_id=385552230]
-z_index = 11
+z_index = 15
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -439,6 +440,19 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("12")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Foreground8" type="TextureRect" parent="." unique_id=1184666746]
+z_index = 16
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("55_ni6g6")
 expand_mode = 1
 stretch_mode = 6
 
