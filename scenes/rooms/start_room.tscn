@@ -10,16 +10,16 @@
 [ext_resource type="Texture2D" uid="uid://bdjtmfv3b5tg2" path="res://sprites/map/游乐场地图/前景4.png" id="8"]
 [ext_resource type="Texture2D" uid="uid://cujjbrarx1bet" path="res://sprites/map/游乐场地图/前景5.png" id="9_v5cll"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v5cll"]
+size = Vector2(220, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lcoeq"]
+size = Vector2(220, 64)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yw6jb"]
 size = Vector2(220, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bc050"]
-size = Vector2(220, 64)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jls7n"]
-size = Vector2(220, 64)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_d67pt"]
 size = Vector2(220, 64)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bc050"]
@@ -72,18 +72,6 @@ grow_vertical = 2
 script = ExtResource("1")
 fallback_room_tint = Color(0.88, 0.94, 0.88, 1)
 
-[node name="Backdrop" type="TextureRect" parent="." unique_id=149815197]
-z_index = -10
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4")
-expand_mode = 1
-stretch_mode = 6
-
 [node name="PlayerSpawn" type="ColorRect" parent="." unique_id=1467688366]
 y_sort_enabled = true
 custom_minimum_size = Vector2(48, 48)
@@ -97,6 +85,18 @@ color = Color(0.41, 0.84, 0.56, 0.55)
 script = ExtResource("2")
 anchor_kind = &"player_spawn"
 
+[node name="Backdrop" type="TextureRect" parent="." unique_id=149815197]
+z_index = -10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4")
+expand_mode = 1
+stretch_mode = 6
+
 [node name="GuideInteractable" parent="." unique_id=997475294 instance=ExtResource("3")]
 position = Vector2(596, 113)
 interactable_id = &"guide"
@@ -108,7 +108,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="GuideInteractable/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_yw6jb")
+shape = SubResource("RectangleShape2D_v5cll")
 
 [node name="Label" parent="GuideInteractable" index="1"]
 offset_left = -110.0
@@ -132,7 +132,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToMonsterA/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_bc050")
+shape = SubResource("RectangleShape2D_lcoeq")
 
 [node name="Label" parent="ExitToMonsterA" index="1"]
 offset_left = -110.0
@@ -156,7 +156,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToChest/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_jls7n")
+shape = SubResource("RectangleShape2D_yw6jb")
 
 [node name="Label" parent="ExitToChest" index="1"]
 offset_left = -110.0
@@ -180,7 +180,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToMonsterB/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_d67pt")
+shape = SubResource("RectangleShape2D_bc050")
 
 [node name="Label" parent="ExitToMonsterB" index="1"]
 offset_left = -110.0
@@ -214,20 +214,6 @@ offset = Vector2(-177, -196)
 y_sort_enabled = true
 
 [node name="Sprite2D4" type="Sprite2D" parent="Y-sort" unique_id=322801081]
-
-[node name="Foreground1" type="TextureRect" parent="." unique_id=1682070456]
-visible = false
-z_index = 10
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("5")
-expand_mode = 1
-stretch_mode = 6
 
 [node name="Foreground2" type="TextureRect" parent="." unique_id=524310752]
 z_index = 11
@@ -265,20 +251,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 texture = ExtResource("8")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Foreground5" type="TextureRect" parent="." unique_id=1107798958]
-visible = false
-z_index = 13
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("9_v5cll")
 expand_mode = 1
 stretch_mode = 6
 

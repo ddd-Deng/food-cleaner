@@ -19,7 +19,7 @@ position = Vector2(0, 66)
 offset = Vector2(0, -66)
 
 [node name="BodyCollisionShape2D" type="CollisionShape2D" parent="." unique_id=1929341163]
-position = Vector2(0, 66)
+position = Vector2(0, 35)
 rotation = -1.5707964
 shape = SubResource("CapsuleShape2D_mb1e3")
 
