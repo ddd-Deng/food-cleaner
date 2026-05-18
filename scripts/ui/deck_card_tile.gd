@@ -38,12 +38,14 @@ func _refresh_content() -> void:
 		name_label.text = "未知卡牌"
 		art_label.text = "?"
 		description_label.text = "当前卡牌缺少定义数据。"
+		_auto_fit_description_font()
 		background.texture = _build_card_atlas(ATTACK_CARD_TEXTURE)
 		return
 	_refresh_cost_sprite(_card_data.time_cost, _card_data.card_type)
 	name_label.text = _card_data.display_name
 	art_label.text = _card_data.art_label if not _card_data.art_label.is_empty() else _fallback_art_label(_card_data.display_name)
 	description_label.text = _card_data.description
+	_auto_fit_description_font()
 	background.texture = _build_card_atlas(_texture_for_type(_card_data.card_type))
 
 func _apply_quantity_badge_style() -> void:
@@ -87,6 +89,26 @@ func _apply_card_font() -> void:
 	var card_theme := Theme.new()
 	card_theme.default_font = CARD_FONT
 	theme = card_theme
+
+func _auto_fit_description_font() -> void:
+	var text := description_label.text
+	var char_count := text.length()
+	if char_count == 0:
+		return
+	var label_width := description_label.size.x
+	if label_width <= 0:
+		label_width = custom_minimum_size.x * 0.64
+	var available_height: float = custom_minimum_size.y * 0.28
+	var candidates: Array[int] = [20, 18, 16, 14, 12]
+	var chosen_size: int = candidates[-1]
+	for font_size: int in candidates:
+		var chars_per_line: int = maxi(1, int(label_width / float(font_size)))
+		var line_count: int = ceili(float(char_count) / float(chars_per_line))
+		var total_height: float = line_count * (font_size + 1)
+		if total_height <= available_height:
+			chosen_size = font_size
+			break
+	description_label.add_theme_font_size_override("font_size", chosen_size)
 
 func _refresh_cost_sprite(time_cost: int, card_type: BattleTypes.CardType) -> void:
 	if cost_sprite == null:
