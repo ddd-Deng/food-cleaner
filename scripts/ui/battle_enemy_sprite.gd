@@ -15,10 +15,10 @@ func setup_from_monster(monster_id: StringName) -> void:
 	_load_animation(definition.battle_animation_dir, definition.animation_fps)
 
 func _load_animation(directory_path: String, animation_fps: float) -> void:
-	var sprite_frames := MonsterCatalog.get_animation_frames(
+	var loaded_frames := MonsterCatalog.get_animation_frames(
 		directory_path,
 		animation_fps if animation_fps > 0.0 else fallback_animation_fps
 	)
-	self.sprite_frames = sprite_frames
-	if sprite_frames.get_frame_count("idle") > 0:
+	self.sprite_frames = loaded_frames
+	if loaded_frames.get_frame_count("idle") > 0:
 		play("idle")

@@ -38,15 +38,15 @@ const OPEN_LAYOUT_MAX_RETRIES := 8
 
 @onready var backdrop: ColorRect = $Backdrop
 @onready var panel: PanelContainer = $SafeArea/Panel
-@onready var title_label: Label = $SafeArea/Panel/PanelMargin/PanelColumn/HeaderRow/HeaderText/TitleLabel
-@onready var summary_label: Label = $SafeArea/Panel/PanelMargin/PanelColumn/HeaderRow/HeaderText/SummaryLabel
-@onready var close_button: Button = $SafeArea/Panel/PanelMargin/PanelColumn/HeaderRow/CloseButton
-@onready var all_tab_button: Button = $SafeArea/Panel/PanelMargin/PanelColumn/TabRow/AllTabButton
-@onready var draw_tab_button: Button = $SafeArea/Panel/PanelMargin/PanelColumn/TabRow/DrawTabButton
-@onready var discard_tab_button: Button = $SafeArea/Panel/PanelMargin/PanelColumn/TabRow/DiscardTabButton
-@onready var content_panel: PanelContainer = $SafeArea/Panel/PanelMargin/PanelColumn/ContentPanel
-@onready var content_scroll: ScrollContainer = $SafeArea/Panel/PanelMargin/PanelColumn/ContentPanel/ContentMargin/ContentScroll
-@onready var content_column: VBoxContainer = $SafeArea/Panel/PanelMargin/PanelColumn/ContentPanel/ContentMargin/ContentScroll/ContentColumn
+@onready var title_label: Label = %TitleLabel
+@onready var summary_label: Label = %SummaryLabel
+@onready var close_button: Button = %CloseButton
+@onready var all_tab_button: Button = %AllTabButton
+@onready var draw_tab_button: Button = %DrawTabButton
+@onready var discard_tab_button: Button = %DiscardTabButton
+@onready var content_panel: PanelContainer = %ContentPanel
+@onready var content_scroll: ScrollContainer = %ContentScroll
+@onready var content_column: VBoxContainer = %ContentColumn
 
 var _state: BattleState
 var _current_tab: StringName = TAB_ALL

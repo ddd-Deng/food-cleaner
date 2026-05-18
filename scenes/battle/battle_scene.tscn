@@ -265,6 +265,7 @@ offset_bottom = 36.5
 texture = SubResource("AtlasTexture_hp_under")
 
 [node name="PlayerHpBar" type="Control" parent="Root/Layout/HeaderRow/PlayerHud/StatusColumn/PlayerHpPanel" unique_id=1382936982]
+unique_name_in_owner = true
 clip_contents = true
 layout_mode = 1
 anchors_preset = 0
@@ -274,12 +275,14 @@ offset_right = 314.0
 offset_bottom = 35.5
 
 [node name="PlayerHpFill" type="NinePatchRect" parent="Root/Layout/HeaderRow/PlayerHud/StatusColumn/PlayerHpPanel/PlayerHpBar" unique_id=1811504332]
+unique_name_in_owner = true
 layout_mode = 1
 offset_right = 308.0
 offset_bottom = 31.0
 texture = SubResource("AtlasTexture_hp_fill")
 
 [node name="PlayerHpLabel" type="Label" parent="Root/Layout/HeaderRow/PlayerHud/StatusColumn/PlayerHpPanel" unique_id=1717803940]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -306,6 +309,7 @@ texture = SubResource("AtlasTexture_gold_slot")
 stretch_mode = 5
 
 [node name="GoldValue" type="Label" parent="Root/Layout/HeaderRow/PlayerHud/StatusColumn/GoldPanel" unique_id=2065763788]
+unique_name_in_owner = true
 layout_mode = 1
 offset_left = 58.0
 offset_top = 6.0
@@ -321,10 +325,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="TaskStripPanel" type="PanelContainer" parent="Root/Layout/HeaderRow" unique_id=176934834]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_task_strip_panel")
 
 [node name="PurificationTaskRow" type="HBoxContainer" parent="Root/Layout/HeaderRow/TaskStripPanel" unique_id=1954513484]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 
@@ -397,6 +403,7 @@ theme_override_constants/separation = 8
 alignment = 2
 
 [node name="DeckPreviewButton" type="TextureButton" parent="Root/Layout/HeaderRow/RightButtons" unique_id=1129262132]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 tooltip_text = "牌库"
@@ -405,6 +412,7 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="SettingsButton" type="TextureButton" parent="Root/Layout/HeaderRow/RightButtons" unique_id=966229500]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 tooltip_text = "设置"
@@ -449,6 +457,7 @@ layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="TimelineValue" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner" unique_id=769047376]
+unique_name_in_owner = true
 layout_mode = 2
 text = "战斗时间：0t"
 
@@ -464,6 +473,7 @@ theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 8
 
 [node name="EffectBannerLabel" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner/EffectBanner/EffectBannerInner" unique_id=1938284100]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 text = "拖拽手牌到出牌区后，这里会显示效果摘要。"
@@ -475,6 +485,7 @@ layout_mode = 2
 text = "日志"
 
 [node name="EnemyIntentLabel" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner" unique_id=934510221]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
@@ -484,11 +495,13 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="LogScroll" type="ScrollContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner" unique_id=602774726]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="LogText" type="RichTextLabel" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner/LogScroll" unique_id=1473608164]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -511,6 +524,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="DeckPanel" type="TextureButton" parent="Root/Layout/BottomRow/DeckColumn" unique_id=451597229]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(96, 92)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -523,6 +537,7 @@ stretch_mode = 5
 layout_mode = 0
 
 [node name="DrawValue" type="Label" parent="Root/Layout/BottomRow/DeckColumn/DeckPanel/DeckPanelInner" unique_id=695905672]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.14, 0.08, 1)
 theme_override_font_sizes/font_size = 12
@@ -542,6 +557,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HandView" type="Control" parent="Root/Layout/BottomRow/BottomCenter/HandCenter" unique_id=1613551167]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(920, 178)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -553,12 +569,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="TimelineScroll" type="ScrollContainer" parent="Root/Layout/BottomRow/BottomCenter/TimelineCenter" unique_id=802588537]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(920, 82)
 layout_mode = 2
 horizontal_scroll_mode = 2
 vertical_scroll_mode = 0
 
 [node name="TimelineStrip" type="Control" parent="Root/Layout/BottomRow/BottomCenter/TimelineCenter/TimelineScroll" unique_id=1963287131]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(920, 82)
 layout_mode = 2
 mouse_filter = 2
@@ -575,6 +593,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="DiscardPanel" type="TextureButton" parent="Root/Layout/BottomRow/DiscardColumn" unique_id=2117097553]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(96, 92)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -587,6 +606,7 @@ stretch_mode = 5
 layout_mode = 0
 
 [node name="DiscardValue" type="Label" parent="Root/Layout/BottomRow/DiscardColumn/DiscardPanel/DiscardPanelInner" unique_id=1055437035]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.2, 0.14, 0.08, 1)
 theme_override_font_sizes/font_size = 12

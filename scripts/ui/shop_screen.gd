@@ -46,11 +46,11 @@ func _process(_delta: float) -> void:
 	_refresh_button_layers()
 
 
-func _apply_preview_visibility(visible: bool) -> void:
-	_preview_visible = visible
+func _apply_preview_visibility(should_show: bool) -> void:
+	_preview_visible = should_show
 	for preview_node in _preview_nodes:
 		if is_instance_valid(preview_node):
-			preview_node.visible = visible
+			preview_node.visible = should_show
 
 
 func _refresh_button_layers() -> void:

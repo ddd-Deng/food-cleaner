@@ -51,7 +51,7 @@ func _ready() -> void:
 	_configure_outline_material()
 	_update_animation_state(false)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if not is_active:
 		velocity = Vector2.ZERO
 		_update_animation_state(false)

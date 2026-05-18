@@ -6,12 +6,12 @@ const HOVER_LIFT: float = 34.0
 const HOVER_HOLD_PADDING: float = 14.0
 const DRAG_START_DISTANCE: float = 8.0
 
-# The original transparent art sheets are 1024x750; the card body sits in this 336x448 region.
-const CARD_BODY_REGION: Rect2 = Rect2(332, 191, 336, 448)
+const CARD_BODY_REGION: Rect2 = Rect2(399, 47, 366, 506)
 const CARD_OUTLINE_SOURCE_PADDING: float = 8.0
-const ATTACK_CARD_TEXTURE: Texture2D = preload("res://sprites/攻击卡.png")
-const SKILL_CARD_TEXTURE: Texture2D = preload("res://sprites/技能卡.png")
-const PURIFY_CARD_TEXTURE: Texture2D = preload("res://sprites/净化卡.png")
+const ATTACK_CARD_TEXTURE: Texture2D = preload("res://sprites/红.png")
+const SKILL_CARD_TEXTURE: Texture2D = preload("res://sprites/蓝.png")
+const PURIFY_CARD_TEXTURE: Texture2D = preload("res://sprites/绿.png")
+const CARD_FONT: FontFile = preload("res://黄油面包体.ttf")
 const OUTLINE_SHADER_CODE: String = """
 shader_type canvas_item;
 
@@ -74,10 +74,10 @@ enum VisualState {
 
 @onready var background: TextureRect = $Background
 @onready var state_outline: TextureRect = $StateOutline
-@onready var cost_label: Label = $Margin/Content/TopRow/CostLabel
-@onready var name_label: Label = $Margin/Content/TopRow/NameLabel
-@onready var art_label: Label = $Margin/Content/ArtSpacer/ArtLabel
-@onready var description_label: Label = $Margin/Content/DescriptionSpacer/DescriptionLabel
+@onready var cost_sprite: TextureRect = $CostSprite
+@onready var name_label: Label = $NameLabel
+@onready var art_label: Label = $ArtLabel
+@onready var description_label: Label = $DescriptionLabel
 
 var card_instance: CardInstance
 var hand_index: int = -1
@@ -103,6 +103,7 @@ func _ready() -> void:
 	set_process(false)
 	set_process_input(false)
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	_apply_card_font()
 	_capture_base_layout()
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
@@ -184,11 +185,32 @@ func is_mouse_inside_card_body() -> bool:
 func _refresh_content() -> void:
 	if not _is_ui_ready or card_instance == null:
 		return
-	cost_label.text = "%dt" % card_instance.get_time_cost()
+	_refresh_cost_sprite()
 	name_label.text = card_instance.get_display_name()
 	art_label.text = card_instance.get_art_label()
 	description_label.text = card_instance.definition.description if card_instance.definition != null else ""
+	_auto_fit_description_font()
 	_refresh_background_texture()
+
+func _auto_fit_description_font() -> void:
+	var text := description_label.text
+	var char_count := text.length()
+	if char_count == 0:
+		return
+	var label_width := description_label.size.x
+	if label_width <= 0:
+		label_width = _base_size.x * 0.64
+	var available_height: float = _base_size.y * 0.28
+	var candidates: Array[int] = [20, 18, 16, 14, 12]
+	var chosen_size: int = candidates[-1]
+	for font_size: int in candidates:
+		var chars_per_line: int = maxi(1, int(label_width / float(font_size)))
+		var line_count: int = ceili(float(char_count) / float(chars_per_line))
+		var total_height: float = line_count * (font_size + 1)
+		if total_height <= available_height:
+			chosen_size = font_size
+			break
+	description_label.add_theme_font_size_override("font_size", chosen_size)
 
 func _capture_base_layout() -> void:
 	_base_size = custom_minimum_size
@@ -198,6 +220,38 @@ func _capture_base_layout() -> void:
 		_base_size = Vector2(144, 192)
 	size = _base_size
 	pivot_offset = _base_size * 0.5
+
+func _apply_card_font() -> void:
+	var card_theme := Theme.new()
+	card_theme.default_font = CARD_FONT
+	theme = card_theme
+
+func _refresh_cost_sprite() -> void:
+	if cost_sprite == null or card_instance == null:
+		return
+	var time_cost := card_instance.get_time_cost()
+	var color_dir := _digit_color_dir_for_type()
+	var digit := clampi(time_cost, 0, 9)
+	var digit_texture := load("res://sprites/数字/%s/%d.png" % [color_dir, digit]) as Texture2D
+	if digit_texture == null:
+		return
+	var atlas := AtlasTexture.new()
+	atlas.atlas = digit_texture
+	atlas.region = Rect2(413, 63, 54, 63)
+	cost_sprite.texture = atlas
+
+func _digit_color_dir_for_type() -> String:
+	if card_instance == null:
+		return "红"
+	match card_instance.get_card_type():
+		BattleTypes.CardType.ATTACK:
+			return "红"
+		BattleTypes.CardType.SKILL:
+			return "蓝"
+		BattleTypes.CardType.PURIFY:
+			return "绿"
+		_:
+			return "红"
 
 func _get_card_size() -> Vector2:
 	var base_size := _base_size if _base_size != Vector2.ZERO else custom_minimum_size

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bv2s0jyj7vtg6"]
 
-[ext_resource type="Script" uid="uid://c8cc8jx0ebp32" path="res://scripts/explore/room_scene.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
 [ext_resource type="Script" uid="uid://bgvn7fnrkcagx" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 [ext_resource type="Texture2D" uid="uid://cfqe3cl17q4ij" path="res://sprites/map/游乐场地图/背景.png" id="4"]

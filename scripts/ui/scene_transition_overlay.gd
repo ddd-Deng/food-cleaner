@@ -36,6 +36,7 @@ func play_transition() -> void:
 		return
 	_is_transitioning = true
 	_midpoint_emitted = false
+	@warning_ignore("integer_division")
 	_midpoint_frame = max(0, frame_count / 2)
 	overlay_root.visible = true
 	overlay_root.mouse_filter = Control.MOUSE_FILTER_STOP

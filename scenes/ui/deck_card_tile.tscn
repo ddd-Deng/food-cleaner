@@ -17,14 +17,77 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 1
-stretch_mode = 6
+stretch_mode = 5
+
+[node name="CostSprite" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.02
+anchor_right = 0.22
+anchor_bottom = 0.16
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.28
+anchor_top = 0.04
+anchor_right = 0.88
+anchor_bottom = 0.14
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.38, 0.29, 0.14, 1)
+theme_override_font_sizes/font_size = 14
+text = "卡牌名"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ArtLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2
+anchor_top = 0.22
+anchor_right = 0.8
+anchor_bottom = 0.62
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.9)
+theme_override_font_sizes/font_size = 26
+text = "图"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DescriptionLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.12
+anchor_top = 0.72
+anchor_right = 0.88
+anchor_bottom = 0.96
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.45, 0.36, 0.22, 1)
+theme_override_font_sizes/font_size = 10
+text = "卡牌描述"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
 
 [node name="QuantityBadge" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 0
-offset_left = 117.0
+offset_left = 125.0
 offset_top = 10.0
-offset_right = 156.0
+offset_right = 158.0
 offset_bottom = 32.0
 mouse_filter = 2
 
@@ -34,110 +97,3 @@ theme_override_font_sizes/font_size = 12
 text = "x1"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Margin" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = 7.0
-offset_right = -8.0
-offset_bottom = -8.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
-
-[node name="Content" type="Control" parent="Margin"]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="TopRow" type="Control" parent="Margin/Content"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="CostLabel" type="Label" parent="Margin/Content/TopRow"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.05
-anchor_top = 0.045
-anchor_right = 0.23
-anchor_bottom = 0.15
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.76, 0.6, 0.11, 1)
-theme_override_font_sizes/font_size = 12
-text = "0t"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="NameLabel" type="Label" parent="Margin/Content/TopRow"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.29
-anchor_top = 0.045
-anchor_right = 0.86
-anchor_bottom = 0.165
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.38, 0.29, 0.14, 1)
-theme_override_font_sizes/font_size = 12
-text = "卡牌名"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ArtSpacer" type="Control" parent="Margin/Content"]
-layout_mode = 1
-anchor_left = 0.295
-anchor_top = 0.28
-anchor_right = 0.705
-anchor_bottom = 0.56
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="ArtLabel" type="Label" parent="Margin/Content/ArtSpacer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 0.9)
-theme_override_font_sizes/font_size = 22
-text = "图"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="DescriptionSpacer" type="Control" parent="Margin/Content"]
-layout_mode = 1
-anchor_left = 0.08
-anchor_top = 0.67
-anchor_right = 0.68
-anchor_bottom = 0.86
-offset_top = 24.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="DescriptionLabel" type="Label" parent="Margin/Content/DescriptionSpacer"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.45, 0.36, 0.22, 1)
-theme_override_font_sizes/font_size = 11
-text = "卡牌描述"
-vertical_alignment = 1
-autowrap_mode = 2
