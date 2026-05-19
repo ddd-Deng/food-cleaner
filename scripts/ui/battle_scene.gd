@@ -15,10 +15,6 @@ signal battle_resolved(result: Dictionary)
 @onready var task_strip_panel: Control = %TaskStripPanel
 @onready var purification_task_row: HBoxContainer = %PurificationTaskRow
 @onready var timeline_value_label: Label = %TimelineValue
-@onready var effect_banner_label: Label = %EffectBannerLabel
-@onready var enemy_intent_label: Label = %EnemyIntentLabel
-@onready var log_scroll: ScrollContainer = %LogScroll
-@onready var log_text: RichTextLabel = %LogText
 @onready var draw_pile_label: Label = %DrawValue
 @onready var discard_pile_label: Label = %DiscardValue
 @onready var hand_view: HandView = %HandView
@@ -89,8 +85,6 @@ var _preview_card: CardInstance
 var _preview_data: Dictionary = {}
 
 func _ready() -> void:
-	ScrollBarSkin.apply_to_scroll_container(log_scroll)
-	ScrollBarSkin.apply_to_rich_text_label(log_text)
 	ScrollBarSkin.apply_compact_horizontal_to_scroll_container(timeline_scroll)
 	_create_card_effect_preview_popup()
 	_create_deck_view_overlay()
@@ -158,24 +152,19 @@ func _on_state_changed(state: BattleState) -> void:
 	gold_value_label.text = str(state.player_gold)
 	draw_pile_label.text = "抽牌堆：%d" % state.draw_pile.size()
 	discard_pile_label.text = "弃牌堆：%d" % state.discard_pile.size()
-	timeline_value_label.text = "战斗时间：%dt" % state.battle_time
-	enemy_intent_label.text = "敌人行动：%s" % _enemy_intent_text(state)
+	timeline_value_label.text = "战斗时间 %dt" % state.battle_time
+	if battle_enemy_sprite != null:
+		battle_enemy_sprite.set_intent_text(_enemy_intent_text(state))
 	_refresh_food_queues(state)
 	_rebuild_hand(state)
 	_rebuild_timeline(state, previous_battle_time)
 	_refresh_timeline_preview()
-	_refresh_effect_banner(state)
 	_previous_battle_time = state.battle_time
 
-func _on_log_added(message: String) -> void:
-	if not log_text.text.is_empty():
-		log_text.append_text("\n")
-	log_text.append_text(message)
-	log_text.scroll_to_line(log_text.get_line_count())
+func _on_log_added(_message: String) -> void:
+	pass
 
 func _on_battle_finished(outcome: BattleTypes.BattleOutcome) -> void:
-	log_text.append_text("\n战斗结束：%s" % _outcome_text(outcome))
-	log_text.scroll_to_line(log_text.get_line_count())
 	var result := {
 		"outcome": outcome,
 		"player_hp": controller.state.player_hp if controller.state != null else 0,
@@ -189,28 +178,16 @@ func _on_battle_finished(outcome: BattleTypes.BattleOutcome) -> void:
 	_show_victory_overlay(outcome)
 
 func _on_settings_pressed() -> void:
-	log_text.append_text("\n设置界面占位。")
-	log_text.scroll_to_line(log_text.get_line_count())
+	pass
 
 func _on_deck_preview_pressed() -> void:
-	log_text.append_text("\n牌库预览：")
-	var seen_ids: Dictionary = {}
-	for card in CardCatalog.build_card_map().values():
-		if card is CardData:
-			var data: CardData = card
-			if seen_ids.has(data.id):
-				continue
-			seen_ids[data.id] = true
-			log_text.append_text("\n- %s | %dt | %s" % [data.display_name, data.time_cost, data.description])
-	log_text.scroll_to_line(log_text.get_line_count())
+	pass
 
 func _on_draw_pile_pressed() -> void:
-	log_text.append_text("\n抽牌堆按钮点击。")
-	log_text.scroll_to_line(log_text.get_line_count())
+	pass
 
 func _on_discard_pile_pressed() -> void:
-	log_text.append_text("\n弃牌堆按钮点击。")
-	log_text.scroll_to_line(log_text.get_line_count())
+	pass
 
 func _rebuild_hand(state: BattleState) -> void:
 	hand_view.rebuild_hand(state.hand, not state.is_finished())
@@ -218,16 +195,17 @@ func _rebuild_hand(state: BattleState) -> void:
 func _refresh_food_queues(state: BattleState) -> void:
 	var stomach_capacity := state.player_max_stomach_volume + state.player_extra_stomach_capacity
 	player_food_queue.set_queue(
-		"玩家胃袋",
+		"",
 		_build_food_queue_items(state.stomach, true),
 		stomach_capacity
 	)
 	var enemy_count := state.enemy.blocks.size() if state.enemy != null else 0
 	enemy_food_queue.set_queue(
-		"敌人掉落",
+		"",
 		_build_food_queue_items(state.enemy.blocks if state.enemy != null else [], false),
 		max(enemy_count, 3)
 	)
+	enemy_food_queue.set_preview_targets([])
 
 func _build_food_queue_items(blocks: Array, include_digest_time: bool) -> Array[Dictionary]:
 	var items: Array[Dictionary] = []
@@ -236,12 +214,15 @@ func _build_food_queue_items(blocks: Array, include_digest_time: bool) -> Array[
 			continue
 		var block := block_variant as FoodBlockInstance
 		var meta_parts: PackedStringArray = []
-		meta_parts.append("体积 %d" % max(1, block.volume))
+		if block.volume > 1:
+			meta_parts.append("占 %d 格" % max(1, block.volume))
 		if include_digest_time:
 			meta_parts.append("消化 %dt" % max(0, block.remaining_digest_time))
 		items.append({
 			"name": block.get_display_name(),
 			"meta": " | ".join(meta_parts),
+			"is_bad": block.is_bad_block(),
+			"volume": block.volume,
 		})
 	return items
 
@@ -383,15 +364,14 @@ func _clear_timeline_preview() -> void:
 	_preview_hand_index = -1
 	_preview_data.clear()
 	_refresh_timeline_preview()
-	if controller.state != null:
-		_last_effect_sequence_seen = -1
-		_refresh_effect_banner(controller.state)
 
 func _refresh_timeline_preview() -> void:
 	_remove_timeline_preview_layer()
 	if controller.state == null or _preview_hand_index < 0:
+		_refresh_enemy_card_preview()
 		return
 	_preview_data = BattleRules.preview_card_play(controller.state, _preview_hand_index)
+	_refresh_enemy_card_preview()
 	if _preview_data.is_empty():
 		return
 	var start_time: int = int(_preview_data.get("start_time", 0))
@@ -452,22 +432,43 @@ func _refresh_timeline_preview() -> void:
 		if action_time < 0:
 			continue
 		var action_highlight := ColorRect.new()
-		action_highlight.color = Color(0.93, 0.48, 0.28, 0.28)
-		action_highlight.position = Vector2(TIMELINE_LEFT_PADDING + TIMELINE_SLOT_WIDTH * action_time - 18.0, TIMELINE_CARD_EFFECT_MARKER_Y)
-		action_highlight.size = Vector2(36.0, 58.0)
+		action_highlight.color = Color(0.67, 0.08, 0.06, 0.52)
+		action_highlight.position = Vector2(TIMELINE_LEFT_PADDING + TIMELINE_SLOT_WIDTH * action_time - 20.0, TIMELINE_CARD_EFFECT_MARKER_Y - 2.0)
+		action_highlight.size = Vector2(40.0, 62.0)
 		layer.add_child(action_highlight)
+		var action_border := Panel.new()
+		var action_border_style := StyleBoxFlat.new()
+		action_border_style.bg_color = Color(0, 0, 0, 0)
+		action_border_style.border_color = Color(1.0, 0.58, 0.34, 0.95)
+		action_border_style.border_width_left = 2
+		action_border_style.border_width_top = 2
+		action_border_style.border_width_right = 2
+		action_border_style.border_width_bottom = 2
+		action_border_style.corner_radius_top_left = 8
+		action_border_style.corner_radius_top_right = 8
+		action_border_style.corner_radius_bottom_left = 8
+		action_border_style.corner_radius_bottom_right = 8
+		action_border.add_theme_stylebox_override("panel", action_border_style)
+		action_border.position = action_highlight.position
+		action_border.size = action_highlight.size
+		action_border.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		layer.add_child(action_border)
 
-	if can_play:
-		effect_banner_label.text = "预计打出 %s | 前进 %dt | 到达 %dt" % [
-			_preview_card.get_display_name() if _preview_card != null else "卡牌",
-			int(_preview_data.get("time_cost", 0)),
-			end_time,
-		]
-	else:
-		effect_banner_label.text = "无法打出 %s | %s" % [
-			_preview_card.get_display_name() if _preview_card != null else "这张牌",
-			str(_preview_data.get("reason", "当前不能打出")),
-		]
+func _refresh_enemy_card_preview() -> void:
+	if battle_enemy_sprite == null:
+		return
+	if enemy_food_queue != null:
+		enemy_food_queue.set_preview_targets([])
+	if _preview_data.is_empty():
+		return
+	var target_indices_raw: Array = _preview_data.get("eat_target_indices", [])
+	var target_indices: Array[int] = []
+	for index_value in target_indices_raw:
+		if typeof(index_value) != TYPE_INT:
+			continue
+		target_indices.append(int(index_value))
+	if enemy_food_queue != null:
+		enemy_food_queue.set_preview_targets(target_indices)
 
 func _play_timeline_resolution_feedback(state: BattleState, previous_battle_time: int) -> void:
 	if previous_battle_time < 0 or state.battle_time <= previous_battle_time:
@@ -499,7 +500,7 @@ func _play_timeline_resolution_feedback(state: BattleState, previous_battle_time
 		if time_point <= previous_battle_time or time_point > state.battle_time:
 			continue
 		var marker := child as TextureRect
-		_timeline_feedback_tween.tween_property(marker, "modulate", Color(1.25, 0.75, 0.62, 1.0), 0.08)
+		_timeline_feedback_tween.tween_property(marker, "modulate", Color(1.45, 0.42, 0.26, 1.0), 0.08)
 		_timeline_feedback_tween.tween_property(marker, "modulate", Color.WHITE, 0.24).set_delay(0.10)
 	_timeline_feedback_tween.finished.connect(func() -> void:
 		if is_instance_valid(played_bar):
@@ -628,11 +629,11 @@ func _build_purification_task_item(step_name: String, done: bool) -> PanelContai
 func _build_purification_item_style(done: bool) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	if done:
-		style.bg_color = Color(0.79, 0.88, 0.72, 0.92)
-		style.border_color = Color(0.3, 0.45, 0.26, 0.8)
+		style.bg_color = Color(0.86, 0.92, 0.77, 0.94)
+		style.border_color = Color(0.40, 0.55, 0.30, 0.82)
 	else:
-		style.bg_color = Color(0.95, 0.88, 0.70, 0.92)
-		style.border_color = Color(0.56, 0.42, 0.23, 0.72)
+		style.bg_color = Color(0.97, 0.92, 0.80, 0.94)
+		style.border_color = Color(0.72, 0.55, 0.28, 0.76)
 	style.border_width_left = 1
 	style.border_width_top = 1
 	style.border_width_right = 1
@@ -676,22 +677,6 @@ func _outcome_text(outcome: BattleTypes.BattleOutcome) -> String:
 		_:
 			return "进行中"
 
-func _refresh_effect_banner(state: BattleState) -> void:
-	if _preview_hand_index >= 0 and not _preview_data.is_empty():
-		return
-	if state.last_played_sequence == _last_effect_sequence_seen:
-		return
-	_last_effect_sequence_seen = state.last_played_sequence
-	if state.last_played_sequence <= 0:
-		effect_banner_label.text = "拖出手牌区后松手即可打出，右键可立即取消。"
-		return
-	effect_banner_label.text = "打出 %s | 消耗 %dt | %s" % [
-		state.last_played_card_name,
-		state.last_played_card_time_cost,
-		state.last_played_effect_summary,
-	]
-	_flash_control(effect_banner_label, Color(1.0, 0.94, 0.70, 1.0))
-
 func _flash_state_changes(state: BattleState) -> void:
 	if _last_player_hp_seen >= 0 and _last_player_hp_seen != state.player_hp:
 		var hp_color := Color(1.0, 0.68, 0.68, 1.0) if state.player_hp < _last_player_hp_seen else Color(0.72, 1.0, 0.72, 1.0)
@@ -721,7 +706,6 @@ func _start_controller_battle(definition: BattleDefinition) -> void:
 	if battle_enemy_sprite != null:
 		battle_enemy_sprite.setup_from_monster(definition.monster_id)
 	if _started_once:
-		log_text.clear()
 		_last_effect_sequence_seen = -1
 		_last_player_hp_seen = -1
 		_last_enemy_block_count_seen = -1

@@ -79,6 +79,10 @@ static func preview_card_play(state: BattleState, hand_index: int) -> Dictionary
 		"end_time": 0,
 		"time_cost": 0,
 		"enemy_actions_crossed": [],
+		"requested_eat_count": 0,
+		"eat_count": 0,
+		"eat_volume": 0,
+		"eat_target_indices": [],
 	}
 	if state == null:
 		preview.reason = "当前没有战斗状态。"
@@ -92,6 +96,12 @@ static func preview_card_play(state: BattleState, hand_index: int) -> Dictionary
 		preview.reason = "选中的卡牌无效。"
 		return preview
 	var card: CardInstance = state.hand[hand_index]
+	var requested_eat_count: int = _requested_eat_count_for_card(card)
+	var eat_preview: Dictionary = _build_eat_preview(state, requested_eat_count)
+	preview.requested_eat_count = requested_eat_count
+	preview.eat_count = int(eat_preview.get("actual_count", 0))
+	preview.eat_volume = int(eat_preview.get("required_volume", 0))
+	preview.eat_target_indices = (eat_preview.get("target_indices", []) as Array).duplicate()
 	var validation_error: String = _validate_card_play(state, card)
 	if not validation_error.is_empty():
 		preview.reason = validation_error
@@ -108,29 +118,48 @@ static func preview_card_play(state: BattleState, hand_index: int) -> Dictionary
 static func _validate_card_play(state: BattleState, card: CardInstance) -> String:
 	if card == null or card.definition == null:
 		return "这张牌当前没有可用定义。"
-	var total_requested_eat_count: int = 0
-	for effect in card.definition.effects:
-		match effect.kind:
-			BattleTypes.EffectKind.EAT_ENEMY_BLOCK:
-				total_requested_eat_count += max(1, effect.amount)
+	var total_requested_eat_count: int = _requested_eat_count_for_card(card)
 	if total_requested_eat_count > 0:
 		if state.enemy == null or state.enemy.blocks.is_empty():
 			return "当前没有可吃掉的敌方食物块。"
-		var required_volume: int = _preview_eat_volume(state, total_requested_eat_count)
+		var eat_preview: Dictionary = _build_eat_preview(state, total_requested_eat_count)
+		var required_volume: int = int(eat_preview.get("required_volume", 0))
 		if required_volume <= 0:
 			return "当前没有可吃掉的敌方食物块。"
 		if required_volume > state.get_stomach_capacity_left():
 			return "胃容量不足，无法打出这张吃牌。"
 	return ""
 
-static func _preview_eat_volume(state: BattleState, count: int) -> int:
-	if state.enemy == null:
+static func _requested_eat_count_for_card(card: CardInstance) -> int:
+	if card == null or card.definition == null:
 		return 0
-	var total_volume: int = 0
+	var total_requested_eat_count := 0
+	for effect in card.definition.effects:
+		if effect.kind == BattleTypes.EffectKind.EAT_ENEMY_BLOCK:
+			total_requested_eat_count += max(1, effect.amount)
+	return total_requested_eat_count
+
+static func _build_eat_preview(state: BattleState, count: int) -> Dictionary:
+	var preview := {
+		"actual_count": 0,
+		"required_volume": 0,
+		"target_indices": [],
+	}
+	if state == null or state.enemy == null or count <= 0:
+		return preview
 	var limit: int = mini(count, state.enemy.blocks.size())
+	var target_indices: Array[int] = []
+	var required_volume := 0
 	for i in range(limit):
-		total_volume += state.enemy.blocks[i].volume
-	return total_volume
+		var block := state.enemy.blocks[i]
+		if block == null:
+			continue
+		required_volume += block.volume
+		target_indices.append(i)
+	preview.actual_count = target_indices.size()
+	preview.required_volume = required_volume
+	preview.target_indices = target_indices
+	return preview
 
 static func _advance_time_and_resolve(state: BattleState, delta: int) -> void:
 	for _step in range(delta):

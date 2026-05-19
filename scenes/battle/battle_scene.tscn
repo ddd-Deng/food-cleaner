@@ -44,30 +44,30 @@ content_margin_left = 14.0
 content_margin_top = 8.0
 content_margin_right = 14.0
 content_margin_bottom = 8.0
-bg_color = Color(0.13, 0.11, 0.07, 0.84)
+bg_color = Color(0.95, 0.90, 0.79, 0.9)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.89, 0.79, 0.56, 0.82)
+border_color = Color(0.66, 0.48, 0.24, 0.72)
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
-shadow_color = Color(0, 0, 0, 0.2)
-shadow_size = 8
+shadow_color = Color(0.18, 0.11, 0.03, 0.1)
+shadow_size = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_task_pending"]
 content_margin_left = 12.0
 content_margin_top = 6.0
 content_margin_right = 10.0
 content_margin_bottom = 6.0
-bg_color = Color(0.95, 0.88, 0.7, 0.92)
+bg_color = Color(0.97, 0.92, 0.8, 0.94)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.56, 0.42, 0.23, 0.72)
+border_color = Color(0.72, 0.55, 0.28, 0.76)
 corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
@@ -82,16 +82,34 @@ content_margin_left = 12.0
 content_margin_top = 6.0
 content_margin_right = 10.0
 content_margin_bottom = 6.0
-bg_color = Color(0.79, 0.88, 0.72, 0.92)
+bg_color = Color(0.86, 0.92, 0.77, 0.94)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.3, 0.45, 0.26, 0.8)
+border_color = Color(0.40, 0.55, 0.30, 0.82)
 corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_battle_time_panel"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.96, 0.90, 0.76, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.70, 0.51, 0.24, 0.8)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0.18, 0.11, 0.03, 0.1)
+shadow_size = 4
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_purification_done"]
 atlas = ExtResource("13_purification_progress")
@@ -178,7 +196,6 @@ offset_right = 161.0
 offset_bottom = 468.0
 mouse_filter = 2
 script = ExtResource("4_food_queue")
-title_text = "玩家胃袋"
 accent_mode = &"player"
 
 [node name="EnemyFoodSlot" type="TextureRect" parent="." unique_id=2136149214]
@@ -208,7 +225,6 @@ offset_bottom = 468.0
 grow_horizontal = 0
 mouse_filter = 2
 script = ExtResource("4_food_queue")
-title_text = "敌人掉落"
 accent_mode = &"enemy"
 
 [node name="Root" type="MarginContainer" parent="." unique_id=750512397]
@@ -323,6 +339,30 @@ vertical_alignment = 1
 [node name="HeaderSpacer" type="Control" parent="Root/Layout/HeaderRow" unique_id=1311506952]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.45
+
+[node name="BattleTimePanel" type="PanelContainer" parent="Root/Layout/HeaderRow" unique_id=1281506953]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_battle_time_panel")
+
+[node name="BattleTimeInner" type="MarginContainer" parent="Root/Layout/HeaderRow/BattleTimePanel" unique_id=1281506954]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 8
+
+[node name="TimelineValue" type="Label" parent="Root/Layout/HeaderRow/BattleTimePanel/BattleTimeInner" unique_id=769047376]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.16, 0.08, 1)
+theme_override_colors/font_outline_color = Color(1, 0.97, 0.9, 0.72)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 18
+text = "战斗时间 0t"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="TaskStripPanel" type="PanelContainer" parent="Root/Layout/HeaderRow" unique_id=176934834]
 unique_name_in_owner = true
@@ -444,68 +484,17 @@ theme_override_constants/separation = 8
 [node name="TimeLogCenter" type="HBoxContainer" parent="Root/Layout/MainRow/CentreColumn" unique_id=70771227]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_vertical = 4
 
 [node name="TimeLogPanel" type="PanelContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter" unique_id=70771226]
 custom_minimum_size = Vector2(840, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-size_flags_vertical = 3
+size_flags_vertical = 4
 
 [node name="TimeLogInner" type="VBoxContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel" unique_id=180011127]
 layout_mode = 2
 theme_override_constants/separation = 8
-
-[node name="TimelineValue" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner" unique_id=769047376]
-unique_name_in_owner = true
-layout_mode = 2
-text = "战斗时间：0t"
-
-[node name="EffectBanner" type="PanelContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner" unique_id=1188837986]
-custom_minimum_size = Vector2(0, 42)
-layout_mode = 2
-
-[node name="EffectBannerInner" type="MarginContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner/EffectBanner" unique_id=1555356340]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 8
-
-[node name="EffectBannerLabel" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner/EffectBanner/EffectBannerInner" unique_id=1938284100]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 2
-text = "拖拽手牌到出牌区后，这里会显示效果摘要。"
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="LogTitle" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner" unique_id=751006090]
-layout_mode = 2
-text = "日志"
-
-[node name="EnemyIntentLabel" type="Label" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner" unique_id=934510221]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 22)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
-theme_override_font_sizes/font_size = 13
-text = "敌人行动：等待"
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="LogScroll" type="ScrollContainer" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner" unique_id=602774726]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="LogText" type="RichTextLabel" parent="Root/Layout/MainRow/CentreColumn/TimeLogCenter/TimeLogPanel/TimeLogInner/LogScroll" unique_id=1473608164]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-autowrap_mode = 2
 
 [node name="BottomRow" type="HBoxContainer" parent="Root/Layout" unique_id=2026744775]
 custom_minimum_size = Vector2(0, 286)
