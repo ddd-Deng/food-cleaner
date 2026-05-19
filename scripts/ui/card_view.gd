@@ -61,6 +61,7 @@ void fragment() {
 signal drag_started(card_view: CardView)
 signal drag_ended(card_view: CardView, dropped_successfully: bool, release_global_position: Vector2, cancelled_by_user: bool)
 signal hover_requested(card_view: CardView)
+signal hover_cleared(card_view: CardView)
 
 enum VisualState {
 	IN_HAND,
@@ -170,6 +171,7 @@ func force_hover_exit() -> void:
 		return
 	is_pointer_inside = false
 	set_visual_state(VisualState.IN_HAND if interactable else VisualState.DISABLED)
+	hover_cleared.emit(self)
 
 func grant_hover() -> void:
 	if interactable and not is_dragging:
@@ -316,6 +318,7 @@ func _on_mouse_exited() -> void:
 		return
 	is_pointer_inside = false
 	set_visual_state(VisualState.IN_HAND)
+	hover_cleared.emit(self)
 
 func _is_mouse_inside_hover_hold_area() -> bool:
 	var parent_control := get_parent() as Control

@@ -71,6 +71,40 @@ static func play_card(state: BattleState, hand_index: int) -> bool:
 	_refresh_battle_readouts(state)
 	return true
 
+static func preview_card_play(state: BattleState, hand_index: int) -> Dictionary:
+	var preview := {
+		"can_play": false,
+		"reason": "",
+		"start_time": 0,
+		"end_time": 0,
+		"time_cost": 0,
+		"enemy_actions_crossed": [],
+	}
+	if state == null:
+		preview.reason = "当前没有战斗状态。"
+		return preview
+	preview.start_time = max(0, state.battle_time)
+	preview.end_time = preview.start_time
+	if state.is_finished():
+		preview.reason = "战斗已经结束。"
+		return preview
+	if hand_index < 0 or hand_index >= state.hand.size():
+		preview.reason = "选中的卡牌无效。"
+		return preview
+	var card: CardInstance = state.hand[hand_index]
+	var validation_error: String = _validate_card_play(state, card)
+	if not validation_error.is_empty():
+		preview.reason = validation_error
+		preview.time_cost = max(0, card.get_time_cost()) if card != null else 0
+		preview.end_time = preview.start_time + preview.time_cost
+		preview.enemy_actions_crossed = _enemy_actions_between(state, preview.start_time, preview.end_time)
+		return preview
+	preview.can_play = true
+	preview.time_cost = max(0, card.get_time_cost()) if card != null else 0
+	preview.end_time = preview.start_time + preview.time_cost
+	preview.enemy_actions_crossed = _enemy_actions_between(state, preview.start_time, preview.end_time)
+	return preview
+
 static func _validate_card_play(state: BattleState, card: CardInstance) -> String:
 	if card == null or card.definition == null:
 		return "这张牌当前没有可用定义。"
@@ -423,6 +457,20 @@ static func _refresh_after_state_change(state: BattleState) -> void:
 
 static func _refresh_enemy_preview(state: BattleState) -> void:
 	_update_enemy_intent(state)
+
+static func _enemy_actions_between(state: BattleState, start_time: int, end_time: int) -> Array[Dictionary]:
+	var actions: Array[Dictionary] = []
+	if state == null or state.enemy == null:
+		return actions
+	for time_point in range(start_time + 1, end_time + 1):
+		var labels := state.enemy.get_action_labels_at_time(time_point)
+		if labels.is_empty():
+			continue
+		actions.append({
+			"time_point": time_point,
+			"labels": labels.duplicate(),
+		})
+	return actions
 
 static func _enemy_name(state: BattleState) -> String:
 	if state.enemy == null or state.enemy.definition == null:

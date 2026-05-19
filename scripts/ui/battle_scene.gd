@@ -55,6 +55,8 @@ const TIMELINE_CARD_EFFECT_MARKER_SIZE := Vector2(16, 25)
 const TIMELINE_SLOT_WIDTH := 84.0
 const TIMELINE_LEFT_PADDING := 22.0
 const TIMELINE_TRACK_Y := 30.0
+const TIMELINE_PREVIEW_TRACK_HEIGHT := 18.0
+const TIMELINE_PREVIEW_TRACK_Y := 42.0
 const TIMELINE_ACTION_MARKER_Y := 50.0
 const TIMELINE_CARD_EFFECT_MARKER_Y := 4.0
 const TIMELINE_CARD_EFFECT_MARKER_X_OFFSET := 18.0
@@ -63,6 +65,8 @@ const TIMELINE_LABEL_Y := 22.0
 const TIMELINE_MIN_HEIGHT := 82.0
 const TIMELINE_CURRENT_OFFSET_SLOTS := 2
 const TIMELINE_END_CAP_PADDING := 64.0
+const TIMELINE_PREVIEW_MARKER_SIZE := Vector2(22.0, 22.0)
+const TIMELINE_SCROLL_TWEEN_DURATION := 0.48
 
 var _last_effect_sequence_seen: int = -1
 var _last_player_hp_seen: int = -1
@@ -77,6 +81,12 @@ var _pending_resolution: Dictionary = {}
 var _victory_reward_gold: int = 0
 var _victory_is_boss_room: bool = false
 var _victory_has_card_reward: bool = true
+var _timeline_scroll_tween: Tween
+var _timeline_feedback_tween: Tween
+var _previous_battle_time: int = -1
+var _preview_hand_index: int = -1
+var _preview_card: CardInstance
+var _preview_data: Dictionary = {}
 
 func _ready() -> void:
 	ScrollBarSkin.apply_to_scroll_container(log_scroll)
@@ -109,6 +119,8 @@ func _ready() -> void:
 	_configure_texture_button_feedback(discard_pile_button)
 	hand_view.card_released_outside_hand.connect(_on_card_released_outside_hand)
 	hand_view.drag_cancelled.connect(_on_drag_cancelled)
+	hand_view.card_preview_requested.connect(_on_card_preview_requested)
+	hand_view.card_preview_cleared.connect(_clear_timeline_preview)
 	if _pending_definition != null:
 		_start_controller_battle(_pending_definition)
 	elif start_demo_on_ready:
@@ -138,6 +150,7 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _on_state_changed(state: BattleState) -> void:
+	var previous_battle_time := _previous_battle_time
 	_flash_state_changes(state)
 	_refresh_player_hp_bar(state.player_hp, state.player_max_hp)
 	player_hp_overlay.text = "HP %d / %d" % [state.player_hp, state.player_max_hp]
@@ -149,8 +162,10 @@ func _on_state_changed(state: BattleState) -> void:
 	enemy_intent_label.text = "敌人行动：%s" % _enemy_intent_text(state)
 	_refresh_food_queues(state)
 	_rebuild_hand(state)
-	_rebuild_timeline(state)
+	_rebuild_timeline(state, previous_battle_time)
+	_refresh_timeline_preview()
 	_refresh_effect_banner(state)
+	_previous_battle_time = state.battle_time
 
 func _on_log_added(message: String) -> void:
 	if not log_text.text.is_empty():
@@ -258,7 +273,7 @@ func _configure_texture_button_feedback(button: BaseButton) -> void:
 		button.scale = Vector2(1.05, 1.05) if is_hovered else Vector2.ONE
 	)
 
-func _rebuild_timeline(state: BattleState) -> void:
+func _rebuild_timeline(state: BattleState, previous_battle_time: int = -1) -> void:
 	_hide_card_effect_preview()
 	for child in timeline_strip.get_children():
 		child.queue_free()
@@ -288,6 +303,7 @@ func _rebuild_timeline(state: BattleState) -> void:
 	var current_marker_x: float = TIMELINE_LEFT_PADDING + TIMELINE_SLOT_WIDTH * current_slot_index
 	current_marker.position = Vector2(current_marker_x - TIMELINE_CURRENT_REGION.size.x * 0.5, TIMELINE_CURRENT_Y)
 	current_marker.size = TIMELINE_CURRENT_REGION.size
+	current_marker.name = "CurrentMarker"
 	timeline_strip.add_child(current_marker)
 
 	for i in range(entry_count):
@@ -306,6 +322,7 @@ func _rebuild_timeline(state: BattleState) -> void:
 			action_marker.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			action_marker.position = Vector2(marker_x - action_region.size.x * 0.5, TIMELINE_ACTION_MARKER_Y)
 			action_marker.size = action_region.size
+			action_marker.set_meta("timeline_time_point", time_point)
 			timeline_strip.add_child(action_marker)
 
 		var label := Label.new()
@@ -318,9 +335,10 @@ func _rebuild_timeline(state: BattleState) -> void:
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		timeline_strip.add_child(label)
 
-	_align_timeline_scroll_to_current_time(state, timeline_width)
+	_align_timeline_scroll_to_current_time(state, timeline_width, previous_battle_time)
+	_play_timeline_resolution_feedback(state, previous_battle_time)
 
-func _align_timeline_scroll_to_current_time(state: BattleState, timeline_width: float) -> void:
+func _align_timeline_scroll_to_current_time(state: BattleState, timeline_width: float, previous_battle_time: int = -1) -> void:
 	var visible_width: float = timeline_scroll.size.x
 	if visible_width <= 0.0:
 		visible_width = timeline_scroll.get_rect().size.x
@@ -330,7 +348,16 @@ func _align_timeline_scroll_to_current_time(state: BattleState, timeline_width: 
 		return
 	var target_time: int = max(0, state.battle_time - TIMELINE_CURRENT_OFFSET_SLOTS)
 	var target_scroll: float = TIMELINE_LEFT_PADDING + TIMELINE_SLOT_WIDTH * target_time - TIMELINE_SLOT_WIDTH * 0.5
-	timeline_scroll.scroll_horizontal = int(clampf(target_scroll, 0.0, max_scroll))
+	var clamped_scroll := int(clampf(target_scroll, 0.0, max_scroll))
+	if previous_battle_time < 0 or state.battle_time <= previous_battle_time:
+		timeline_scroll.scroll_horizontal = clamped_scroll
+		return
+	if _timeline_scroll_tween != null:
+		_timeline_scroll_tween.kill()
+	_timeline_scroll_tween = create_tween()
+	_timeline_scroll_tween.set_trans(Tween.TRANS_SINE)
+	_timeline_scroll_tween.set_ease(Tween.EASE_OUT)
+	_timeline_scroll_tween.tween_property(timeline_scroll, "scroll_horizontal", clamped_scroll, TIMELINE_SCROLL_TWEEN_DURATION)
 
 func _timeline_time_has_action(state: BattleState, time_point: int) -> bool:
 	return state.enemy != null and not state.enemy.get_action_labels_at_time(time_point).is_empty()
@@ -345,6 +372,146 @@ func _build_card_effect_marker(records: Array[CardEffectRecord], marker_x: float
 	marker.preview_requested.connect(_show_card_effect_preview)
 	marker.preview_dismissed.connect(_hide_card_effect_preview)
 	return marker
+
+func _on_card_preview_requested(card: CardInstance, hand_index: int) -> void:
+	_preview_card = card
+	_preview_hand_index = hand_index
+	_refresh_timeline_preview()
+
+func _clear_timeline_preview() -> void:
+	_preview_card = null
+	_preview_hand_index = -1
+	_preview_data.clear()
+	_refresh_timeline_preview()
+	if controller.state != null:
+		_last_effect_sequence_seen = -1
+		_refresh_effect_banner(controller.state)
+
+func _refresh_timeline_preview() -> void:
+	_remove_timeline_preview_layer()
+	if controller.state == null or _preview_hand_index < 0:
+		return
+	_preview_data = BattleRules.preview_card_play(controller.state, _preview_hand_index)
+	if _preview_data.is_empty():
+		return
+	var start_time: int = int(_preview_data.get("start_time", 0))
+	var end_time: int = int(_preview_data.get("end_time", start_time))
+	var layer := Control.new()
+	layer.name = "PreviewLayer"
+	layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	layer.set_anchors_preset(Control.PRESET_FULL_RECT)
+	timeline_strip.add_child(layer)
+
+	var can_play: bool = bool(_preview_data.get("can_play", false))
+	var fill_color := Color(0.96, 0.88, 0.45, 0.36) if can_play else Color(0.62, 0.62, 0.62, 0.26)
+	var border_color := Color(0.96, 0.82, 0.28, 0.82) if can_play else Color(0.75, 0.75, 0.75, 0.55)
+	var start_x := TIMELINE_LEFT_PADDING + TIMELINE_SLOT_WIDTH * start_time
+	var end_x := TIMELINE_LEFT_PADDING + TIMELINE_SLOT_WIDTH * end_time
+	if end_time > start_time:
+		var preview_bar := ColorRect.new()
+		preview_bar.color = fill_color
+		preview_bar.position = Vector2(start_x, TIMELINE_PREVIEW_TRACK_Y)
+		preview_bar.size = Vector2(max(10.0, end_x - start_x), TIMELINE_PREVIEW_TRACK_HEIGHT)
+		layer.add_child(preview_bar)
+
+		var preview_border := Panel.new()
+		var border_style := StyleBoxFlat.new()
+		border_style.bg_color = Color(0, 0, 0, 0)
+		border_style.border_color = border_color
+		border_style.border_width_left = 2
+		border_style.border_width_top = 2
+		border_style.border_width_right = 2
+		border_style.border_width_bottom = 2
+		border_style.corner_radius_top_left = 8
+		border_style.corner_radius_top_right = 8
+		border_style.corner_radius_bottom_left = 8
+		border_style.corner_radius_bottom_right = 8
+		preview_border.add_theme_stylebox_override("panel", border_style)
+		preview_border.position = preview_bar.position
+		preview_border.size = preview_bar.size
+		preview_border.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		layer.add_child(preview_border)
+
+	var preview_marker := TextureRect.new()
+	var preview_texture := AtlasTexture.new()
+	preview_texture.atlas = TIMELINE_CURRENT_TEXTURE
+	preview_texture.region = TIMELINE_CURRENT_REGION
+	preview_marker.texture = preview_texture
+	preview_marker.modulate = border_color
+	preview_marker.position = Vector2(end_x - TIMELINE_PREVIEW_MARKER_SIZE.x * 0.5, TIMELINE_CURRENT_Y - 4.0)
+	preview_marker.size = TIMELINE_PREVIEW_MARKER_SIZE
+	preview_marker.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	preview_marker.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	layer.add_child(preview_marker)
+
+	for action_info_variant in _preview_data.get("enemy_actions_crossed", []):
+		if typeof(action_info_variant) != TYPE_DICTIONARY:
+			continue
+		var action_info := action_info_variant as Dictionary
+		var action_time := int(action_info.get("time_point", -1))
+		if action_time < 0:
+			continue
+		var action_highlight := ColorRect.new()
+		action_highlight.color = Color(0.93, 0.48, 0.28, 0.28)
+		action_highlight.position = Vector2(TIMELINE_LEFT_PADDING + TIMELINE_SLOT_WIDTH * action_time - 18.0, TIMELINE_CARD_EFFECT_MARKER_Y)
+		action_highlight.size = Vector2(36.0, 58.0)
+		layer.add_child(action_highlight)
+
+	if can_play:
+		effect_banner_label.text = "预计打出 %s | 前进 %dt | 到达 %dt" % [
+			_preview_card.get_display_name() if _preview_card != null else "卡牌",
+			int(_preview_data.get("time_cost", 0)),
+			end_time,
+		]
+	else:
+		effect_banner_label.text = "无法打出 %s | %s" % [
+			_preview_card.get_display_name() if _preview_card != null else "这张牌",
+			str(_preview_data.get("reason", "当前不能打出")),
+		]
+
+func _play_timeline_resolution_feedback(state: BattleState, previous_battle_time: int) -> void:
+	if previous_battle_time < 0 or state.battle_time <= previous_battle_time:
+		return
+	_remove_timeline_preview_layer()
+	if _timeline_feedback_tween != null:
+		_timeline_feedback_tween.kill()
+	var start_x := TIMELINE_LEFT_PADDING + TIMELINE_SLOT_WIDTH * previous_battle_time
+	var end_x := TIMELINE_LEFT_PADDING + TIMELINE_SLOT_WIDTH * state.battle_time
+	var played_bar := ColorRect.new()
+	played_bar.color = Color(1.0, 0.88, 0.40, 0.0)
+	played_bar.position = Vector2(start_x, TIMELINE_PREVIEW_TRACK_Y)
+	played_bar.size = Vector2(max(10.0, end_x - start_x), TIMELINE_PREVIEW_TRACK_HEIGHT)
+	timeline_strip.add_child(played_bar)
+	var current_marker := timeline_strip.get_node_or_null("CurrentMarker") as TextureRect
+	_timeline_feedback_tween = create_tween()
+	_timeline_feedback_tween.set_parallel(true)
+	_timeline_feedback_tween.tween_property(played_bar, "color", Color(1.0, 0.88, 0.40, 0.34), 0.12)
+	_timeline_feedback_tween.tween_property(played_bar, "color", Color(1.0, 0.88, 0.40, 0.0), 0.35).set_delay(0.18)
+	if current_marker != null:
+		_timeline_feedback_tween.tween_property(current_marker, "scale", Vector2(1.18, 1.18), 0.12)
+		_timeline_feedback_tween.tween_property(current_marker, "scale", Vector2.ONE, 0.22).set_delay(0.12)
+	for child in timeline_strip.get_children():
+		if not (child is TextureRect):
+			continue
+		if not child.has_meta("timeline_time_point"):
+			continue
+		var time_point := int(child.get_meta("timeline_time_point"))
+		if time_point <= previous_battle_time or time_point > state.battle_time:
+			continue
+		var marker := child as TextureRect
+		_timeline_feedback_tween.tween_property(marker, "modulate", Color(1.25, 0.75, 0.62, 1.0), 0.08)
+		_timeline_feedback_tween.tween_property(marker, "modulate", Color.WHITE, 0.24).set_delay(0.10)
+	_timeline_feedback_tween.finished.connect(func() -> void:
+		if is_instance_valid(played_bar):
+			played_bar.queue_free()
+	)
+
+func _remove_timeline_preview_layer() -> void:
+	var existing := timeline_strip.get_node_or_null("PreviewLayer")
+	if existing == null:
+		return
+	timeline_strip.remove_child(existing)
+	existing.queue_free()
 
 func _create_card_effect_preview_popup() -> void:
 	if _card_effect_preview_popup != null:
@@ -510,6 +677,8 @@ func _outcome_text(outcome: BattleTypes.BattleOutcome) -> String:
 			return "进行中"
 
 func _refresh_effect_banner(state: BattleState) -> void:
+	if _preview_hand_index >= 0 and not _preview_data.is_empty():
+		return
 	if state.last_played_sequence == _last_effect_sequence_seen:
 		return
 	_last_effect_sequence_seen = state.last_played_sequence
@@ -557,6 +726,10 @@ func _start_controller_battle(definition: BattleDefinition) -> void:
 		_last_player_hp_seen = -1
 		_last_enemy_block_count_seen = -1
 		_last_purification_index_seen = -1
+		_preview_hand_index = -1
+		_preview_card = null
+		_preview_data.clear()
+		_previous_battle_time = -1
 	_started_once = true
 	controller.start_battle(definition)
 
