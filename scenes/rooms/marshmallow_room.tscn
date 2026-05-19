@@ -49,17 +49,20 @@
 [ext_resource type="Texture2D" uid="uid://bjgwgs2cpupvg" path="res://sprites/怪物_256x144/棉花糖/Scene1_037.png" id="43_iip2v"]
 [ext_resource type="Texture2D" uid="uid://6hhaehk7e8a4" path="res://sprites/怪物_256x144/棉花糖/Scene1_038.png" id="44_bxllm"]
 [ext_resource type="Texture2D" uid="uid://beyafecqak34x" path="res://sprites/怪物_256x144/棉花糖/Scene1_039.png" id="45_i7my1"]
-[ext_resource type="Texture2D" uid="uid://btnyp2fx0ctdx" path="res://sprites/map/森林地图/前景6.png" id="50_a8r2e"]
+[ext_resource type="Shader" uid="uid://c3hi5ewsut45f" path="res://shaders/grass_waving.gdshader" id="47_fbnqn"]
+[ext_resource type="Texture2D" uid="uid://c0qtsb2hx1jef" path="res://sprites/map/森林地图/前景6-3.png" id="48_8p8sm"]
+[ext_resource type="Texture2D" uid="uid://deg4dykleooyi" path="res://sprites/map/森林地图/前景6-2.png" id="49_tpogf"]
+[ext_resource type="Texture2D" uid="uid://b0ornv3wg4fc" path="res://sprites/map/森林地图/前景6-1.png" id="50_16y4h"]
 [ext_resource type="Texture2D" uid="uid://7n2tqbvywc0w" path="res://sprites/map/森林地图/前景4.png" id="50_iboen"]
 [ext_resource type="Texture2D" uid="uid://b56k3u2amb0e0" path="res://sprites/map/森林地图/前景5.png" id="52_fbnqn"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fbnqn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_itpou"]
 shader = ExtResource("5_pp0i3")
 shader_parameter/outline_color = Color(1, 0.95, 0.72, 1)
 shader_parameter/outline_thickness = 4.0
 shader_parameter/outline_enabled = false
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_8p8sm"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_jjlxl"]
 animations = [{
 "frames": [],
 "loop": true,
@@ -192,20 +195,44 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8p8sm"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_16y4h"]
 size = Vector2(220, 180)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_16y4h"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xo6ym"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_itpou"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hdnpy"]
 size = Vector2(220, 64)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sqoih"]
+shader = ExtResource("47_fbnqn")
+shader_parameter/init_phase = 1.5
+shader_parameter/strength = 0.00800000038
+shader_parameter/speed = 1.4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5ablc"]
+shader = ExtResource("47_fbnqn")
+shader_parameter/init_phase = 1.0
+shader_parameter/strength = 0.010000000475
+shader_parameter/speed = 1.2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_stc06"]
+shader = ExtResource("47_fbnqn")
+shader_parameter/init_phase = 2.0
+shader_parameter/strength = 0.00800000038
+shader_parameter/speed = 1.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ayv8"]
 size = Vector2(1289, 270)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2x13b"]
 radius = 43.416588
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jjlxl"]
+shader = ExtResource("47_fbnqn")
+shader_parameter/init_phase = 0.0
+shader_parameter/strength = 0.0050000002375
+shader_parameter/speed = 1.0
 
 [node name="MarshmallowRoom" type="Control" unique_id=104040902]
 custom_minimum_size = Vector2(960, 540)
@@ -256,13 +283,13 @@ payload = {
 }
 
 [node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
-material = SubResource("ShaderMaterial_fbnqn")
-sprite_frames = SubResource("SpriteFrames_8p8sm")
+material = SubResource("ShaderMaterial_itpou")
+sprite_frames = SubResource("SpriteFrames_jjlxl")
 animation = &"idle"
-frame_progress = 0.2007183
+frame_progress = 0.3343235
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_8p8sm")
+shape = SubResource("RectangleShape2D_16y4h")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -288,7 +315,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStart/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_16y4h")
+shape = SubResource("RectangleShape2D_xo6ym")
 
 [node name="Label" parent="ExitToStart" index="1"]
 offset_left = -110.0
@@ -312,7 +339,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_itpou")
+shape = SubResource("RectangleShape2D_hdnpy")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0
@@ -325,57 +352,42 @@ text = "出口 -> 怪物房"
 autowrap_mode = 3
 max_lines_visible = 2
 
-[node name="Foreground1" type="TextureRect" parent="." unique_id=2010050386]
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
-z_index = 10
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("6")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Foreground2" type="TextureRect" parent="." unique_id=1571272113]
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
-z_index = 11
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("7")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Foreground3" type="TextureRect" parent="." unique_id=678121278]
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
-z_index = 12
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("8")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Foreground4" type="TextureRect" parent="." unique_id=563534965]
+[node name="Foreground7" type="TextureRect" parent="." unique_id=711374393]
 z_index = 13
+material = SubResource("ShaderMaterial_sqoih")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("50_a8r2e")
+texture = ExtResource("48_8p8sm")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Foreground6" type="TextureRect" parent="." unique_id=1425479246]
+z_index = 13
+material = SubResource("ShaderMaterial_5ablc")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("49_tpogf")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Foreground5" type="TextureRect" parent="." unique_id=1878529533]
+z_index = 13
+material = SubResource("ShaderMaterial_stc06")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("50_16y4h")
 expand_mode = 1
 stretch_mode = 6
 
@@ -401,11 +413,29 @@ position = Vector2(-27, -19)
 texture = ExtResource("50_iboen")
 offset = Vector2(-295, -91)
 
-[node name="Sprite2D2" type="Sprite2D" parent="Y-sort" unique_id=895559728]
+[node name="Sprite2D2" type="Sprite2D" parent="Y-sort" unique_id=1134200348]
 y_sort_enabled = true
+material = SubResource("ShaderMaterial_jjlxl")
 position = Vector2(-592, -116)
 texture = ExtResource("52_fbnqn")
 offset = Vector2(270, 6)
+
+[node name="Sprite2D3" type="Sprite2D" parent="Y-sort" unique_id=1532465467]
+y_sort_enabled = true
+position = Vector2(-816, -123)
+texture = ExtResource("6")
+offset = Vector2(494, 13)
+
+[node name="Sprite2D4" type="Sprite2D" parent="Y-sort" unique_id=2139509577]
+y_sort_enabled = true
+position = Vector2(-292, -185)
+texture = ExtResource("7")
+offset = Vector2(-30, 75)
+
+[node name="Sprite2D5" type="Sprite2D" parent="Y-sort" unique_id=1070842224]
+position = Vector2(-213, -107)
+texture = ExtResource("8")
+offset = Vector2(-109, -3)
 
 [editable path="MonsterEncounter"]
 [editable path="ExitToStart"]

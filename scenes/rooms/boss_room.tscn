@@ -9,7 +9,34 @@
 [ext_resource type="Texture2D" uid="uid://dqh6clcx085kv" path="res://sprites/map/森林地图/前景2.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://b56k3u2amb0e0" path="res://sprites/map/森林地图/前景5.png" id="6_2y12g"]
 [ext_resource type="Texture2D" uid="uid://km3dvdxj6sbu" path="res://sprites/map/森林地图/前景3.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://btnyp2fx0ctdx" path="res://sprites/map/森林地图/前景6.png" id="10_m0gjn"]
+[ext_resource type="Texture2D" uid="uid://c0qtsb2hx1jef" path="res://sprites/map/森林地图/前景6-3.png" id="10_4hilx"]
+[ext_resource type="Texture2D" uid="uid://deg4dykleooyi" path="res://sprites/map/森林地图/前景6-2.png" id="11_bsn33"]
+[ext_resource type="Texture2D" uid="uid://b0ornv3wg4fc" path="res://sprites/map/森林地图/前景6-1.png" id="12_0p40x"]
+[ext_resource type="Shader" uid="uid://c3hi5ewsut45f" path="res://shaders/grass_waving.gdshader" id="12_bsn33"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ir4o7"]
+shader = ExtResource("12_bsn33")
+shader_parameter/init_phase = 0.0
+shader_parameter/strength = 0.0050000002375
+shader_parameter/speed = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jipsg"]
+shader = ExtResource("12_bsn33")
+shader_parameter/init_phase = 1.5
+shader_parameter/strength = 0.00800000038
+shader_parameter/speed = 1.4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bsn33"]
+shader = ExtResource("12_bsn33")
+shader_parameter/init_phase = 1.0
+shader_parameter/strength = 0.010000000475
+shader_parameter/speed = 1.2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0p40x"]
+shader = ExtResource("12_bsn33")
+shader_parameter/init_phase = 2.0
+shader_parameter/strength = 0.00800000038
+shader_parameter/speed = 1.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bm5hw"]
 size = Vector2(1289, 270)
@@ -78,61 +105,64 @@ offset = Vector2(-296, -91)
 
 [node name="Sprite2D2" type="Sprite2D" parent="Y-sort" unique_id=493723804]
 y_sort_enabled = true
+material = SubResource("ShaderMaterial_ir4o7")
 position = Vector2(-592, -116)
 texture = ExtResource("6_2y12g")
 offset = Vector2(270, 6)
 
-[node name="Foreground1" type="TextureRect" parent="." unique_id=1530916857]
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
-z_index = 10
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
+[node name="Sprite2D3" type="Sprite2D" parent="Y-sort" unique_id=1956098817]
+y_sort_enabled = true
+position = Vector2(-816, -123)
 texture = ExtResource("5")
-expand_mode = 1
-stretch_mode = 6
+offset = Vector2(494, 13)
 
-[node name="Foreground2" type="TextureRect" parent="." unique_id=662483466]
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
-z_index = 11
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
+[node name="Sprite2D4" type="Sprite2D" parent="Y-sort" unique_id=1783164627]
+y_sort_enabled = true
+position = Vector2(-292, -185)
 texture = ExtResource("6")
-expand_mode = 1
-stretch_mode = 6
+offset = Vector2(-30, 75)
 
-[node name="Foreground3" type="TextureRect" parent="." unique_id=1445806650]
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
-z_index = 12
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
+[node name="Sprite2D5" type="Sprite2D" parent="Y-sort" unique_id=560261130]
+position = Vector2(-213, -107)
 texture = ExtResource("7")
-expand_mode = 1
-stretch_mode = 6
+offset = Vector2(-109, -3)
 
-[node name="Foreground4" type="TextureRect" parent="." unique_id=510936746]
+[node name="Foreground7" type="TextureRect" parent="." unique_id=969842292]
 z_index = 13
+material = SubResource("ShaderMaterial_jipsg")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("10_m0gjn")
+texture = ExtResource("10_4hilx")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Foreground6" type="TextureRect" parent="." unique_id=427782095]
+z_index = 13
+material = SubResource("ShaderMaterial_bsn33")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_bsn33")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Foreground5" type="TextureRect" parent="." unique_id=231858717]
+z_index = 13
+material = SubResource("ShaderMaterial_0p40x")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_0p40x")
 expand_mode = 1
 stretch_mode = 6
 

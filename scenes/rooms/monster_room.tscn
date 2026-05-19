@@ -5,17 +5,44 @@
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 [ext_resource type="Texture2D" uid="uid://bdc001as4kr4" path="res://sprites/map/森林地图/背景.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://dptn6gaplv80o" path="res://sprites/map/森林地图/前景1.png" id="5"]
+[ext_resource type="Shader" uid="uid://c3hi5ewsut45f" path="res://shaders/grass_waving.gdshader" id="5_bmf3x"]
 [ext_resource type="Texture2D" uid="uid://dqh6clcx085kv" path="res://sprites/map/森林地图/前景2.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://c0qtsb2hx1jef" path="res://sprites/map/森林地图/前景6-3.png" id="6_a5rrr"]
 [ext_resource type="Texture2D" uid="uid://km3dvdxj6sbu" path="res://sprites/map/森林地图/前景3.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://deg4dykleooyi" path="res://sprites/map/森林地图/前景6-2.png" id="7_dy3mt"]
 [ext_resource type="Texture2D" uid="uid://7n2tqbvywc0w" path="res://sprites/map/森林地图/前景4.png" id="8_0ic6m"]
-[ext_resource type="Texture2D" uid="uid://btnyp2fx0ctdx" path="res://sprites/map/森林地图/前景6.png" id="8_yb5im"]
+[ext_resource type="Texture2D" uid="uid://b0ornv3wg4fc" path="res://sprites/map/森林地图/前景6-1.png" id="8_r7fff"]
 [ext_resource type="Texture2D" uid="uid://b56k3u2amb0e0" path="res://sprites/map/森林地图/前景5.png" id="10_bmf3x"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7v7hi"]
+shader = ExtResource("5_bmf3x")
+shader_parameter/init_phase = 1.5
+shader_parameter/strength = 0.00800000038
+shader_parameter/speed = 1.4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l7ff0"]
+shader = ExtResource("5_bmf3x")
+shader_parameter/init_phase = 1.0
+shader_parameter/strength = 0.010000000475
+shader_parameter/speed = 1.2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_84uq5"]
+shader = ExtResource("5_bmf3x")
+shader_parameter/init_phase = 2.0
+shader_parameter/strength = 0.00800000038
+shader_parameter/speed = 1.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b8v33"]
 size = Vector2(1289, 270)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yb5im"]
 radius = 43.416588
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r7fff"]
+shader = ExtResource("5_bmf3x")
+shader_parameter/init_phase = 0.0
+shader_parameter/strength = 0.0050000002375
+shader_parameter/speed = 1.0
 
 [node name="MonsterRoom" type="Control" unique_id=545952028]
 custom_minimum_size = Vector2(960, 540)
@@ -100,57 +127,42 @@ payload = {
 "target_room_id": &"boss_room"
 }
 
-[node name="Foreground1" type="TextureRect" parent="." unique_id=310947277]
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
-z_index = 10
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("5")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Foreground2" type="TextureRect" parent="." unique_id=202928191]
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
-z_index = 11
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("6")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Foreground3" type="TextureRect" parent="." unique_id=1341080942]
-self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
-z_index = 12
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("7")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Foreground4" type="TextureRect" parent="." unique_id=1924819539]
+[node name="Foreground7" type="TextureRect" parent="." unique_id=1965688157]
 z_index = 13
+material = SubResource("ShaderMaterial_7v7hi")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("8_yb5im")
+texture = ExtResource("6_a5rrr")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Foreground6" type="TextureRect" parent="." unique_id=1518955893]
+z_index = 13
+material = SubResource("ShaderMaterial_l7ff0")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_dy3mt")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Foreground5" type="TextureRect" parent="." unique_id=1069797514]
+z_index = 13
+material = SubResource("ShaderMaterial_84uq5")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_r7fff")
 expand_mode = 1
 stretch_mode = 6
 
@@ -175,8 +187,26 @@ y_sort_enabled = true
 texture = ExtResource("8_0ic6m")
 offset = Vector2(-322, -110)
 
-[node name="Sprite2D2" type="Sprite2D" parent="Y-sort" unique_id=1709071037]
+[node name="Sprite2D2" type="Sprite2D" parent="Y-sort" unique_id=147584305]
 y_sort_enabled = true
+material = SubResource("ShaderMaterial_r7fff")
 position = Vector2(-592, -116)
 texture = ExtResource("10_bmf3x")
 offset = Vector2(270, 6)
+
+[node name="Sprite2D3" type="Sprite2D" parent="Y-sort" unique_id=518465395]
+y_sort_enabled = true
+position = Vector2(-816, -123)
+texture = ExtResource("5")
+offset = Vector2(494, 13)
+
+[node name="Sprite2D4" type="Sprite2D" parent="Y-sort" unique_id=838901005]
+y_sort_enabled = true
+position = Vector2(-292, -185)
+texture = ExtResource("6")
+offset = Vector2(-30, 75)
+
+[node name="Sprite2D5" type="Sprite2D" parent="Y-sort" unique_id=1180115911]
+position = Vector2(-213, -107)
+texture = ExtResource("7")
+offset = Vector2(-109, -3)
