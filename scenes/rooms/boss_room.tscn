@@ -1,19 +1,18 @@
 [gd_scene format=3 uid="uid://l02k4weobvj3"]
 
-[ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
+[ext_resource type="Script" uid="uid://c8cc8jx0ebp32" path="res://scripts/explore/room_scene.gd" id="1"]
 [ext_resource type="Script" uid="uid://bgvn7fnrkcagx" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 [ext_resource type="Texture2D" uid="uid://bdc001as4kr4" path="res://sprites/map/森林地图/背景.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://dptn6gaplv80o" path="res://sprites/map/森林地图/前景1.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://7n2tqbvywc0w" path="res://sprites/map/森林地图/前景4.png" id="5_qfvvh"]
 [ext_resource type="Texture2D" uid="uid://dqh6clcx085kv" path="res://sprites/map/森林地图/前景2.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://b56k3u2amb0e0" path="res://sprites/map/森林地图/前景5.png" id="6_2y12g"]
 [ext_resource type="Texture2D" uid="uid://km3dvdxj6sbu" path="res://sprites/map/森林地图/前景3.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://btnyp2fx0ctdx" path="res://sprites/map/森林地图/前景6.png" id="10_m0gjn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bm5hw"]
 size = Vector2(1289, 270)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_qfvvh"]
-size = Vector2(1324, 170.5)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2y12g"]
 radius = 43.416588
@@ -77,6 +76,12 @@ position = Vector2(-26, -19)
 texture = ExtResource("5_qfvvh")
 offset = Vector2(-296, -91)
 
+[node name="Sprite2D2" type="Sprite2D" parent="Y-sort" unique_id=493723804]
+y_sort_enabled = true
+position = Vector2(-592, -116)
+texture = ExtResource("6_2y12g")
+offset = Vector2(270, 6)
+
 [node name="Foreground1" type="TextureRect" parent="." unique_id=1530916857]
 self_modulate = Color(0.945098, 0.933333, 0.419608, 0.29)
 z_index = 10
@@ -119,17 +124,23 @@ texture = ExtResource("7")
 expand_mode = 1
 stretch_mode = 6
 
+[node name="Foreground4" type="TextureRect" parent="." unique_id=510936746]
+z_index = 13
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_m0gjn")
+expand_mode = 1
+stretch_mode = 6
+
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1624688154]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=720149223]
 position = Vector2(634.5, 125)
 shape = SubResource("RectangleShape2D_bm5hw")
-
-[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=249058298]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=686145082]
-position = Vector2(647, 642.25)
-shape = SubResource("RectangleShape2D_qfvvh")
 
 [node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=1474584746]
 

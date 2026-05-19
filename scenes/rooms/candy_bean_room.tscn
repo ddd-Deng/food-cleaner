@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://b42qvdyvg5mn4"]
 
-[ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
+[ext_resource type="Script" uid="uid://c8cc8jx0ebp32" path="res://scripts/explore/room_scene.gd" id="1"]
 [ext_resource type="Script" uid="uid://bgvn7fnrkcagx" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/explore/monster_encounter.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://bdc001as4kr4" path="res://sprites/map/森林地图/背景.png" id="5"]
-[ext_resource type="Shader" path="res://shaders/sprite_outline.gdshader" id="5_4uc4h"]
+[ext_resource type="Shader" uid="uid://1kajis20fdfn" path="res://shaders/sprite_outline.gdshader" id="5_4uc4h"]
 [ext_resource type="Texture2D" uid="uid://dptn6gaplv80o" path="res://sprites/map/森林地图/前景1.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://boqu3qvhwod" path="res://sprites/怪物_256x144/糖豆人/Scene1_000.png" id="6_efyel"]
 [ext_resource type="Texture2D" uid="uid://dqh6clcx085kv" path="res://sprites/map/森林地图/前景2.png" id="7"]
@@ -50,15 +50,17 @@
 [ext_resource type="Texture2D" uid="uid://c126g47ebd886" path="res://sprites/怪物_256x144/糖豆人/Scene1_038.png" id="44_ppdqk"]
 [ext_resource type="Texture2D" uid="uid://dv2w8g60h038u" path="res://sprites/怪物_256x144/糖豆人/Scene1_039.png" id="45_j2duf"]
 [ext_resource type="Texture2D" uid="uid://dw0rxdlf5p15a" path="res://sprites/怪物_256x144/糖豆人/Scene1_040.png" id="46_s2thq"]
+[ext_resource type="Texture2D" uid="uid://btnyp2fx0ctdx" path="res://sprites/map/森林地图/前景6.png" id="51_6vjbs"]
 [ext_resource type="Texture2D" uid="uid://7n2tqbvywc0w" path="res://sprites/map/森林地图/前景4.png" id="51_efyel"]
+[ext_resource type="Texture2D" uid="uid://b56k3u2amb0e0" path="res://sprites/map/森林地图/前景5.png" id="53_rvga1"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_efyel"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rvga1"]
 shader = ExtResource("5_4uc4h")
 shader_parameter/outline_color = Color(1, 0.95, 0.72, 1)
 shader_parameter/outline_thickness = 4.0
 shader_parameter/outline_enabled = false
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_efyel"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_ekobi"]
 animations = [{
 "frames": [],
 "loop": true,
@@ -194,20 +196,17 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_efyel"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ekobi"]
 size = Vector2(220, 180)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_rvga1"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lynss"]
 size = Vector2(220, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ekobi"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ruk8j"]
 size = Vector2(220, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p4w4b"]
 size = Vector2(1289, 270)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2lx8j"]
-size = Vector2(1324, 170.5)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_em06p"]
 radius = 43.416588
@@ -261,13 +260,13 @@ payload = {
 }
 
 [node name="AnimatedSprite2D" parent="MonsterEncounter" index="0"]
-material = SubResource("ShaderMaterial_efyel")
-sprite_frames = SubResource("SpriteFrames_efyel")
+material = SubResource("ShaderMaterial_rvga1")
+sprite_frames = SubResource("SpriteFrames_ekobi")
 animation = &"idle"
-frame_progress = 0.80858415
+frame_progress = 0.8471684
 
 [node name="CollisionShape2D" parent="MonsterEncounter/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_efyel")
+shape = SubResource("RectangleShape2D_ekobi")
 
 [node name="Label" parent="MonsterEncounter" index="2"]
 offset_left = -110.0
@@ -293,7 +292,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStart/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_rvga1")
+shape = SubResource("RectangleShape2D_lynss")
 
 [node name="Label" parent="ExitToStart" index="1"]
 offset_left = -110.0
@@ -317,7 +316,7 @@ payload = {
 }
 
 [node name="CollisionShape2D" parent="ExitToStrawberry/Area2D" index="0"]
-shape = SubResource("RectangleShape2D_ekobi")
+shape = SubResource("RectangleShape2D_ruk8j")
 
 [node name="Label" parent="ExitToStrawberry" index="1"]
 offset_left = -110.0
@@ -372,17 +371,23 @@ texture = ExtResource("8")
 expand_mode = 1
 stretch_mode = 6
 
+[node name="Foreground4" type="TextureRect" parent="." unique_id=326291808]
+z_index = 13
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("51_6vjbs")
+expand_mode = 1
+stretch_mode = 6
+
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1504190246]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=670155157]
 position = Vector2(634.5, 125)
 shape = SubResource("RectangleShape2D_p4w4b")
-
-[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=2112828069]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=441163273]
-position = Vector2(647, 642.25)
-shape = SubResource("RectangleShape2D_2lx8j")
 
 [node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=661479224]
 
@@ -399,6 +404,12 @@ y_sort_enabled = true
 position = Vector2(-24, -15)
 texture = ExtResource("51_efyel")
 offset = Vector2(-298, -95)
+
+[node name="Sprite2D2" type="Sprite2D" parent="Y-sort" unique_id=51307589]
+y_sort_enabled = true
+position = Vector2(-592, -116)
+texture = ExtResource("53_rvga1")
+offset = Vector2(270, 6)
 
 [editable path="MonsterEncounter"]
 [editable path="ExitToStart"]

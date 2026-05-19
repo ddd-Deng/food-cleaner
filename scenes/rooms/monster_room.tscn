@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dbs41r8jlgg2p"]
 
-[ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
+[ext_resource type="Script" uid="uid://c8cc8jx0ebp32" path="res://scripts/explore/room_scene.gd" id="1"]
 [ext_resource type="Script" uid="uid://bgvn7fnrkcagx" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 [ext_resource type="Texture2D" uid="uid://bdc001as4kr4" path="res://sprites/map/森林地图/背景.png" id="4"]
@@ -8,12 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://dqh6clcx085kv" path="res://sprites/map/森林地图/前景2.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://km3dvdxj6sbu" path="res://sprites/map/森林地图/前景3.png" id="7"]
 [ext_resource type="Texture2D" uid="uid://7n2tqbvywc0w" path="res://sprites/map/森林地图/前景4.png" id="8_0ic6m"]
+[ext_resource type="Texture2D" uid="uid://btnyp2fx0ctdx" path="res://sprites/map/森林地图/前景6.png" id="8_yb5im"]
+[ext_resource type="Texture2D" uid="uid://b56k3u2amb0e0" path="res://sprites/map/森林地图/前景5.png" id="10_bmf3x"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b8v33"]
 size = Vector2(1289, 270)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0ic6m"]
-size = Vector2(1324, 170.5)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yb5im"]
 radius = 43.416588
@@ -143,17 +142,23 @@ texture = ExtResource("7")
 expand_mode = 1
 stretch_mode = 6
 
+[node name="Foreground4" type="TextureRect" parent="." unique_id=1924819539]
+z_index = 13
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_yb5im")
+expand_mode = 1
+stretch_mode = 6
+
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1831761987]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=35411578]
 position = Vector2(634.5, 125)
 shape = SubResource("RectangleShape2D_b8v33")
-
-[node name="StaticBody2D2" type="StaticBody2D" parent="." unique_id=1106803038]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2" unique_id=1346207823]
-position = Vector2(647, 642.25)
-shape = SubResource("RectangleShape2D_0ic6m")
 
 [node name="StaticBody2D3" type="StaticBody2D" parent="." unique_id=1580569435]
 
@@ -169,3 +174,9 @@ position = Vector2(962, 470)
 y_sort_enabled = true
 texture = ExtResource("8_0ic6m")
 offset = Vector2(-322, -110)
+
+[node name="Sprite2D2" type="Sprite2D" parent="Y-sort" unique_id=1709071037]
+y_sort_enabled = true
+position = Vector2(-592, -116)
+texture = ExtResource("10_bmf3x")
+offset = Vector2(270, 6)

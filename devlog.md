@@ -1,6 +1,5 @@
 # 开发日志
 
-<<<<<<< HEAD
 ## 2026-05-17
 
 ### 探索玩家会自动接入当前房间的 `Y-sort` 层
@@ -17,9 +16,7 @@
 - 做了什么：把 `start_room` 和 `chest_room` 切到 `游乐场地图` 后，这两间房的前景层仍沿用了森林地图时期的 `self_modulate` 淡黄色半透明设置，会把游乐场素材整体压暗、染色。现在已移除这两个场景里 `Foreground1~Foreground4` 的 `self_modulate`，让游乐场前景按原图颜色直接显示。
 - 影响文件：`scenes/rooms/start_room.tscn`、`scenes/rooms/chest_room.tscn`、`devlog.md`
 - 如何验证：在 Godot 编辑器中打开 `res://scenes/rooms/start_room.tscn` 与 `res://scenes/rooms/chest_room.tscn`，确认 `Foreground1~Foreground4` 不再带 `self_modulate`；运行项目进入入口前厅和补给角落，确认游乐场前景不再偏黄、半透明度恢复为素材原始表现。
-=======
 > 当前改为“阶段里程碑”记录方式：优先保留仍能解释项目现状的结果、主要影响文件和验证方式；已被后续实现覆盖的中间修补过程不再逐条展开。
->>>>>>> origin/main
 
 ## 2026-05-19
 
