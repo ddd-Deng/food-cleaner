@@ -6,14 +6,14 @@ signal continue_pressed
 const BACKDROP_COLOR := Color(0.06, 0.05, 0.03, 0.74)
 
 @onready var backdrop: ColorRect = $Backdrop
-@onready var title_label: Label = $Center/PanelRoot/OuterPanel/OuterMargin/Column/TitleCenter/TitlePanel/TitleLabel
-@onready var summary_label: Label = $Center/PanelRoot/OuterPanel/OuterMargin/Column/SummaryLabel
-@onready var gold_main_label: Label = $Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/GoldRewardPanel/GoldMargin/GoldRow/GoldTextColumn/GoldMainLabel
-@onready var gold_sub_label: Label = $Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/GoldRewardPanel/GoldMargin/GoldRow/GoldTextColumn/GoldSubLabel
-@onready var card_main_label: Label = $Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/CardRewardPanel/CardMargin/CardRow/CardTextColumn/CardMainLabel
-@onready var card_sub_label: Label = $Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/CardRewardPanel/CardMargin/CardRow/CardTextColumn/CardSubLabel
-@onready var footer_hint_label: Label = $Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/FooterHintLabel
-@onready var continue_button: Button = $Center/PanelRoot/OuterPanel/OuterMargin/Column/ContinueCenter/ContinueButton
+@onready var title_label: Label = %TitleLabel
+@onready var summary_label: Label = %SummaryLabel
+@onready var gold_main_label: Label = %GoldMainLabel
+@onready var gold_sub_label: Label = %GoldSubLabel
+@onready var card_main_label: Label = %CardMainLabel
+@onready var card_sub_label: Label = %CardSubLabel
+@onready var footer_hint_label: Label = %FooterHintLabel
+@onready var continue_button: Button = %ContinueButton
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE

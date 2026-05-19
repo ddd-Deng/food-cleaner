@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://bq1osvcyoxar2"]
 
-[ext_resource type="Script" uid="uid://c8cc8jx0ebp32" path="res://scripts/explore/room_scene.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
 [ext_resource type="Script" uid="uid://bgvn7fnrkcagx" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/explore/monster_encounter.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://df62dfyohaby" path="res://sprites/map/喷泉地图/背景.png" id="5"]
-[ext_resource type="Shader" uid="uid://1kajis20fdfn" path="res://shaders/sprite_outline.gdshader" id="5_pejmt"]
+[ext_resource type="Shader" path="res://shaders/sprite_outline.gdshader" id="5_pejmt"]
 [ext_resource type="Texture2D" uid="uid://bt6qf06khot2j" path="res://sprites/map/喷泉地图/前景1.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://cvjnxf3v2qbq0" path="res://sprites/怪物_256x144/面包/bread_000.png" id="6_gdr51"]
 [ext_resource type="Texture2D" uid="uid://bare7fpq8scrw" path="res://sprites/map/喷泉地图/前景2.png" id="7"]

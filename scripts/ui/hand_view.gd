@@ -17,6 +17,8 @@ const HAND_RELEASE_GRACE_HEIGHT: float = 24.0
 
 signal card_released_outside_hand(hand_index: int)
 signal drag_cancelled()
+signal card_preview_requested(card: CardInstance, hand_index: int)
+signal card_preview_cleared()
 
 var _cards_interactable: bool = true
 var _slot_order: Array[int] = []
@@ -57,6 +59,7 @@ func rebuild_hand(cards: Array[CardInstance], interactable: bool) -> void:
 			card_view = CARD_VIEW_SCENE.instantiate()
 			add_child(card_view)
 			card_view.hover_requested.connect(_on_card_hover_requested)
+			card_view.hover_cleared.connect(_on_card_hover_cleared)
 			card_view.drag_started.connect(_on_card_drag_started)
 			card_view.drag_ended.connect(_on_card_drag_ended)
 		var card: CardInstance = card_by_id.get(card_id, null)
@@ -70,6 +73,7 @@ func rebuild_hand(cards: Array[CardInstance], interactable: bool) -> void:
 		if not reused_views.has(card_view):
 			if _hover_owner == card_view:
 				_hover_owner = null
+				card_preview_cleared.emit()
 			remove_child(card_view)
 			card_view.queue_free()
 
@@ -122,6 +126,15 @@ func _process(_delta: float) -> void:
 	var body_hover_card := _find_topmost_card_body_under_mouse()
 	if body_hover_card != null and body_hover_card != _hover_owner:
 		_grant_hover_to(body_hover_card)
+		return
+	if body_hover_card == null and _hover_owner != null:
+		if is_instance_valid(_hover_owner) and _hover_owner.is_mouse_inside_hover_hold_area():
+			return
+		var previous_hover_owner := _hover_owner
+		_hover_owner = null
+		if is_instance_valid(previous_hover_owner):
+			previous_hover_owner.force_hover_exit()
+		card_preview_cleared.emit()
 
 func _card_id(card: CardInstance) -> int:
 	return card.get_instance_id() if card != null else -1
@@ -208,11 +221,21 @@ func _grant_hover_to(active_card_view: CardView) -> void:
 		card_view.force_hover_exit()
 	_hover_owner = active_card_view
 	active_card_view.grant_hover()
+	card_preview_requested.emit(active_card_view.card_instance, active_card_view.hand_index)
+
+func _on_card_hover_cleared(card_view: CardView) -> void:
+	if _hover_owner != card_view:
+		return
+	_hover_owner = null
+	if _active_drag_card_id >= 0:
+		return
+	card_preview_cleared.emit()
 
 func _on_card_drag_ended(card_view: CardView, dropped_successfully: bool, _release_global_position: Vector2, cancelled_by_user: bool) -> void:
 	_active_drag_card_id = -1
 	if _hover_owner == card_view:
 		_hover_owner = null
+	card_preview_cleared.emit()
 	if cancelled_by_user:
 		for view in get_card_views():
 			view.set_interactable(_cards_interactable)

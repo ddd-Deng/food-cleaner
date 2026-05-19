@@ -153,6 +153,7 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_title")
 
 [node name="TitleLabel" type="Label" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/TitleCenter/TitlePanel"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -166,6 +167,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="SummaryLabel" type="Label" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.43, 0.31, 0.19, 1)
@@ -220,6 +222,7 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 2
 
 [node name="GoldMainLabel" type="Label" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/GoldRewardPanel/GoldMargin/GoldRow/GoldTextColumn"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.96, 0.94, 1)
 theme_override_font_sizes/font_size = 19
@@ -227,6 +230,7 @@ text = "获得 0 金币"
 vertical_alignment = 1
 
 [node name="GoldSubLabel" type="Label" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/GoldRewardPanel/GoldMargin/GoldRow/GoldTextColumn"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84, 0.9, 0.86, 1)
 theme_override_font_sizes/font_size = 13
@@ -263,6 +267,7 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 2
 
 [node name="CardMainLabel" type="Label" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/CardRewardPanel/CardMargin/CardRow/CardTextColumn"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.96, 0.94, 1)
 theme_override_font_sizes/font_size = 19
@@ -270,6 +275,7 @@ text = "将 1 张牌加入你的牌组"
 vertical_alignment = 1
 
 [node name="CardSubLabel" type="Label" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn/CardRewardPanel/CardMargin/CardRow/CardTextColumn"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.84, 0.9, 0.86, 1)
 theme_override_font_sizes/font_size = 13
@@ -277,6 +283,7 @@ text = "当前为展示占位"
 vertical_alignment = 1
 
 [node name="FooterHintLabel" type="Label" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/InnerPanel/InnerMargin/RewardsColumn"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.39, 0.29, 0.18, 1)
@@ -290,6 +297,7 @@ custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 
 [node name="ContinueButton" type="Button" parent="Center/PanelRoot/OuterPanel/OuterMargin/Column/ContinueCenter"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(152, 40)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_button_normal")

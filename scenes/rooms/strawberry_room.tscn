@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://cts6y6x55t0vn"]
 
-[ext_resource type="Script" uid="uid://c8cc8jx0ebp32" path="res://scripts/explore/room_scene.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/explore/room_scene.gd" id="1"]
 [ext_resource type="Script" uid="uid://bgvn7fnrkcagx" path="res://scripts/explore/room_anchor.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/explore/explore_interactable.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/explore/monster_encounter.tscn" id="4"]
 [ext_resource type="Texture2D" uid="uid://nnkw4t8of8ax" path="res://sprites/map/小镇地图/背景.png" id="5"]
-[ext_resource type="Shader" uid="uid://1kajis20fdfn" path="res://shaders/sprite_outline.gdshader" id="5_hxhp4"]
+[ext_resource type="Shader" path="res://shaders/sprite_outline.gdshader" id="5_hxhp4"]
 [ext_resource type="Texture2D" uid="uid://cis2chreaa465" path="res://sprites/map/小镇地图/前景1.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://bulf1p226x17f" path="res://sprites/怪物_256x144/草莓/Scene1_000.png" id="6_abhmd"]
 [ext_resource type="Texture2D" uid="uid://dm0ug65vmw5rw" path="res://sprites/map/小镇地图/前景2.png" id="7"]

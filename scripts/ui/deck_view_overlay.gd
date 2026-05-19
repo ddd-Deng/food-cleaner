@@ -38,15 +38,15 @@ const OPEN_LAYOUT_MAX_RETRIES := 8
 
 @onready var backdrop: ColorRect = $Backdrop
 @onready var panel: PanelContainer = $SafeArea/Panel
-@onready var title_label: Label = $SafeArea/Panel/PanelMargin/PanelColumn/HeaderRow/HeaderText/TitleLabel
-@onready var summary_label: Label = $SafeArea/Panel/PanelMargin/PanelColumn/HeaderRow/HeaderText/SummaryLabel
-@onready var close_button: Button = $SafeArea/Panel/PanelMargin/PanelColumn/HeaderRow/CloseButton
-@onready var all_tab_button: Button = $SafeArea/Panel/PanelMargin/PanelColumn/TabRow/AllTabButton
-@onready var draw_tab_button: Button = $SafeArea/Panel/PanelMargin/PanelColumn/TabRow/DrawTabButton
-@onready var discard_tab_button: Button = $SafeArea/Panel/PanelMargin/PanelColumn/TabRow/DiscardTabButton
-@onready var content_panel: PanelContainer = $SafeArea/Panel/PanelMargin/PanelColumn/ContentPanel
-@onready var content_scroll: ScrollContainer = $SafeArea/Panel/PanelMargin/PanelColumn/ContentPanel/ContentMargin/ContentScroll
-@onready var content_column: VBoxContainer = $SafeArea/Panel/PanelMargin/PanelColumn/ContentPanel/ContentMargin/ContentScroll/ContentColumn
+@onready var title_label: Label = %TitleLabel
+@onready var summary_label: Label = %SummaryLabel
+@onready var close_button: Button = %CloseButton
+@onready var all_tab_button: Button = %AllTabButton
+@onready var draw_tab_button: Button = %DrawTabButton
+@onready var discard_tab_button: Button = %DiscardTabButton
+@onready var content_panel: PanelContainer = %ContentPanel
+@onready var content_scroll: ScrollContainer = %ContentScroll
+@onready var content_column: VBoxContainer = %ContentColumn
 
 var _state: BattleState
 var _current_tab: StringName = TAB_ALL
@@ -268,12 +268,16 @@ func _apply_shell_styles() -> void:
 	backdrop.color = Color(0.16, 0.12, 0.07, 0.58)
 	panel.add_theme_stylebox_override("panel", _build_outer_panel_style())
 	content_panel.add_theme_stylebox_override("panel", _build_inner_panel_style())
-	close_button.text = ""
-	close_button.custom_minimum_size = BACK_BUTTON_REGION.size
-	close_button.add_theme_stylebox_override("normal", _build_back_button_style(Color.WHITE))
-	close_button.add_theme_stylebox_override("hover", _build_back_button_style(Color(1.05, 1.05, 1.05, 1.0)))
-	close_button.add_theme_stylebox_override("pressed", _build_back_button_style(Color(0.90, 0.90, 0.90, 1.0)))
-	close_button.add_theme_stylebox_override("focus", _build_back_button_style(Color.WHITE))
+	close_button.text = "返回"
+	close_button.custom_minimum_size = Vector2(100, 44)
+	close_button.add_theme_font_size_override("font_size", 20)
+	close_button.add_theme_color_override("font_color", Color(0.98, 0.96, 0.88, 1.0))
+	close_button.add_theme_color_override("font_hover_color", Color(1.0, 1.0, 1.0, 1.0))
+	close_button.add_theme_color_override("font_pressed_color", Color(0.85, 0.78, 0.60, 1.0))
+	close_button.add_theme_stylebox_override("normal", _build_close_button_flat(Color(0.72, 0.45, 0.18, 1.0)))
+	close_button.add_theme_stylebox_override("hover", _build_close_button_flat(Color(0.82, 0.55, 0.22, 1.0)))
+	close_button.add_theme_stylebox_override("pressed", _build_close_button_flat(Color(0.58, 0.36, 0.14, 1.0)))
+	close_button.add_theme_stylebox_override("focus", _build_close_button_flat(Color(0.72, 0.45, 0.18, 1.0)))
 	for button in [all_tab_button, draw_tab_button, discard_tab_button]:
 		button.custom_minimum_size = TAB_IDLE_REGION.size
 		button.add_theme_font_size_override("font_size", 18)
@@ -302,6 +306,19 @@ func _build_section_style() -> StyleBoxTexture:
 
 func _build_back_button_style(tint: Color) -> StyleBoxTexture:
 	return _build_texture_style(BACK_BUTTON_TEXTURE, BACK_BUTTON_REGION, BACK_BUTTON_SLICE, tint)
+
+func _build_close_button_flat(bg_color: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = bg_color
+	style.corner_radius_top_left = 10
+	style.corner_radius_top_right = 10
+	style.corner_radius_bottom_left = 10
+	style.corner_radius_bottom_right = 10
+	style.content_margin_left = 16.0
+	style.content_margin_right = 16.0
+	style.content_margin_top = 8.0
+	style.content_margin_bottom = 8.0
+	return style
 
 func _build_tab_style(active: bool, hovered: bool) -> StyleBoxTexture:
 	var texture := TAB_ACTIVE_TEXTURE if active else TAB_IDLE_TEXTURE
